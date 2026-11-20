@@ -1,0 +1,165 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Benchy Results</title>
+<meta name="description" content="Community benchmark results: QEDCode versus the same model used on its own, judged by hidden tests.">
+<style>
+  :root {
+    --bg: #fbfbfa; --panel: #ffffff; --ink: #1d1d1b; --muted: #6b6b66; --line: #e4e3de;
+    --base: #8a8f98; --qed: #2f6f4f; --warn: #a1532a; --ci: rgba(29,29,27,.28);
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #141413; --panel: #1c1c1a; --ink: #ecebe6; --muted: #a09f98; --line: #2e2d2a;
+      --base: #8d939c; --qed: #5fb98a; --warn: #e0905f; --ci: rgba(236,235,230,.35);
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg: #141413; --panel: #1c1c1a; --ink: #ecebe6; --muted: #a09f98; --line: #2e2d2a;
+    --base: #8d939c; --qed: #5fb98a; --warn: #e0905f; --ci: rgba(236,235,230,.35);
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; background: var(--bg); color: var(--ink);
+    font: 15px/1.5 ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+  }
+  main { max-width: 1040px; margin: 0 auto; padding: 40px 16px 64px; }
+  h1 { font-size: 26px; margin: 0 0 4px; letter-spacing: -.01em; }
+  .lede { color: var(--muted); margin: 0 0 28px; max-width: 70ch; }
+  .totals { display: flex; flex-wrap: wrap; gap: 12px; margin-bottom: 28px; }
+  .stat { background: var(--panel); border: 1px solid var(--line); border-radius: 10px;
+          padding: 12px 16px; min-width: 150px; }
+  .stat b { display: block; font-size: 22px; font-variant-numeric: tabular-nums; }
+  .stat span { color: var(--muted); font-size: 13px; }
+  .card { background: var(--panel); border: 1px solid var(--line); border-radius: 12px;
+          padding: 18px 20px; margin-bottom: 16px; }
+  .card h2 { font-size: 16px; margin: 0; }
+  .meta { color: var(--muted); font-size: 13px; margin: 2px 0 14px; }
+  .label { display: inline-block; font-size: 12px; padding: 1px 8px; border-radius: 999px;
+           border: 1px solid var(--line); color: var(--muted); margin-left: 8px; vertical-align: 2px; }
+  .label.repro { color: var(--qed); border-color: var(--qed); }
+  .row { display: grid; grid-template-columns: 90px 1fr 140px; gap: 12px; align-items: center;
+         margin: 6px 0; }
+  .row .name { font-size: 13px; color: var(--muted); }
+  .track { position: relative; height: 14px; background: var(--line); border-radius: 4px; }
+  .fill { position: absolute; inset: 0 auto 0 0; border-radius: 4px; }
+  .whisker { position: absolute; top: -3px; bottom: -3px; border-left: 2px solid var(--ci);
+             border-right: 2px solid var(--ci); }
+  .num { font-variant-numeric: tabular-nums; font-size: 13px; }
+  .facts { display: flex; flex-wrap: wrap; gap: 6px 18px; font-size: 13px; color: var(--muted);
+           margin-top: 10px; }
+  .facts b { color: var(--ink); font-weight: 600; }
+  .empty { text-align: center; padding: 48px 16px; color: var(--muted); }
+  .notes { color: var(--muted); font-size: 13px; margin-top: 28px; padding-left: 18px; }
+  a { color: var(--qed); }
+  @media (max-width: 560px) {
+    .row { grid-template-columns: 70px 1fr; }
+    .row .num { grid-column: 2; }
+  }
+</style>
+</head>
+<body>
+<main>
+  <h1>Benchy results</h1>
+  <p class="lede">Each run compares the same model used on its own with the same model running through
+    <a href="https://github.com/AdityaTummuri/QEDCode">QEDCode</a>. Hidden tests that neither side saw
+    decide each outcome. Bars show the verified resolution rate. The whiskers are 95% intervals.</p>
+  <div class="totals" id="totals"></div>
+  <div id="groups"></div>
+  <ul class="notes" id="notes"></ul>
+</main>
+<script>
+(function () {
+  "use strict";
+  var groupsEl = document.getElementById("groups");
+
+  function el(tag, cls, text) {
+    var node = document.createElement(tag);
+    if (cls) node.className = cls;
+    if (text !== undefined) node.textContent = text;
+    return node;
+  }
+  function pct(x) { return x === null || x === undefined ? "–" : (x * 100).toFixed(1) + "%"; }
+
+  function stat(value, label) {
+    var box = el("div", "stat");
+    box.appendChild(el("b", "", String(value)));
+    box.appendChild(el("span", "", label));
+    return box;
+  }
+
+  function bar(name, s, color) {
+    var row = el("div", "row");
+    row.appendChild(el("div", "name", name));
+    var track = el("div", "track");
+    var fill = el("div", "fill");
+    fill.style.width = ((s.resolution_rate || 0) * 100) + "%";
+    fill.style.background = color;
+    track.appendChild(fill);
+    var w = el("div", "whisker");
+    w.style.left = (s.resolution_ci95[0] * 100) + "%";
+    w.style.width = ((s.resolution_ci95[1] - s.resolution_ci95[0]) * 100) + "%";
+    track.appendChild(w);
+    row.appendChild(track);
+    row.appendChild(el("div", "num", s.resolved + "/" + s.attempts + " · " + pct(s.resolution_rate)));
+    return row;
+  }
+
+  function fact(label, value) {
+    var span = el("span", "", label + " ");
+    span.appendChild(el("b", "", value));
+    return span;
+  }
+
+  function render(board) {
+    var totals = document.getElementById("totals");
+    totals.appendChild(stat(board.accepted_submissions, "accepted runs"));
+    totals.appendChild(stat(board.reproduced_submissions, "independently reproduced"));
+    totals.appendChild(stat(board.last_run_date || "–", "latest run"));
+    if (!board.groups.length) {
+      groupsEl.appendChild(el("div", "card empty",
+        "No community results yet. Run `benchy run`, then `benchy share` to preview a contribution."));
+    }
+    board.groups.forEach(function (g) {
+      var card = el("section", "card");
+      var h = el("h2", "", g.model + " · " + g.suite);
+      var label = el("span", g.label.indexOf("reproduced") === 0 ? "label repro" : "label", g.label);
+      h.appendChild(label);
+      card.appendChild(h);
+      card.appendChild(el("div", "meta", g.backend + " · QEDCode " + g.qedcode_version + " (" +
+        g.qedcode_speed + ") · " + g.submissions + " run(s)"));
+      card.appendChild(bar("baseline", g.baseline, "var(--base)"));
+      card.appendChild(bar("QEDCode", g.qedcode, "var(--qed)"));
+      var facts = el("div", "facts");
+      var p = g.paired || { pairs: 0 };
+      facts.appendChild(fact("pairs", String(p.pairs)));
+      if (p.pairs) {
+        facts.appendChild(fact("only QEDCode", String(p.only_qedcode)));
+        facts.appendChild(fact("only baseline", String(p.only_baseline)));
+        facts.appendChild(fact("McNemar p", String(p.mcnemar_p)));
+      }
+      facts.appendChild(fact("regressions", pct(g.baseline.regression_rate) + " / " +
+        pct(g.qedcode.regression_rate)));
+      facts.appendChild(fact("median s", (g.baseline.median_seconds ?? "–") + " / " +
+        (g.qedcode.median_seconds ?? "–")));
+      card.appendChild(facts);
+      groupsEl.appendChild(card);
+    });
+    var notes = document.getElementById("notes");
+    board.notes.forEach(function (n) { notes.appendChild(el("li", "", n)); });
+  }
+
+  fetch("../leaderboard/leaderboard.json", { cache: "no-store" })
+    .then(function (r) { if (!r.ok) throw new Error(r.status); return r.json(); })
+    .then(render)
+    .catch(function () {
+      groupsEl.appendChild(el("div", "card empty",
+        "Could not load leaderboard.json. Open this page through a web server " +
+        "(for example `python3 -m http.server` in the repository) or GitHub Pages."));
+    });
+})();
+</script>
+</body>
+</html>

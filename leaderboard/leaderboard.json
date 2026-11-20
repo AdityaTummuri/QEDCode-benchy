@@ -1,0 +1,13 @@
+{
+  "accepted_submissions": 0,
+  "groups": [],
+  "last_run_date": null,
+  "notes": [
+    "Community-reported results passed schema and consistency checks; that does not prove a run happened as described.",
+    "Independently reproduced = a maintainer re-ran it and listed it in results/reproduced.json.",
+    "Rates come with 95% Wilson intervals; pairs are the same task and repetition within one submission."
+  ],
+  "reproduced_submissions": 0,
+  "schema_version": 1,
+  "skipped_invalid": []
+}

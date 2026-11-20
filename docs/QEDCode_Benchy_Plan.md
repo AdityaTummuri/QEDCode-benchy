@@ -1,10 +1,30 @@
 # QEDCode Benchy — Project Plan
 
-**Status:** Proposed architecture  
+**Status:** Milestones 1–6 implemented (2026-11-21); see *Revisions* below  
 **Core project:** [QEDCode](https://github.com/AdityaTummuri/QEDCode)  
-**Companion project:** `qedcode-benchy` (separate repository; create when implementation begins)
+**Companion project:** [QEDCode-benchy](https://github.com/AdityaTummuri/QEDCode-benchy)
 
 ---
+
+## Revisions (2026-11-21)
+
+These parts of the original plan were removed or simplified during implementation. Each was either
+unnecessary for the goal or created a risk or burden that outweighed its value.
+
+| Original plan | Now | Why |
+|---|---|---|
+| Periodic "install Benchy" reminders with remind-later / don't-remind-again state | **Removed.** `qed setup` ends with one line naming `qed benchy install`. It never asks again. | Nagging an optional tool is user-hostile and needs state, a scheduler and settings for little gain. |
+| `qedcode benchy disable` | **Removed.** `qed benchy uninstall` removes it and keeps reports. | With no reminders and no background work, there is nothing to disable. |
+| `qedcode benchy leaderboard` | **Removed.** The dashboard and README table are in the Benchy repo. | A command that only prints a URL adds surface without value. |
+| Command name `qedcode benchy ...` | `qed benchy ...` | QEDCode's executable is `qed`. |
+| Persistent "sharing enabled" setting and automatic submission after each run | **Replaced** by per-run, explicit `benchy share` (preview) and `--export` (save a file). | Consent per result, after seeing it, is clearer than a standing setting. Nothing is ever sent automatically. |
+| Server-side submission service + GitHub App opening anonymous bot PRs | **Deferred.** Contributors open the PR themselves; docs say plainly that it shows their GitHub account. | It needs hosting, a privileged credential, abuse controls and ongoing operation, and it is a large attack surface. Community results cannot be verified anyway, so anonymity buys little. It can be added later without changing the record format. |
+| Random pseudonymous contributor id | **Removed.** Duplicates are found by content hash (`submission_id`). | Any stable id is a tracking identifier. Contributor counts are not needed. |
+| `results/raw/` + `results/accepted/` + status markers | **One folder** `results/submissions/`: merged means accepted. `results/reproduced.json` lists reproduced ids. | Git history and review already give the states. Fewer places mean fewer inconsistencies. |
+| Separate `sanitizer.py`, `deduplicator.py`, `readme_updater.py`, three workflows | `benchy/submission/` (shared by client and CI), `bot/validate_pr.py`, `bot/aggregate.py`; workflows `ci`, `validate-submission`, `update-results` | The client and CI must agree on validity, so they share one implementation. The dashboard is static and needs no workflow. |
+
+Also changed in QEDCode: a candidate that changes no code outside tests (only comments or
+formatting) is now graded C instead of B. Benchy's scripted self-test found it.
 
 ## 1. Project goal
 
@@ -33,7 +53,7 @@ Responsibilities:
 
 ### QEDCode Benchy
 
-Proposed repository: `qedcode-benchy`
+Repository: https://github.com/AdityaTummuri/QEDCode-benchy (Python package `qedcode-benchy`)
 
 Responsibilities:
 
@@ -52,37 +72,26 @@ The Benchy repository should link prominently back to QEDCode. QEDCode should li
 
 Benchy is an optional component managed through QEDCode. Users should not need to clone a second repository or manually install a separate application.
 
-During QEDCode setup, offer:
+`qed benchy install` installs it into QEDCode's own environment (after a yes). Normal QEDCode
+installation and operation are unaffected whether or not Benchy is installed.
 
-- Install Benchy now.
-- Skip for now.
-- Don't remind me again.
+QEDCode shows no reminders (see *Revisions*): `qed setup` ends with one line naming the install
+command, and that is all.
 
-Normal QEDCode installation and operation must remain unaffected if Benchy is skipped.
-
-If Benchy is not installed, QEDCode may occasionally show a low-frequency reminder, subject to the user's preference. Provide clear controls:
-
-- Remind me later.
-- Don't remind me again.
-
-If Benchy is already installed, suppress installation reminders. If the user disables or uninstalls Benchy, stop reminders. The user can reinstall it later.
-
-### Suggested commands
-
-These are proposed command names; confirm compatibility with QEDCode's actual CLI before implementation.
+### Commands (implemented in QEDCode as `qed benchy`, see QEDCode's AGENTS.md 15.5)
 
 | Command | Purpose |
 |---|---|
-| `qedcode benchy` | Open Benchy |
-| `qedcode benchy run` | Run a benchmark |
-| `qedcode benchy report` | View local reports |
-| `qedcode benchy share` | Configure community sharing |
-| `qedcode benchy status` | Show installation and sharing status |
-| `qedcode benchy disable` | Disable Benchy and reminders |
-| `qedcode benchy uninstall` | Remove Benchy |
-| `qedcode benchy leaderboard` | View community results |
+| `qed benchy` / `qed benchy status` | Show whether Benchy is installed and how to use it |
+| `qed benchy install [--from <path>]` | Install Benchy into QEDCode's environment (asks first) |
+| `qed benchy uninstall` | Remove Benchy (reports are kept) |
+| `qed benchy run` | Run a benchmark |
+| `qed benchy report` | View local reports |
+| `qed benchy selftest` | Check the pipeline with scripted models |
+| `qed benchy suites [check]` | List or validate suites |
+| `qed benchy share [--export]` | Preview or save a sanitized result |
 
-A standalone `qedcode-benchy` executable may also be provided, but it should not be required for normal use.
+The standalone `benchy` (alias `qedcode-benchy`) executable does the same and is not required.
 
 ## 4. Benchmark workflow
 
@@ -147,18 +156,17 @@ Benchy must not:
 - Send source code, private patches, API keys, or personal files.
 - Collect data merely because QEDCode is installed.
 
-The user should be able to enable or disable community sharing through a clear setting or command. Explain what fields will be shared before the first opt-in. Sharing should be revocable.
+Sharing is decided per result (see *Revisions*):
 
-When sharing is enabled and the user explicitly runs Benchy:
+1. `benchy run` generates the local report (always).
+2. `benchy share` builds the community record from an allowlist of approved fields, scans it for
+   secrets and personal data, validates it, and shows it with a list of what is and is not shared.
+   Nothing is written or sent.
+3. `benchy share --export` saves the record as `<submission id>.json`.
+4. The user may open a pull request adding it to `results/submissions/`. That is the only way a
+   result leaves their machine, and it shows their GitHub account (stated in the tool and the docs).
 
-1. Generate the local report.
-2. Build a separate community submission from approved fields.
-3. Sanitize the submission.
-4. Submit it automatically through the community submission service.
-5. Create a PR under the project's bot identity.
-6. Show the user whether submission succeeded and provide a reference to the PR or submission.
-
-Do not embed a GitHub personal access token or repository write token in the distributed QEDCode/Benchy client.
+The client contains no tokens or credentials of any kind.
 
 ### Privacy fields
 
@@ -180,9 +188,12 @@ Potentially publish, where useful and consented to:
 - Runtime, token usage, and estimated cost.
 - Generalized hardware/software categories.
 
-Use a random pseudonymous contributor identifier only if needed for deduplication or aggregate contributor counts. Do not claim perfect anonymity: combinations of rare hardware, software, and timing details can still be identifying. Minimize and generalize metadata.
+No contributor identifier is used. Duplicates are detected by content hash. Do not claim perfect anonymity: combinations of rare hardware, software, and timing details can still be identifying. Minimize and generalize metadata.
 
-## 7. Submission service and GitHub PR creation
+## 7. Submission service and GitHub PR creation — deferred
+
+*Not built (see Revisions).* Kept as the design if anonymous submission is ever needed. The record
+format and the CI validation already work unchanged behind such a service.
 
 Use a small server-side submission service integrated with a GitHub App.
 
@@ -220,6 +231,11 @@ Run workflows when a community submission PR is opened, synchronized, or updated
 
 Validation must treat all PR content as untrusted input.
 
+Implemented in `.github/workflows/validate-submission.yml` + `bot/validate_pr.py`. The validator
+comes from the base branch, and the PR is read only through `git show`/`git ls-tree`. With the
+`pull_request` trigger the workflow file itself comes from the PR, so human review must confirm
+that a submission PR changes only `results/submissions/` (see `docs/contributing.md`).
+
 ### Security requirements
 
 - Use least-privilege workflow permissions.
@@ -237,10 +253,9 @@ GitHub Actions minutes and usage limits depend on the repository plan and curren
 
 After validation and the repository's acceptance policy are satisfied:
 
-- Normalize records into a stable format.
-- Store sanitized raw submissions.
-- Mark records as accepted, rejected, incomplete, or awaiting review.
-- Recalculate aggregates from accepted records.
+- Records are already canonical (built by one sanitizer, checked by one validator).
+- Merged files in `results/submissions/` are the accepted records. Rejected PRs are never merged.
+- `bot/aggregate.py` validates every record again and recalculates aggregates from them.
 - Regenerate leaderboard data.
 - Update the README statistics.
 - Refresh the public dashboard.
@@ -269,84 +284,69 @@ Clearly label results as:
 
 A valid PR and passing schema checks do not prove that a benchmark run genuinely occurred. Do not present community submissions as independently verified unless they have actually been reproduced.
 
-## 11. Suggested repository layout
+## 11. Repository layout (as built)
 
 ```text
-qedcode-benchy/
-├── README.md
-├── LICENSE
-├── docs/
-│   ├── methodology.md
-│   ├── privacy.md
-│   ├── installation.md
-│   └── contributing.md
-├── schemas/
-│   └── result.schema.json
+QEDCode-benchy/
+├── README.md                  status, quick start, community results table (generated)
+├── docs/                      methodology.md, privacy.md, contributing.md, this plan
 ├── benchy/
-│   ├── runner/
-│   ├── evaluators/
-│   ├── reports/
-│   └── submission/
-├── results/
-│   ├── raw/
-│   ├── accepted/
-│   └── aggregates/
-├── leaderboard/
-│   └── leaderboard.json
-├── dashboard/
-├── bot/
-│   ├── validator.py
-│   ├── sanitizer.py
-│   ├── deduplicator.py
-│   ├── aggregator.py
-│   └── readme_updater.py
-└── .github/
-    └── workflows/
-        ├── validate-submission.yml
-        ├── process-results.yml
-        └── update-dashboard.yml
+│   ├── cli.py                 run | report | suites | selftest | share | status
+│   ├── suite.py               suites, clean workspaces, fingerprints, validity checks
+│   ├── runner/                baseline, qedcode condition, experiment, metered clients, scripted
+│   ├── evaluators/            independent hidden-test evaluator
+│   ├── reports/               statistics and the local report writer
+│   └── submission/            schema.json, sanitizer, validator (shared by client and CI)
+├── suites/benchy-core/        8 tasks with hidden tests and reference patches
+├── results/submissions/       accepted community records (<submission id>.json)
+├── results/reproduced.json    ids a maintainer reproduced
+├── leaderboard/leaderboard.json   generated by bot/aggregate.py
+├── dashboard/index.html       static page reading the leaderboard
+├── bot/                       validate_pr.py, aggregate.py (trusted CI code)
+└── .github/                   CODEOWNERS; workflows ci, validate-submission, update-results
 ```
-
-This is a target structure, not a requirement to create every directory immediately. Keep the first implementation small.
 
 ## 12. Implementation milestones
 
-### Milestone 1 — Prove the benchmark
+All six milestones are implemented. What remains is running them with real models and
+publishing the first reproduced results.
+
+### Milestone 1 — Prove the benchmark (done)
 
 - Build one real baseline-versus-QEDCode comparison.
 - Use one real task and an independent evaluator.
 - Save a local JSON and Markdown report.
 - Verify that the only intended experimental difference is QEDCode.
 
-### Milestone 2 — Make results reproducible
+### Milestone 2 — Make results reproducible (done)
 
 - Add a small fixed task suite.
 - Add repetitions and failure tracking.
 - Record versions, configurations, and resource limits.
 - Test report consistency.
 
-### Milestone 3 — Integrate optional Benchy into QEDCode
+### Milestone 3 — Integrate optional Benchy into QEDCode (done, in QEDCode)
 
 - Add optional installation and lifecycle management.
 - Add status, run, report, disable, and uninstall commands.
-- Add reminders with user controls.
+- ~~Add reminders with user controls.~~ Removed (see Revisions).
 - Ensure normal QEDCode usage is unchanged.
 
-### Milestone 4 — Add privacy-safe sharing
+### Milestone 4 — Add privacy-safe sharing (done; submission service deferred)
 
 - Define the public result schema.
 - Implement sanitization and local preview.
 - Add explicit sharing consent.
-- Build the server-side submission service and GitHub App integration.
+- ~~Build the server-side submission service and GitHub App integration.~~ Deferred.
 
-### Milestone 5 — Automate PR validation
+### Milestone 5 — Automate PR validation (done)
 
 - Add GitHub Actions validation.
 - Add duplicate detection and security checks.
 - Test malicious and malformed submissions.
 - Start with human approval before merging.
 
-### Milestone 6 — Publish community results
+### Milestone 6 — Publish community results (done)
 
 - Generate aggregate statistics from accepted records.
 - Update README and leaderboard automatically.

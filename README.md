@@ -13,16 +13,29 @@ judged by the same **independent evaluator**, using hidden tests that neither si
 
 | Milestone (from [the plan](docs/QEDCode_Benchy_Plan.md)) | State |
 |---|---|
-| 1. Prove the benchmark: one fair baseline-vs-QEDCode comparison, local report | **Done** |
-| 2. Reproducible: fixed suite, repetitions, failure tracking, versions/config recorded | **Done** |
-| 3. Optional install and lifecycle inside QEDCode (`qedcode benchy ...`) | Not started (QEDCode repo) |
-| 4–6. Privacy-safe sharing, PR validation, community dashboard | Not started |
+| 1. Prove the benchmark: one fair baseline-vs-QEDCode comparison, local report | Done |
+| 2. Reproducible: fixed suite, repetitions, failure tracking, versions/config recorded | Done |
+| 3. Optional install and lifecycle inside QEDCode (`qed benchy ...`) | Done (in QEDCode) |
+| 4. Privacy-safe sharing: schema, sanitizer, local preview, export | Done (no upload service, see the plan) |
+| 5. Automated PR validation of submissions | Done (GitHub Actions, human merge) |
+| 6. Aggregates, README statistics, static dashboard | Done (fills in as results arrive) |
 
-No real-model results have been published yet. Every number Benchy prints comes from a run you made.
+## Community results
+
+<!-- benchy:stats:start -->
+_No community results yet. Run `benchy run`, then `benchy share` to preview what a contribution contains._
+<!-- benchy:stats:end -->
+
+Dashboard: [`dashboard/index.html`](dashboard/index.html) (serve the repository, e.g. GitHub Pages).
+Data: [`leaderboard/leaderboard.json`](leaderboard/leaderboard.json), generated only by
+`bot/aggregate.py` from the records in [`results/submissions/`](results/submissions/).
+A passing schema check does not prove a run happened, so results are labelled
+*community-reported* until a maintainer reproduces them.
 
 ## Quick start
 
-Benchy lives in the same Python environment as QEDCode.
+Benchy lives in the same Python environment as QEDCode. The easy way is `qed benchy install`.
+For development:
 
 ```bash
 # from a checkout of this repository, next to a QEDCode checkout
@@ -34,7 +47,12 @@ benchy run                 # benchy-core suite, your QEDCode model, both conditi
 benchy run --reps 5 --tasks b01,b04 --speed sure
 benchy run --suite ../QEDCode/bugzoo          # any folder in bug-zoo format works
 benchy report              # latest report;  benchy report --list  for all runs
+benchy share               # preview exactly what a contribution would contain (sends nothing)
+benchy share --export      # save it as <submission id>.json to add in a pull request
 ```
+
+From QEDCode, the same commands are `qed benchy install`, `qed benchy run`, `qed benchy report`,
+and so on.
 
 Models: `--model qedcode` (default: the model `qed` is set up with), `ollama:<name>`,
 `openai:<base url>#<model>` (LM Studio and others), or `scripted:oracle|broken` for self-tests.
@@ -68,7 +86,8 @@ grade is visible.
 - Every attempt counts: timeouts, crashes and unparsable answers stay in the denominator.
 
 Details and known limitations: [docs/methodology.md](docs/methodology.md). What leaves your machine
-(nothing, today): [docs/privacy.md](docs/privacy.md).
+(nothing, unless you open a pull request yourself): [docs/privacy.md](docs/privacy.md).
+How contributions are checked: [docs/contributing.md](docs/contributing.md).
 
 ## Suites
 
@@ -80,7 +99,7 @@ both pass.
 ## Development
 
 ```bash
-.venv/bin/python -m pytest -q     # 34 tests, real pytest + real QEDCode engine, scripted models
+.venv/bin/python -m pytest -q     # real pytest + the real QEDCode engine, scripted models
 .venv/bin/ruff check . && .venv/bin/ruff format --check .
 ```
 

@@ -125,6 +125,55 @@ def cmd_report(args: argparse.Namespace) -> int:
     return 0
 
 
+def _pick_run(root: Path, run_id: str | None) -> Path | None:
+    runs = _run_dirs(root)
+    chosen = [r for r in runs if r.name == run_id] if run_id else runs[-1:]
+    return chosen[0] if chosen else None
+
+
+def cmd_share(args: argparse.Namespace) -> int:
+    """Preview (default) or export the sanitized record of one run. Never uploads anything."""
+    from benchy.submission import SubmissionError
+    from benchy.submission.sanitize import (
+        FIELD_NOTES,
+        NOT_SHARED,
+        build_submission,
+        load_results,
+    )
+
+    run = _pick_run(reports_root(args.out), args.run_id)
+    if run is None:
+        _say("There is no such run. `benchy report --list` shows your runs.")
+        return 1
+    try:
+        record = build_submission(load_results(run))
+    except SubmissionError as exc:
+        _say(f"Cannot share {run.name}: {exc}")
+        return 1
+    text = json.dumps(record, indent=1, sort_keys=True) + "\n"
+    if not args.export:
+        _say(f"This is exactly what would be shared for run {run.name}:\n")
+        for field_name, note in FIELD_NOTES:
+            _say(f"  {field_name:<12} {note}")
+        _say(f"  never shared: {NOT_SHARED}\n")
+        print(text)
+        _say(
+            "Nothing was written or sent. To save it for a contribution: "
+            "benchy share --export [FILE]"
+        )
+        return 0
+    target = Path(args.export if args.export != "-" else f"{record['submission_id']}.json")
+    target.write_text(text, encoding="utf-8")
+    _say(f"Saved {target}. Nothing was sent anywhere.")
+    _say(
+        "To contribute it, open a pull request that adds it as "
+        f"results/submissions/{record['submission_id']}.json in "
+        "https://github.com/AdityaTummuri/QEDCode-benchy. Note: a pull request shows your "
+        "GitHub account name; the file itself contains no identity."
+    )
+    return 0
+
+
 def cmd_suites(args: argparse.Namespace) -> int:
     from benchy.suite import SuiteError, check_task, list_builtin_suites, load_suite
 
@@ -189,7 +238,7 @@ def cmd_status(args: argparse.Namespace) -> int:
     print(f"Built-in suites: {', '.join(list_builtin_suites())}")
     root = reports_root(args.out)
     print(f"Reports folder: {root} ({len(_run_dirs(root))} runs)")
-    print("Community sharing: not available in this version (nothing is ever uploaded).")
+    print("Sharing: nothing is ever uploaded; `benchy share` previews or exports a record.")
     try:
         from benchy.runner.clients import make_model
 
@@ -263,6 +312,18 @@ def build_parser() -> argparse.ArgumentParser:
     st.add_argument("--suite", default="benchy-core")
     st.add_argument("--out", help="keep the self-test reports in this folder")
     st.set_defaults(func=cmd_selftest)
+
+    sh = sub.add_parser("share", help="preview or export a sanitized result (never uploads)")
+    sh.add_argument("run_id", nargs="?")
+    sh.add_argument(
+        "--export",
+        nargs="?",
+        const="-",
+        metavar="FILE",
+        help="write the record to FILE (default: <submission id>.json here)",
+    )
+    out_flag(sh)
+    sh.set_defaults(func=cmd_share)
 
     status = sub.add_parser("status", help="versions, model and report folder")
     out_flag(status)

@@ -1,0 +1,84 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/AdityaTummuri/QEDCode-benchy/benchy/submission/schema.json",
+  "title": "Benchy community submission",
+  "description": "A sanitized benchmark result. Only these fields may be shared: no code, patches, paths, hostnames, account names or secrets.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "submission_id", "benchy_version", "qedcode_version", "run_date", "suite", "model", "controls", "environment", "attempts"],
+  "properties": {
+    "schema_version": {"type": "integer", "enum": [1]},
+    "submission_id": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "benchy_version": {"type": "string", "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+([.+-][0-9A-Za-z.]+)?$", "maxLength": 32},
+    "qedcode_version": {"type": "string", "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+([.+-][0-9A-Za-z.]+)?$", "maxLength": 32},
+    "run_date": {"type": "string", "pattern": "^20[0-9]{2}-[01][0-9]-[0-3][0-9]$"},
+    "suite": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["name", "version", "fingerprint_sha256"],
+      "properties": {
+        "name": {"type": "string", "pattern": "^[a-z0-9][a-z0-9-]{0,39}$"},
+        "version": {"type": "string", "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$"},
+        "fingerprint_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"}
+      }
+    },
+    "model": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["backend", "name"],
+      "properties": {
+        "backend": {"type": "string", "enum": ["llamacpp", "ollama", "openai_compat", "cloud"]},
+        "name": {"type": "string", "pattern": "^[A-Za-z0-9][A-Za-z0-9._:@+/-]{0,99}$"}
+      }
+    },
+    "controls": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["conditions", "repetitions", "time_limit_s_per_condition", "qedcode_speed", "qedcode_apply_policy", "order_seed"],
+      "properties": {
+        "conditions": {"type": "array", "items": {"type": "string", "enum": ["baseline", "qedcode"]}, "minItems": 2, "maxItems": 2},
+        "repetitions": {"type": "integer", "minimum": 1, "maximum": 100},
+        "time_limit_s_per_condition": {"type": "number", "minimum": 1, "maximum": 86400},
+        "qedcode_speed": {"type": "string", "enum": ["fast", "normal", "sure"]},
+        "qedcode_apply_policy": {"type": "string", "enum": ["any", "ab"]},
+        "order_seed": {"type": "integer", "minimum": 0, "maximum": 4294967295}
+      }
+    },
+    "environment": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["os", "arch", "python"],
+      "properties": {
+        "os": {"type": "string", "enum": ["Linux", "Darwin", "Windows", "other"]},
+        "arch": {"type": "string", "enum": ["x86_64", "arm64", "other"]},
+        "python": {"type": "string", "pattern": "^3\\.[0-9]{1,2}$"}
+      }
+    },
+    "attempts": {
+      "type": "array",
+      "minItems": 2,
+      "maxItems": 20000,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["task_id", "rep", "condition", "status", "resolved", "regression", "hidden_passed", "hidden_total", "visible_passed", "visible_total", "seconds", "model_calls", "tokens_est", "qed_grade"],
+        "properties": {
+          "task_id": {"type": "string", "pattern": "^[A-Za-z0-9_-]{1,64}$"},
+          "rep": {"type": "integer", "minimum": 1, "maximum": 100},
+          "condition": {"type": "string", "enum": ["baseline", "qedcode"]},
+          "status": {"type": "string", "enum": ["done", "no_change", "unparsable", "timeout", "error"]},
+          "resolved": {"type": "boolean"},
+          "regression": {"type": "boolean"},
+          "hidden_passed": {"type": "integer", "minimum": 0, "maximum": 1000},
+          "hidden_total": {"type": "integer", "minimum": 1, "maximum": 1000},
+          "visible_passed": {"type": "integer", "minimum": 0, "maximum": 10000},
+          "visible_total": {"type": "integer", "minimum": 0, "maximum": 10000},
+          "seconds": {"type": "number", "minimum": 0, "maximum": 172800},
+          "model_calls": {"type": "integer", "minimum": 0, "maximum": 10000},
+          "tokens_est": {"type": "integer", "minimum": 0, "maximum": 100000000},
+          "qed_grade": {"type": ["string", "null"], "enum": ["A", "B", "C", "D", null]}
+        }
+      }
+    }
+  }
+}

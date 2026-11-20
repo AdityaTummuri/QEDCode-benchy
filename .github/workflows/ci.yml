@@ -1,0 +1,31 @@
+name: ci
+on:
+  push:
+    branches: [main]
+  pull_request:
+permissions:
+  contents: read
+jobs:
+  test:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, macos-latest]
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        with:
+          persist-credentials: false
+      - name: Install QEDCode and Benchy
+        run: |
+          python3 -m venv .venv
+          .venv/bin/python -m pip install --quiet --upgrade pip
+          .venv/bin/python -m pip install --quiet "qedcode @ git+https://github.com/AdityaTummuri/QEDCode" -e . ruff
+      - name: Lint
+        run: .venv/bin/ruff check . && .venv/bin/ruff format --check .
+      - name: Every suite task is valid
+        run: .venv/bin/benchy suites check benchy-core
+      - name: Tests
+        run: .venv/bin/python -m pytest -q
+      - name: Aggregates are up to date
+        run: .venv/bin/python bot/aggregate.py --check
