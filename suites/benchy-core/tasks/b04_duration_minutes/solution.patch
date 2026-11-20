@@ -1,0 +1,13 @@
+diff --git a/src/timekit/durations.py b/src/timekit/durations.py
+index 9a263cf..230e40d 100644
+--- a/src/timekit/durations.py
++++ b/src/timekit/durations.py
+@@ -3,7 +3,7 @@
+ import re
+ 
+ _PART = re.compile(r"(\d+)([hms])")
+-_UNITS = {"h": 3600, "m": 3600, "s": 1}
++_UNITS = {"h": 3600, "m": 60, "s": 1}
+ 
+ 
+ def parse_duration(text):

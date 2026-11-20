@@ -1,0 +1,1 @@
+get_path(data, 'a.b', default) crashes with a TypeError when a value along the path is not a dict (for example a number or a string). It should return the default instead.

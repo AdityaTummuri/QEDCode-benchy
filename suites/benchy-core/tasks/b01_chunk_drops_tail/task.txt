@@ -1,0 +1,1 @@
+chunk() silently drops the last group when the list does not divide evenly, e.g. chunk([1, 2, 3], 2) loses the 3. Please fix it.

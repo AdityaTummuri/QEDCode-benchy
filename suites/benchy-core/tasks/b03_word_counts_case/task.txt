@@ -1,0 +1,1 @@
+word_counts() treats 'The' and 'the' as different words. Counting should ignore letter case (keys in lower case).

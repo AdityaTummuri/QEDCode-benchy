@@ -1,0 +1,1 @@
+retry(fn, attempts=3) only calls fn twice before giving up. It should call it up to `attempts` times and return the first successful result.

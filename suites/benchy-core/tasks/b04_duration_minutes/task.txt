@@ -1,0 +1,1 @@
+parse_duration('10m') returns 36000 seconds instead of 600. Minutes are being converted wrongly; '1h30m' should be 5400.

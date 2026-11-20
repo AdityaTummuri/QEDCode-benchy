@@ -1,0 +1,11 @@
+diff --git a/src/textkit/counts.py b/src/textkit/counts.py
+index 8f29563..f01219a 100644
+--- a/src/textkit/counts.py
++++ b/src/textkit/counts.py
+@@ -9,5 +9,6 @@ def word_counts(text):
+     """Return a dict mapping each word in `text` to how often it appears."""
+     counts = {}
+     for word in _WORD.findall(text):
++        word = word.lower()
+         counts[word] = counts.get(word, 0) + 1
+     return counts

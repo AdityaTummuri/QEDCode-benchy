@@ -1,0 +1,10 @@
+diff --git a/src/listkit/chunks.py b/src/listkit/chunks.py
+index c446c50..979a5b6 100644
+--- a/src/listkit/chunks.py
++++ b/src/listkit/chunks.py
+@@ -6,4 +6,4 @@ def chunk(items, size):
+     if size < 1:
+         raise ValueError("size must be at least 1")
+     items = list(items)
+-    return [items[i : i + size] for i in range(0, len(items) - size + 1, size)]
++    return [items[i : i + size] for i in range(0, len(items), size)]

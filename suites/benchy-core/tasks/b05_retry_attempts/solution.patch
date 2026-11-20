@@ -1,0 +1,17 @@
+diff --git a/src/flowkit/retry.py b/src/flowkit/retry.py
+index dc78e88..9dc003f 100644
+--- a/src/flowkit/retry.py
++++ b/src/flowkit/retry.py
+@@ -6,11 +6,9 @@ def retry(fn, attempts=3, exceptions=(Exception,)):
+     if attempts < 1:
+         raise ValueError("attempts must be at least 1")
+     last_error = None
+-    for _ in range(attempts - 1):
++    for _ in range(attempts):
+         try:
+             return fn()
+         except exceptions as exc:
+             last_error = exc
+-    if last_error is None:
+-        return fn()
+     raise last_error

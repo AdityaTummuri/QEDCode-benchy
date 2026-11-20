@@ -1,0 +1,4 @@
+[suite]
+name = "benchy-core"
+version = "1.0.0"
+description = "Eight small, self-contained Python tasks (seven bug fixes, one small feature) with hidden evaluator tests. Written for Benchy, separate from QEDCode's own bug zoo."

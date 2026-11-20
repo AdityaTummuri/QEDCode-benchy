@@ -1,0 +1,13 @@
+diff --git a/src/datakit/paths.py b/src/datakit/paths.py
+index befed2f..cb80f1f 100644
+--- a/src/datakit/paths.py
++++ b/src/datakit/paths.py
+@@ -5,7 +5,7 @@ def get_path(data, path, default=None):
+     """Return data['a']['b'] for path 'a.b', or `default` when the path does not exist."""
+     current = data
+     for key in path.split("."):
+-        if key not in current:
++        if not isinstance(current, dict) or key not in current:
+             return default
+         current = current[key]
+     return current

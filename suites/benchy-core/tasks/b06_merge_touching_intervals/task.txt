@@ -1,0 +1,1 @@
+merge() does not join intervals that touch: [(1, 2), (2, 3)] should become [(1, 3)]. Touching intervals count as overlapping.
