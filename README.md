@@ -58,6 +58,12 @@ Models: `--model qedcode` (default: the model `qed` is set up with), `ollama:<na
 `openai:<base url>#<model>` (LM Studio and others), or `scripted:oracle|broken` for self-tests.
 Add `--price-in/--price-out` (USD per million tokens) to get estimated costs for paid models.
 
+**No GPU?** Set QEDCode up with a cloud model (`qed setup`, then choose cloud) and run
+`benchy run --model qedcode --price-in <usd> --price-out <usd>`. Both conditions then use that
+cloud model, and the task code is sent to its provider ([privacy](docs/privacy.md)). It works the
+same from the terminal inside Antigravity or VS Code. QEDCode itself connects to those IDEs with
+`qed connect antigravity` or `qed connect vscode`.
+
 ## What a run produces
 
 ```text

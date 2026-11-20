@@ -4,6 +4,9 @@
 
 Benchy has no network code of its own and no upload, telemetry or background feature. The only
 network traffic is whatever your chosen model backend does, exactly as when you use QEDCode.
+With a cloud model (`qed setup` set to cloud mode, then `benchy run --model qedcode`), the task
+code and prompts of both conditions go to that provider, just as in QEDCode's own cloud mode.
+The API key stays in your system keychain and never appears in a report.
 Benchy runs only when you type a `benchy` (or `qed benchy`) command, and writes only to your
 reports folder (default `~/.qedcode/benchy/reports`).
 

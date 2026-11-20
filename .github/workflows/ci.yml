@@ -3,6 +3,11 @@ on:
   push:
     branches: [main]
   pull_request:
+  # Benchy drives the QEDCode engine directly, so it runs against QEDCode's main branch every
+  # week as well: an engine change that breaks Benchy shows up here before a user finds it.
+  schedule:
+    - cron: "17 6 * * 1"
+  workflow_dispatch:
 permissions:
   contents: read
 jobs:
