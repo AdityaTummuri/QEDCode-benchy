@@ -80,6 +80,11 @@ def build_submission(results: dict) -> dict:
             "qedcode_speed": controls["qedcode_speed"],
             "qedcode_apply_policy": controls["qedcode_apply_policy"],
             "order_seed": controls["order_seed"],
+            **(
+                {"baseline_context": controls["baseline_context"]}
+                if "baseline_context" in controls
+                else {}
+            ),
         },
         "environment": {
             "os": _general_os(meta["environment"]["os"]),

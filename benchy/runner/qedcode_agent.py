@@ -46,6 +46,7 @@ def run_qedcode(
     speed: str,
     deadline: float,
     apply_policy: str = "any",
+    python: Path | None = None,
 ) -> QedOutcome:
     from qedcode.config import ProjectConfig, load_global, save_project
     from qedcode.engine import api
@@ -57,7 +58,8 @@ def run_qedcode(
     cfg = load_global().model_copy(deep=True)
     cfg.engine.learn = False
     mode = Mode.LOCAL if cfg.engine.mode is Mode.MIX else cfg.engine.mode
-    save_project(workspace, ProjectConfig(python=sys.executable, confirmed=True))
+    # The task's own interpreter (SWE-bench: its environment); Benchy's for folder tasks.
+    save_project(workspace, ProjectConfig(python=str(python or sys.executable), confirmed=True))
     events: list[str] = []
     cb = NonInteractiveCallbacks(
         on_event=lambda e: events.append(f"[{e.kind}] {e.message}"),

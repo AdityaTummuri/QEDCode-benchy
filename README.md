@@ -19,6 +19,7 @@ judged by the same **independent evaluator**, using hidden tests that neither si
 | 4. Privacy-safe sharing: schema, sanitizer, local preview, export | Done (no upload service, see the plan) |
 | 5. Automated PR validation of submissions | Done (GitHub Actions, human merge) |
 | 6. Aggregates, README statistics, static dashboard | Done (fills in as results arrive) |
+| 7. Standard suite: SWE-bench Verified (sympy, sphinx, pylint, xarray) without Docker | Done |
 
 ## Community results
 
@@ -97,10 +98,27 @@ How contributions are checked: [docs/contributing.md](docs/contributing.md).
 
 ## Suites
 
-`benchy-core` 1.0.0 has eight small Python tasks (seven bug fixes, one feature), written for Benchy
-separately from QEDCode's own bug zoo. `benchy suites check` proves that every task is valid: the
-visible tests pass on the original code, the hidden tests fail on it, and the reference patch makes
-both pass.
+| Suite | Tasks | What it is |
+|---|---|---|
+| `swebench-verified-py` 1.0.0 | 143 | [SWE-bench Verified](suites/swebench-verified-py/README.md) instances from sympy, sphinx, pylint and xarray, on the whole repository, judged by SWE-bench's FAIL_TO_PASS / PASS_TO_PASS tests. The standard suite: use it for results you publish. |
+| `benchy-core` 1.0.0 | 8 | small Python tasks (seven bug fixes, one feature) written for Benchy. Quick to run; good for trying a model and checking the pipeline. |
+
+```bash
+benchy suites fetch swebench-verified-py     # clones 4 repos and builds environments (asks first)
+benchy suites check swebench-verified-py     # which tasks are valid on this computer
+benchy run --suite swebench-verified-py      # 30 minutes per condition per task at most
+```
+
+On SWE-bench tasks the bare model gets SWE-bench's retrieval baseline (the issue plus the files
+BM25 ranks highest, about 13k tokens, answered with one patch); `--baseline-context oracle` gives
+it the files the real fix touched instead, the strictest comparison for QEDCode. The suite needs
+`git` and [uv](https://docs.astral.sh/uv/), not Docker. Its numbers are not comparable with the
+official SWE-bench leaderboard (see the [suite README](suites/swebench-verified-py/README.md)).
+
+`benchy suites check` proves that every task is valid: on `benchy-core`, the visible tests pass on
+the original code, the hidden tests fail on it, and the reference patch makes both pass; on
+SWE-bench, the FAIL_TO_PASS tests fail before and pass with the reference fix, which breaks no
+PASS_TO_PASS test.
 
 ## Development
 

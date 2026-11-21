@@ -5,6 +5,7 @@ benchy report [RUN_ID]          show a report (the latest when no id is given)
 benchy report --list            list local runs
 benchy suites                   list built-in suites
 benchy suites check [SUITE]     prove every task in a suite is valid
+benchy suites fetch [SUITE]     download what a SWE-bench suite needs (asks first)
 benchy selftest                 check the pipeline end to end with scripted models
 benchy status                   versions, model setup, where reports go
 """
@@ -57,6 +58,33 @@ def cmd_run(args: argparse.Namespace) -> int:
     if not conditions or any(c not in ("baseline", "qedcode") for c in conditions):
         _say("Error: --conditions takes baseline, qedcode or both (comma-separated).")
         return 2
+    skipped: list[str] = []
+    if suite.kind == "swebench":
+        from benchy.swebench.validity import load_validity
+
+        try:
+            for task in tasks:
+                task.python()
+        except SuiteError as exc:
+            _say(f"Error: {exc}")
+            return 2
+        validity = load_validity(suite)
+        if validity is None:
+            _say(
+                "Note: `benchy suites check` has not been run for this suite on this computer, so "
+                "tasks whose environment differs here are not skipped. Run it once first."
+            )
+        else:
+            skipped = [t.id for t in tasks if not validity.get(t.id, False)]
+            tasks = [t for t in tasks if validity.get(t.id, False)]
+            if skipped:
+                _say(f"Skipping {len(skipped)} task(s) that are not valid on this computer.")
+            if not tasks:
+                _say("Error: no valid tasks left to run.")
+                return 2
+    time_limit = args.time_limit
+    if time_limit is None:
+        time_limit = suite.time_limit_s or 600.0
     try:
         client, spec = make_model(args.model)
     except Exception as exc:
@@ -75,11 +103,13 @@ def cmd_run(args: argparse.Namespace) -> int:
         reps=args.reps,
         conditions=conditions,
         speed=args.speed,
-        time_limit_s=args.time_limit,
+        time_limit_s=time_limit,
         seed=args.seed,
         qed_apply=args.qed_apply,
         price_in_per_mtok=args.price_in,
         price_out_per_mtok=args.price_out,
+        baseline_context=args.baseline_context,
+        skipped_here=skipped,
     )
     total = len(tasks) * args.reps * len(conditions)
     _say(
@@ -177,22 +207,48 @@ def cmd_share(args: argparse.Namespace) -> int:
 def cmd_suites(args: argparse.Namespace) -> int:
     from benchy.suite import SuiteError, check_task, list_builtin_suites, load_suite
 
-    if args.action == "check":
+    if args.action in ("check", "fetch"):
         try:
             suite = load_suite(args.suite)
+            tasks = suite.select([t for t in args.tasks.split(",") if t.strip()])
         except SuiteError as exc:
             _say(f"Error: {exc}")
             return 2
+    if args.action == "fetch":
+        if suite.kind != "swebench":
+            _say(f"{suite.name} ships everything it needs; there is nothing to fetch.")
+            return 0
+        from benchy.swebench.fetch import fetch
+
+        return fetch(tasks, assume_yes=args.yes, say=_say)
+    if args.action == "check":
         bad = 0
-        for task in suite.tasks:
-            result = check_task(task)
+        results = {}
+        for task in tasks:
+            try:
+                result = check_task(task)
+            except SuiteError as exc:
+                _say(f"Error: {exc}")
+                return 2
+            results[task.id] = result.valid
             bad += not result.valid
+            lost = (
+                f"  ({len(result.p2p_lost)} PASS_TO_PASS fail here already)"
+                if result.p2p_lost
+                else ""
+            )
             print(
                 f"{'ok     ' if result.valid else 'INVALID'}  {task.id}"
-                + ("" if result.valid else f"  ({'; '.join(result.problems)})")
+                + (lost if result.valid else f"  ({'; '.join(result.problems)})"),
+                flush=True,
             )
+        if suite.kind == "swebench":
+            from benchy.swebench.validity import save_validity
+
+            path = save_validity(suite, results)
+            _say(f"Saved which tasks are valid on this computer in {path}")
         print(
-            f"{len(suite.tasks) - bad} of {len(suite.tasks)} tasks valid "
+            f"{len(tasks) - bad} of {len(tasks)} tasks valid "
             f"(suite {suite.name} {suite.version}, fingerprint {suite.fingerprint()[:12]})"
         )
         return 1 if bad else 0
@@ -206,16 +262,30 @@ def cmd_selftest(args: argparse.Namespace) -> int:
     """Known answers: the oracle must resolve everything, the broken model nothing."""
     from benchy.runner.clients import make_model
     from benchy.runner.experiment import ExperimentConfig, run_experiment
-    from benchy.suite import load_suite
+    from benchy.suite import SuiteError, load_suite
 
-    suite = load_suite(args.suite)
+    try:
+        suite = load_suite(args.suite)
+        for task in suite.select([t for t in args.tasks.split(",") if t.strip()]):
+            task.python()  # SWE-bench tasks must be fetched first
+    except SuiteError as exc:
+        _say(f"Error: {exc}")
+        return 2
     expectations = {"scripted:oracle": True, "scripted:broken": False}
     failures = []
     with tempfile.TemporaryDirectory(prefix="benchy-selftest-") as tmp:
         out = Path(args.out).expanduser() if args.out else Path(tmp)
         for model, expect in expectations.items():
             client, spec = make_model(model)
-            cfg = ExperimentConfig(suite=suite, tasks=suite.tasks, model=spec, time_limit_s=120)
+            swe = suite.kind == "swebench"
+            tasks = suite.select([t for t in args.tasks.split(",") if t.strip()])
+            cfg = ExperimentConfig(
+                suite=suite,
+                tasks=tasks,
+                model=spec,
+                time_limit_s=1800 if swe else 120,
+                speed="fast" if swe else "normal",  # big repos: skip the full-suite baseline
+            )
             wanted = "resolved" if expect else "unresolved"
             _say(f"Self-test with {model} (expect every task {wanted})")
             state, run_dir = run_experiment(cfg, client, out, progress=_say)
@@ -281,8 +351,15 @@ def build_parser() -> argparse.ArgumentParser:
     run.add_argument(
         "--time-limit",
         type=float,
-        default=600.0,
-        help="seconds per condition per attempt (default 600)",
+        default=None,
+        help="seconds per condition per attempt (default: the suite's, else 600)",
+    )
+    run.add_argument(
+        "--baseline-context",
+        default="bm25",
+        choices=["bm25", "oracle"],
+        help="SWE-bench suites: files the bare model sees: BM25 retrieval (default) or the files "
+        "the reference fix changes (oracle; favours the baseline)",
     )
     run.add_argument("--seed", type=int, default=0, help="seed for the condition order")
     run.add_argument(
@@ -303,13 +380,16 @@ def build_parser() -> argparse.ArgumentParser:
     out_flag(rep)
     rep.set_defaults(func=cmd_report)
 
-    su = sub.add_parser("suites", help="list or check suites")
-    su.add_argument("action", nargs="?", choices=["list", "check"], default="list")
+    su = sub.add_parser("suites", help="list, check or fetch suites")
+    su.add_argument("action", nargs="?", choices=["list", "check", "fetch"], default="list")
     su.add_argument("suite", nargs="?", default="benchy-core")
+    su.add_argument("--tasks", default="", help="comma-separated task ids or prefixes")
+    su.add_argument("--yes", "-y", action="store_true", help="fetch without asking first")
     su.set_defaults(func=cmd_suites)
 
     st = sub.add_parser("selftest", help="check the pipeline with scripted models (no GPU)")
     st.add_argument("--suite", default="benchy-core")
+    st.add_argument("--tasks", default="", help="comma-separated task ids or prefixes")
     st.add_argument("--out", help="keep the self-test reports in this folder")
     st.set_defaults(func=cmd_selftest)
 

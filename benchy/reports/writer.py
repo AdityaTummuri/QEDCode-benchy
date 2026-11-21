@@ -57,14 +57,37 @@ def limitations(meta: dict, summary: dict) -> list[str]:
             f"Small sample ({pairs} paired attempts). Treat differences as indicative only; "
             "the confidence intervals and the McNemar p-value show how uncertain they are."
         )
-    notes += [
-        "Token counts are estimates (characters / 3.5), not counts from the model's tokenizer.",
-        "Tasks are small single-file Python problems; results may not carry over to large "
-        "real-world repositories.",
-        "The baseline is the bare model with one plain prompt and one answer. Other agent "
-        "harnesses (with their own retries or tools) would be different baselines.",
-        "Times include model latency on this machine and are only comparable within this run.",
-    ]
+    swe = meta.get("suite", {}).get("kind") == "swebench"
+    notes.append(
+        "Token counts are estimates (characters / 3.5), not counts from the model's tokenizer."
+    )
+    if swe:
+        skipped = meta["suite"].get("skipped_not_valid_here") or []
+        notes += [
+            "SWE-bench tasks run in environments rebuilt without Docker; results are not "
+            "comparable with the official SWE-bench leaderboard (a subset of repositories, a "
+            "retrieval baseline instead of an agent).",
+            "The baseline saw the issue plus retrieved files "
+            f"({meta['controls'].get('baseline_context')}) and answered with one patch. Other "
+            "harnesses would be different baselines.",
+            "SWE-bench Verified is public, so recent models may have seen these issues and fixes "
+            "in training.",
+        ]
+        if skipped:
+            notes.append(
+                f"{len(skipped)} task(s) were skipped for both conditions because they are not "
+                "valid on this computer (see metadata.json)."
+            )
+    else:
+        notes += [
+            "Tasks are small single-file Python problems; results may not carry over to large "
+            "real-world repositories.",
+            "The baseline is the bare model with one plain prompt and one answer. Other agent "
+            "harnesses (with their own retries or tools) would be different baselines.",
+        ]
+    notes.append(
+        "Times include model latency on this machine and are only comparable within this run."
+    )
     return notes
 
 
@@ -161,11 +184,18 @@ def render_markdown(meta: dict, summary: dict, attempts: list[dict]) -> str:
         "## Method",
         "",
         "Both conditions use the same model client, the same fresh repository snapshot (checked "
-        "by commit sha), the same time limit and the same evaluator. The evaluator applies only "
-        "changes to non-test source files to a pristine copy, then runs the original visible "
-        "tests and the hidden tests. *Resolved* = all hidden tests pass and no previously passing "
-        "visible test fails. Condition order is shuffled per task and repetition with the seed "
-        "above. See docs/methodology.md.",
+        "by commit sha), the same time limit and the same evaluator. "
+        + (
+            "The evaluator applies only changes to non-test source files to the base commit, adds "
+            "SWE-bench's test patch and runs the instance's tests. *Resolved* = every "
+            "FAIL_TO_PASS test passes and no PASS_TO_PASS test that passed before now fails. "
+            if meta.get("suite", {}).get("kind") == "swebench"
+            else "The evaluator applies only changes to non-test source files to a pristine copy, "
+            "then runs the original visible tests and the hidden tests. *Resolved* = all hidden "
+            "tests pass and no previously passing visible test fails. "
+        )
+        + "Condition order is shuffled per task and repetition with the seed above. "
+        "See docs/methodology.md.",
         "",
     ]
     return "\n".join(lines)

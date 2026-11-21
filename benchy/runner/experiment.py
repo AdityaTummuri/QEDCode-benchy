@@ -28,6 +28,7 @@ from pathlib import Path
 from benchy import __version__
 from benchy.evaluators.pytest_eval import Evaluator
 from benchy.runner import baseline as baseline_mod
+from benchy.runner import baseline_swe
 from benchy.runner.clients import MeteredClient, ModelSpec
 from benchy.runner.qedcode_agent import run_qedcode
 from benchy.suite import Suite, Task, prepare_workspace
@@ -48,6 +49,17 @@ class ExperimentConfig:
     qed_apply: str = "any"
     price_in_per_mtok: float | None = None
     price_out_per_mtok: float | None = None
+    baseline_context: str = "bm25"  # SWE-bench tasks: "bm25" or "oracle"
+    skipped_here: list[str] = field(default_factory=list)  # not valid on this computer
+
+
+def make_evaluator(task: Task):
+    """The judge for one task: the hidden-test evaluator, or the SWE-bench evaluator."""
+    if task.swe is not None:
+        from benchy.swebench.evaluate import SweEvaluator
+
+        return SweEvaluator(task.swe, task.python())
+    return Evaluator(task)
 
 
 @dataclass
@@ -88,7 +100,7 @@ def run_attempt(
     rep: int,
     condition: str,
     order_index: int,
-    evaluator: Evaluator,
+    evaluator,
     log_dir: Path,
     expected_commit: str | None,
 ) -> dict:
@@ -105,7 +117,21 @@ def run_attempt(
         started = time.monotonic()
         metered = MeteredClient(client, deadline=started + cfg.time_limit_s)
         extra: dict = {}
-        if condition == "baseline":
+        if condition == "baseline" and task.swe is not None:
+            out, shown = baseline_swe.run_baseline_swe(
+                metered,
+                task.request,
+                workspace,
+                context=cfg.baseline_context,
+                oracle_patch=task.swe.patch,
+            )
+            status, message = out.status, out.message
+            extra = {
+                "files_written": out.files_written,
+                "rejected_paths": out.rejected_paths,
+                "baseline_context_files": shown,
+            }
+        elif condition == "baseline":
             out = baseline_mod.run_baseline(metered, task.request, workspace, task.project_files())
             status, message = out.status, out.message
             extra = {"files_written": out.files_written, "rejected_paths": out.rejected_paths}
@@ -117,6 +143,7 @@ def run_attempt(
                 speed=cfg.speed,
                 deadline=started + cfg.time_limit_s,
                 apply_policy=cfg.qed_apply,
+                python=task.python(),
             )
             status, message = out.status, out.message
             extra = {
@@ -179,8 +206,10 @@ def metadata(cfg: ExperimentConfig, state: RunState) -> dict:
         "suite": {
             "name": cfg.suite.name,
             "version": cfg.suite.version,
+            "kind": cfg.suite.kind,
             "fingerprint_sha256": cfg.suite.fingerprint(),
             "tasks": [t.id for t in cfg.tasks],
+            "skipped_not_valid_here": list(cfg.skipped_here),
         },
         "model": {"backend": cfg.model.backend, "name": cfg.model.model},
         "controls": {
@@ -193,7 +222,16 @@ def metadata(cfg: ExperimentConfig, state: RunState) -> dict:
             "qedcode_memory": "off",
             "qedcode_helper_model": "off",
             "baseline_temperature": baseline_mod.TEMPERATURE,
-            "baseline_max_tokens": baseline_mod.MAX_TOKENS,
+            "baseline_max_tokens": (
+                baseline_swe.MAX_TOKENS if cfg.suite.kind == "swebench" else baseline_mod.MAX_TOKENS
+            ),
+            "baseline_context": (
+                f"{cfg.baseline_context}-{baseline_swe.CONTEXT_TOKENS // 1000}k-tokens"
+                if cfg.suite.kind == "swebench" and cfg.baseline_context == "bm25"
+                else (
+                    cfg.baseline_context if cfg.suite.kind == "swebench" else "every project file"
+                )
+            ),
             "same_model_client_for_both": True,
             "price_per_mtok_usd": (
                 {"input": cfg.price_in_per_mtok, "output": cfg.price_out_per_mtok}
@@ -201,13 +239,21 @@ def metadata(cfg: ExperimentConfig, state: RunState) -> dict:
                 else None
             ),
         },
-        "evaluator": {"name": Evaluator.name, "version": Evaluator.version},
+        "evaluator": _evaluator_meta(cfg),
         "environment": {
             "os": platform.system(),
             "arch": platform.machine(),
             "python": f"{sys.version_info.major}.{sys.version_info.minor}",
         },
     }
+
+
+def _evaluator_meta(cfg: ExperimentConfig) -> dict:
+    if cfg.suite.kind == "swebench":
+        from benchy.swebench.evaluate import SweEvaluator
+
+        return {"name": SweEvaluator.name, "version": SweEvaluator.version}
+    return {"name": Evaluator.name, "version": Evaluator.version}
 
 
 def run_experiment(
@@ -224,7 +270,7 @@ def run_experiment(
     logs = run_dir / "logs"
     total = len(cfg.tasks) * cfg.reps * len(cfg.conditions)
     done = 0
-    evaluators = {t.id: Evaluator(t) for t in cfg.tasks}
+    evaluators = {t.id: make_evaluator(t) for t in cfg.tasks}
     try:
         for rep in range(1, cfg.reps + 1):
             for task in cfg.tasks:

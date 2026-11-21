@@ -1,8 +1,10 @@
 """Benchmark suites: loading tasks, building clean workspaces, fingerprinting, validity checks.
 
 A suite is a folder with an optional `suite.toml` and one sub-folder per task (either directly or
-under `tasks/`). A task folder uses the same layout as QEDCode's bug zoo, so `bugzoo/` can be run
-as a suite unchanged:
+under `tasks/`). A suite whose `suite.toml` says `kind = "swebench"` instead lists SWE-bench
+instances in `instances.jsonl`; their repositories and environments come from the local cache
+(`benchy suites fetch`, see `benchy/swebench/`). A task folder uses the same layout as QEDCode's
+bug zoo, so `bugzoo/` can be run as a suite unchanged:
 
     <task>/task.txt             the request given to both conditions, word for word
     <task>/hidden/              the evaluator's tests; never shown to either condition
@@ -14,6 +16,7 @@ as a suite unchanged:
 from __future__ import annotations
 
 import hashlib
+import json
 import os
 import shutil
 import subprocess
@@ -22,6 +25,10 @@ import tempfile
 import tomllib
 from dataclasses import dataclass, field
 from pathlib import Path
+from typing import TYPE_CHECKING
+
+if TYPE_CHECKING:
+    from benchy.swebench.instances import SweInstance
 
 # Files and folders that belong to the benchmark, not to the project the agent sees.
 RESERVED = frozenset({"hidden", "solution.patch", "edits.txt", "task.txt", "task.toml"})
@@ -47,6 +54,30 @@ class Task:
     id: str
     path: Path
     request: str
+    swe: SweInstance | None = None  # set for SWE-bench tasks
+
+    @property
+    def is_swe(self) -> bool:
+        return self.swe is not None
+
+    def python(self) -> Path:
+        """The interpreter that runs this task's tests (SWE-bench: the task's own environment)."""
+        if self.swe is None:
+            return Path(sys.executable)
+        from benchy.swebench import cache
+        from benchy.swebench.specs import Unsupported
+
+        try:
+            spec = self.swe.spec
+        except Unsupported as exc:
+            raise SuiteError(f"{self.id} cannot run here: {exc}.") from exc
+        if not cache.env_ready(self.swe.repo, self.swe.env_commit, spec) or not cache.has_commit(
+            self.swe.repo, self.swe.base_commit
+        ):
+            raise SuiteError(
+                f"{self.id} is not fetched yet. Run `benchy suites fetch` for this suite first."
+            )
+        return cache.env_python(cache.env_dir(self.swe.repo, self.swe.env_commit, spec))
 
     @property
     def hidden_dir(self) -> Path:
@@ -71,9 +102,19 @@ class Suite:
     path: Path
     tasks: list[Task] = field(default_factory=list)
 
+    kind: str = "folder"  # "folder" or "swebench"
+    time_limit_s: float | None = None  # the suite's recommended limit per condition
+
     def fingerprint(self) -> str:
         """sha256 over every task file (including hidden tests), so results name the exact data."""
         h = hashlib.sha256()
+        if self.kind == "swebench":
+            for task in self.tasks:
+                assert task.swe is not None
+                h.update(json.dumps(task.swe.to_record(), sort_keys=True).encode())
+                h.update(repr(task.swe.spec.key_parts()).encode())
+                h.update(b"\0")
+            return h.hexdigest()
         for task in self.tasks:
             for p in sorted(task.path.rglob("*")):
                 rel = p.relative_to(task.path)
@@ -139,6 +180,8 @@ def load_suite(name_or_path: str | Path) -> Suite:
             meta = tomllib.loads((path / "suite.toml").read_text(encoding="utf-8")).get("suite", {})
         except tomllib.TOMLDecodeError as exc:
             raise SuiteError(f"{path / 'suite.toml'} is not valid TOML: {exc}") from exc
+    if meta.get("kind") == "swebench":
+        return _load_swe_suite(path, meta)
     task_root = path / "tasks" if (path / "tasks").is_dir() else path
     tasks = [
         Task(id=p.name, path=p, request=(p / "task.txt").read_text(encoding="utf-8").strip())
@@ -158,6 +201,34 @@ def load_suite(name_or_path: str | Path) -> Suite:
         description=str(meta.get("description", "")),
         path=path,
         tasks=tasks,
+    )
+
+
+def _load_swe_suite(path: Path, meta: dict) -> Suite:
+    from benchy.swebench.instances import load_instances
+
+    file = path / "instances.jsonl"
+    if not file.is_file():
+        raise SuiteError(f'{path} says kind = "swebench" but has no instances.jsonl.')
+    try:
+        instances = load_instances(file)
+    except ValueError as exc:
+        raise SuiteError(str(exc)) from exc
+    tasks = [
+        Task(id=i.instance_id, path=path, request=i.problem_statement.strip(), swe=i)
+        for i in instances
+    ]
+    if not tasks:
+        raise SuiteError(f"{file} lists no instances.")
+    limit = meta.get("time_limit_s")
+    return Suite(
+        name=str(meta.get("name", path.name)),
+        version=str(meta.get("version", "unversioned")),
+        description=str(meta.get("description", "")),
+        path=path,
+        tasks=tasks,
+        kind="swebench",
+        time_limit_s=float(limit) if limit else None,
     )
 
 
@@ -192,8 +263,19 @@ def prepare_workspace(task: Task, target: Path) -> str:
     Fixed author, dates and contents mean every condition gets the identical commit, which the
     runner records and checks: that is the "same repository snapshot" guarantee.
     """
-    copy_project(task, target)
-    (target / ".gitignore").write_text("__pycache__/\n.pytest_cache/\n.qed/\n", encoding="utf-8")
+    if task.swe is not None:
+        from benchy.swebench import cache
+
+        cache.extract(task.swe.repo, task.swe.base_commit, target)
+        ignore = target / ".gitignore"
+        old = ignore.read_text(encoding="utf-8") if ignore.exists() else ""
+        sep = "" if not old or old.endswith("\n") else "\n"
+        ignore.write_text(old + sep + "__pycache__/\n.pytest_cache/\n.qed/\n", encoding="utf-8")
+    else:
+        copy_project(task, target)
+        (target / ".gitignore").write_text(
+            "__pycache__/\n.pytest_cache/\n.qed/\n", encoding="utf-8"
+        )
     git(target, "init", "-q")
     git(target, "add", "-A")
     git(target, "commit", "-q", "--no-gpg-sign", "-m", "task snapshot")
@@ -212,6 +294,7 @@ class TaskCheck:
     visible_pass_after: bool = False
     hidden_pass_after: bool = False
     problems: list[str] = field(default_factory=list)
+    p2p_lost: list[str] = field(default_factory=list)  # SWE-bench: PASS_TO_PASS failing here
 
     @property
     def valid(self) -> bool:
@@ -235,6 +318,20 @@ def _pytest_rc(cwd: Path, *args: str) -> int:
 def check_task(task: Task) -> TaskCheck:
     """A task is valid when: visible tests pass on the buggy code, hidden tests fail on it, and the
     reference patch makes both pass. Invalid tasks would make the comparison meaningless."""
+    if task.swe is not None:
+        from benchy.swebench.evaluate import check_instance
+
+        swe = check_instance(task.swe, task.python())
+        return TaskCheck(
+            task.id,
+            visible_pass_before=True,
+            hidden_fail_before=not any("already pass" in p for p in swe.problems),
+            patch_applies=not any("reference fix:" in p for p in swe.problems),
+            visible_pass_after=not any("breaks" in p for p in swe.problems),
+            hidden_pass_after=not any("still fail" in p for p in swe.problems),
+            problems=list(swe.problems),
+            p2p_lost=list(swe.p2p_lost),
+        )
     result = TaskCheck(task.id)
     if not (task.path / "solution.patch").exists():
         result.problems.append("missing solution.patch (needed to prove the task is solvable)")

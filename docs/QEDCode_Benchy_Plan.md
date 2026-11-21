@@ -26,6 +26,13 @@ unnecessary for the goal or created a risk or burden that outweighed its value.
 Also changed in QEDCode: a candidate that changes no code outside tests (only comments or
 formatting) is now graded C instead of B. Benchy's scripted self-test found it.
 
+Added later the same day: **milestone 7, a standard suite.** `benchy-core` is eight small tasks,
+which is enough to prove the pipeline but too easy and too small to be persuasive. Terminal-Bench
+was considered and rejected as the main benchmark: its tasks need an agent with a shell, and
+QEDCode by design never lets a model run commands, so it would measure something QEDCode does not
+do. SWE-bench Verified matches what QEDCode does (patch a Python repository so its tests pass,
+judged by hidden fail-to-pass tests).
+
 ## 1. Project goal
 
 QEDCode Benchy is an optional benchmarking companion for QEDCode. It measures whether using QEDCode improves coding-agent outcomes compared with using the same agent without QEDCode.
@@ -308,7 +315,7 @@ QEDCode-benchy/
 
 ## 12. Implementation milestones
 
-All six milestones are implemented. What remains is running them with real models and
+All seven milestones are implemented. What remains is running them with real models and
 publishing the first reproduced results.
 
 ### Milestone 1 — Prove the benchmark (done)
@@ -352,6 +359,24 @@ publishing the first reproduced results.
 - Update README and leaderboard automatically.
 - Publish a simple static dashboard.
 - Document methodology and limitations.
+
+### Milestone 7 — A standard suite: SWE-bench Verified (done)
+
+- `swebench-verified-py`: SWE-bench Verified instances from sympy, sphinx (up to 7.1), pylint and
+  xarray, the repositories that use pytest and rebuild without Docker or compilers. The suite
+  ships only the instance data. `benchy suites fetch` (asks first) clones the repositories and
+  builds uv environments with SWE-bench's pins.
+- Judge `benchy-swebench`: SWE-bench's test patch plus FAIL_TO_PASS / PASS_TO_PASS, with
+  per-test outcomes from a small pytest plugin. Test edits are discarded as in
+  `benchy-pytest-hidden`.
+- Baseline: SWE-bench's BM25 retrieval baseline (about 13k tokens, one unified diff), or
+  `--baseline-context oracle` for the strictest comparison. Recorded in shared records; aggregates
+  never pool the two.
+- `benchy suites check` records which tasks are valid on each computer, and `benchy run` skips
+  the others for both conditions. Instances that do not rebuild faithfully on the reference
+  machine are excluded with reasons (EXCLUDED.md), never because of a model's result.
+- Next: a bigger, harder Benchy-owned suite (40-60 tasks, some JavaScript/TypeScript) that has
+  never been public, so training-data leakage cannot inflate results.
 
 ---
 

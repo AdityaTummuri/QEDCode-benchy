@@ -8,6 +8,7 @@ runner, the evaluator and the report agree with known answers. Every report made
 
 from __future__ import annotations
 
+import difflib
 import subprocess
 import tempfile
 from collections.abc import Callable
@@ -20,9 +21,17 @@ BASELINE_TAG = "benchy_baseline"
 
 def fixed_files(task: Task) -> dict[str, tuple[str, str]]:
     """path -> (original text, fixed text) for every file the reference patch changes."""
-    patch = (task.path / "solution.patch").read_text(encoding="utf-8").replace("\r\n", "\n")
+    if task.swe is not None:
+        patch = task.swe.patch
+    else:
+        patch = (task.path / "solution.patch").read_text(encoding="utf-8").replace("\r\n", "\n")
     with tempfile.TemporaryDirectory(prefix="benchy-oracle-") as tmp:
-        work = copy_project(task, Path(tmp) / "p")
+        if task.swe is not None:
+            from benchy.swebench import cache
+
+            work = cache.extract(task.swe.repo, task.swe.base_commit, Path(tmp) / "p")
+        else:
+            work = copy_project(task, Path(tmp) / "p")
         subprocess.run(["git", "init", "-q"], cwd=work, check=True, capture_output=True)
         names = subprocess.run(
             ["git", "apply", "--numstat", "-"],
@@ -75,6 +84,8 @@ class ScriptedModel:
 
     def _reply(self, tag: str) -> str:
         assert self._task is not None
+        if tag == BASELINE_TAG and self._task.swe is not None:
+            return f"<patch>\n{self._swe_patch()}</patch>\n"
         if tag == BASELINE_TAG:
             blocks = [
                 f"FILE: {path}\n```python\n{self._target(b, a)}```"
@@ -98,6 +109,21 @@ class ScriptedModel:
         if tag == "explainer":
             return "The change updates the code so it does what the task asks."
         return "NONE\n"
+
+    def _swe_patch(self) -> str:
+        """The reference fix (oracle), or a diff that only adds a comment (broken)."""
+        assert self._task is not None and self._task.swe is not None
+        if self.mode == "oracle":
+            return self._task.swe.patch
+        path, (before, _after) = next(iter(self._files.items()))
+        after = self._target(before, before)
+        diff = difflib.unified_diff(
+            before.splitlines(keepends=True),
+            after.splitlines(keepends=True),
+            fromfile=f"a/{path}",
+            tofile=f"b/{path}",
+        )
+        return "".join(diff)
 
     def health(self) -> bool:
         return True

@@ -64,6 +64,8 @@ def build_leaderboard(records: list[dict], reproduced: set[str], skipped: list[s
             r["model"]["name"],
             r["qedcode_version"],
             r["controls"]["qedcode_speed"],
+            # bm25 and oracle baselines answer different questions: never pool them
+            r["controls"].get("baseline_context", "every project file"),
         )
         groups.setdefault(key, []).append(r)
     rows = []
@@ -84,6 +86,7 @@ def build_leaderboard(records: list[dict], reproduced: set[str], skipped: list[s
                 "backend": key[2],
                 "qedcode_version": key[4],
                 "qedcode_speed": key[5],
+                "baseline_context": key[6],
                 "submissions": len(members),
                 "reproduced_submissions": n_repro,
                 "label": REPRODUCED if n_repro == len(members) else COMMUNITY,

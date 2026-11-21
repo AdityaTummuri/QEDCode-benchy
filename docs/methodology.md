@@ -52,6 +52,49 @@ agent, including QEDCode's grade.
 **Resolved** means every hidden test passes and no visible test that passed on the original code
 now fails. **Regression** means a previously passing visible test fails, errors or times out.
 
+## SWE-bench suites
+
+`swebench-verified-py` (`kind = "swebench"`) runs real GitHub issues from SWE-bench Verified on
+whole repositories. The question and the controls stay the same; four things differ.
+
+**Environments.** No Docker. Each repository version gets a uv virtualenv with uv-managed CPython
+at SWE-bench's Python version and SWE-bench's pins (`benchy/swebench/specs.py`, adapted from the
+SWE-bench harness). The project itself is installed non-editable for its dependencies and entry
+points; tests run with `python -m pytest` from the workspace, which puts the workspace's own code
+first on `sys.path`. Both conditions and the judge use the same interpreter.
+
+**Baseline input.** A repository does not fit in a prompt, so the bare model gets SWE-bench's
+retrieval baseline: the issue text plus the source files that BM25 ranks highest against it, whole
+and with line numbers, up to about 13,000 tokens. It answers with one unified diff, applied with
+`git apply`. `--baseline-context oracle` gives instead the files the reference fix changes. That
+tells the baseline where the bug is, so it is the strictest test of QEDCode. The setting is
+recorded in metadata and shared records, and aggregates never pool the two.
+
+**Judge** (`benchy-swebench` v1). Start from the base commit, copy in only the agent's changes to
+non-test files (the same discard rules as above), apply SWE-bench's test patch, run the instance's
+test files with pytest, and read one outcome per test node. **Resolved** = every FAIL_TO_PASS test
+passes and every PASS_TO_PASS test that passes on the base commit still passes. xfail counts as a
+pass, as in SWE-bench. Test ids follow SWE-bench's logs: sympy ids are bare function names, and ids
+SWE-bench cut at a space inside parameters are matched by prefix.
+
+**The one deviation.** A rebuilt environment never matches SWE-bench's images exactly, so a few
+PASS_TO_PASS tests can fail before any change. Like visible tests in `benchy-pytest-hidden`, only
+tests that pass on the original code can count as a regression. `benchy suites check` lists how
+many PASS_TO_PASS tests each task loses this way and marks a task invalid when it loses more than
+10%. FAIL_TO_PASS tests are never relaxed: each must fail on the base commit and pass with the
+reference fix, or the task is invalid.
+
+**Validity per computer.** `benchy suites check` records which tasks are valid on this computer
+(keyed by the suite fingerprint, which covers the instances and their environment specs). `benchy
+run` skips the others for *both* conditions and lists them in metadata
+(`skipped_not_valid_here`). The shipped instance list contains only instances that were valid on
+the reference machine (macOS arm64); the rest are listed with reasons in the suite's EXCLUDED.md.
+Selection never used any model's result.
+
+**Time.** QEDCode at normal speed runs the whole test suite of the repository once before it
+starts, which takes minutes on these repositories. The suite's default time limit is therefore
+1800 s per condition. The baseline makes one call either way, so a longer limit cannot help it.
+
 ## Statistics
 
 - Resolution rate per condition, with a 95% Wilson score interval.
@@ -76,7 +119,10 @@ check the whole pipeline against known answers. Their reports are labelled
 
 ## Known limitations
 
-- The tasks are small single-file Python projects. Larger repositories may behave differently.
+- `benchy-core` tasks are small single-file Python projects. `swebench-verified-py` covers real
+  repositories, but only four of them, and its numbers are not comparable with the official
+  SWE-bench leaderboard (a subset, environments rebuilt without Docker, a retrieval baseline
+  instead of an agent).
 - Token counts are estimates. Times depend on the machine and are comparable only within a run.
 - Agent-written code runs on your machine during evaluation (as with QEDCode itself). Run Benchy
   where you would run QEDCode.

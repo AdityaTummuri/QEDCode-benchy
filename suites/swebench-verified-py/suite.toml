@@ -1,0 +1,7 @@
+[suite]
+name = "swebench-verified-py"
+version = "1.0.0"
+kind = "swebench"
+description = "SWE-bench Verified instances from sympy, sphinx, pylint and xarray that run with pytest without Docker: real GitHub issues, judged by SWE-bench's FAIL_TO_PASS and PASS_TO_PASS tests. Needs `benchy suites fetch` first."
+# Real repositories are slow to test; QEDCode at normal speed runs the whole suite once.
+time_limit_s = 1800

@@ -41,7 +41,8 @@
         "time_limit_s_per_condition": {"type": "number", "minimum": 1, "maximum": 86400},
         "qedcode_speed": {"type": "string", "enum": ["fast", "normal", "sure"]},
         "qedcode_apply_policy": {"type": "string", "enum": ["any", "ab"]},
-        "order_seed": {"type": "integer", "minimum": 0, "maximum": 4294967295}
+        "order_seed": {"type": "integer", "minimum": 0, "maximum": 4294967295},
+        "baseline_context": {"type": "string", "enum": ["every project file", "bm25-13k-tokens", "oracle"]}
       }
     },
     "environment": {
