@@ -26,7 +26,7 @@ model's result.**
 ## Running it
 
 ```bash
-benchy suites fetch swebench-verified-py     # asks first: ~0.5 GB of clones + ~1 GB of envs
+benchy suites fetch swebench-verified-py     # asks first: ~0.45 GB of clones + ~3.7 GB of envs
 benchy suites check swebench-verified-py     # proves which tasks are valid on this computer
 benchy run --suite swebench-verified-py --model qedcode
 benchy run --suite swebench-verified-py --tasks sympy__sympy-13031,sphinx-doc__sphinx-8638
@@ -35,7 +35,8 @@ benchy run --suite swebench-verified-py --baseline-context oracle   # strictest 
 
 `fetch` needs `git` and [uv](https://docs.astral.sh/uv/). Environments are uv virtualenvs with
 uv-managed CPython and SWE-bench's own version pins (`benchy/swebench/specs.py`), cached in
-`~/.qedcode/benchy/cache/`. Delete that folder to free the space.
+`~/.qedcode/benchy/cache/` (35 environments, about 4 GB in all; xarray's four are half of it).
+Delete that folder to free the space, or fetch only some tasks with `--tasks`.
 
 ## How it is judged
 

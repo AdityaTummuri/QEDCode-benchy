@@ -19,7 +19,8 @@ CLONE_MB = {
     "pylint-dev/pylint": 50,
     "pydata/xarray": 60,
 }
-ENV_MB = {"sympy/sympy": 60, "sphinx-doc/sphinx": 90, "pylint-dev/pylint": 80, "pydata/xarray": 700}
+# Measured per environment on the reference machine (macOS arm64, November 2026).
+ENV_MB = {"sympy/sympy": 20, "sphinx-doc/sphinx": 85, "pylint-dev/pylint": 80, "pydata/xarray": 490}
 
 
 def plan(tasks: list[Task]) -> tuple[dict[str, list[str]], dict[tuple, Task], list[str]]:
