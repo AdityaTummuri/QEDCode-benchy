@@ -9,3 +9,4 @@ build/
 .DS_Store
 # Local benchmark reports stay on the user's machine.
 /reports/
+.claude/settings.local.json
