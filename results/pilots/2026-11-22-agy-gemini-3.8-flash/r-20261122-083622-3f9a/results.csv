@@ -1,0 +1,2 @@
+task_id,rep,condition,order,status,resolved,regression,hidden_passed,hidden_total,visible_passed,visible_total,seconds,model_calls,prompt_tokens_est,completion_tokens_est,tokens_est,cost_usd_est,qed_status,qed_grade,qed_applied,qed_candidates,eval_error,agent_used_qedcode,agent_receipts,agent_claimed_fixed
+sympy__sympy-14711,1,agent,0,done,True,False,1,1,2,2,738.34,1,164838,49077,213915,,,,,,,False,0,True

@@ -52,6 +52,11 @@ def build_submission(results: dict) -> dict:
         raise SubmissionError(
             "This run used a scripted stand-in model (a self-test). Self-tests are never shared."
         )
+    if meta.get("mode") == "agent":
+        raise SubmissionError(
+            "Agent-mode runs (agent vs agent+qedcode) cannot be shared yet: the submission format "
+            "covers model mode only. The local report has every result."
+        )
     if not meta.get("complete", False):
         raise SubmissionError(
             "This run did not finish (it was stopped early). Only complete runs can be shared."

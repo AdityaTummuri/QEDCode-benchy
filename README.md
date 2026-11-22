@@ -56,8 +56,19 @@ From QEDCode, the same commands are `qed benchy install`, `qed benchy run`, `qed
 and so on.
 
 Models: `--model qedcode` (default: the model `qed` is set up with), `ollama:<name>`,
-`openai:<base url>#<model>` (LM Studio and others), or `scripted:oracle|broken` for self-tests.
+`openai:<base url>#<model>` (LM Studio and others), `agy:<model>` (agent mode, below), or
+`scripted:oracle|broken` for self-tests.
 Add `--price-in/--price-out` (USD per million tokens) to get estimated costs for paid models.
+
+**Agent mode (Antigravity).** `benchy run --model agy:gemini-3.8-flash-medium --suite
+swebench-verified-py` runs Antigravity's agent CLI on each task twice: on its own, and with the
+QEDCode skill and MCP server set up for that workspace. The prompt is the same and never names
+QEDCode. The report adds how often the agent used QEDCode and how often each side said "fixed" when
+the hidden tests disagreed. It runs on your Antigravity plan (no API key); if the quota runs out,
+Benchy stops and reports the finished tasks. Needs `agy` signed in, and the
+[QEDCode agent skill](https://github.com/AdityaTummuri/QEDCode-AgentSkill) (found next to this
+checkout, in `~/.agents/skills/qedcode`, or via `BENCHY_QEDCODE_SKILL`). Details:
+[methodology](docs/methodology.md#agent-mode).
 
 **No GPU?** Set QEDCode up with a cloud model (`qed setup`, then choose cloud) and run
 `benchy run --model qedcode --price-in <usd> --price-out <usd>`. Both conditions then use that

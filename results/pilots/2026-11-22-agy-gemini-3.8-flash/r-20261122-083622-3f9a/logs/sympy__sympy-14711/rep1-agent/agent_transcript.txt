@@ -1,0 +1,142 @@
+$ agy -p <prompt> --print-timeout 900s --output-format stream-json --settings {"permissions": {"allow": ["command(.venv/bin/python)", "command(git status)", "command(git diff)", "command(git log)", "command(ls)", "command(cat)", "command(grep)"]}} --model gemini-3.8-flash-medium
+
+--- prompt ---
+vector add 0 error
+```python
+from sympy.physics.vector import ReferenceFrame, Vector
+from sympy import symbols
+sum([N.x, (0 * N.x)])
+```
+gives
+```
+---------------------------------------------------------------------------
+TypeError                                 Traceback (most recent call last)
+<ipython-input-1-0b9155eecc0e> in <module>()
+      2 from sympy import symbols
+      3 N = ReferenceFrame('N')
+----> 4 sum([N.x, (0 * N.x)])
+
+/usr/local/lib/python3.6/site-packages/sympy/physics/vector/vector.py in __add__(self, other)
+     59         """The add operator for Vector. """
+     60         #if other == 0: return self
+---> 61         other = _check_vector(other)
+     62         return Vector(self.args + other.args)
+     63 
+
+/usr/local/lib/python3.6/site-packages/sympy/physics/vector/vector.py in _check_vector(other)
+    708 def _check_vector(other):
+    709     if not isinstance(other, Vector):
+--> 710         raise TypeError('A Vector must be supplied')
+    711     return other
+
+TypeError: A Vector must be supplied
+```
+
+The repository is checked out in the current folder. Its Python environment is `.venv/bin/python` (for example `.venv/bin/python -m pytest <test file>`). Fix the issue in the source code. Fix it, and make sure the fix is actually proven before you tell me it is done.
+
+--- tool steps ---
+  1.      2.2s  run_command  .venv/bin/python -c "from sympy.physics.vector import ReferenceFrame, Vector; N = ReferenceFrame('N'); print(type(0 * N.x)); print(0 * N.x); sum([N.x, (0 * N.x)])"
+  2.      6.8s  run_command  .venv/bin/python -c "from sympy.physics.vector import ReferenceFrame, Vector; N = ReferenceFrame('N'); print(type(0 * N.x)); print(0 * N.x); sum([N.x, (0 * N.x)])"
+  3.      0.4s  read_file  
+  4.      0.1s  read_file  
+  5.      0.0s  read_file  
+  6.      0.3s  read_file  
+  7.      0.1s  read_file  
+  8.      0.1s  read_file  
+  9.      5.4s  run_command  .venv/bin/python -c "from sympy.physics.vector import ReferenceFrame; N = ReferenceFrame('N'); print('N.x + 0:'); 
+try:
+    N.x + 0
+except Exception as e:
+    print(type(e), e)
+print('0 + N.x:')
+try:
+
+ 10.      4.7s  run_command  git grep "__radd__" sympy/physics/vector/
+ 11.      4.3s  run_command  git grep -n "__radd__" sympy/physics/vector/
+ 12.      0.6s  read_file  
+ 13.      0.1s  read_file  
+ 14.      5.6s  run_command  .venv/bin/python -c "from sympy.physics.vector import ReferenceFrame; N = ReferenceFrame('N'); print(N.x + 0 * N.x)"
+ 15.      5.5s  run_command  git grep -n "__sub__" sympy/physics/vector/
+ 16.      0.1s  read_file  
+ 17.      0.2s  read_file  
+ 18.      4.7s  run_command  git grep "__rsub__" sympy/physics/vector/
+ 19.      4.9s  run_command  git grep -n "_check_dyadic" sympy/physics/vector/
+ 20.      0.1s  read_file  
+ 21.      4.5s  run_command  git grep -n "_check_vector" sympy/physics/vector/
+ 22.      4.9s  run_command  git log -L 58,63:sympy/physics/vector/vector.py
+ 23.      4.1s  run_command  git log -n 5 --oneline HEAD~1
+ 24.      8.6s  run_command  .venv/bin/python -m pytest sympy/physics/vector/tests/
+ 25.      0.0s  read_file  
+ 26.      0.6s  read_file  
+ 27.      0.2s  read_file  
+ 28.      6.1s  run_command  .venv/bin/python -c "from sympy import Symbol, S; x = Symbol('x'); print(x + False); print(x + 0)"
+ 29.      4.3s  run_command  git grep "def " sympy/physics/vector/vector.py
+ 30.      6.1s  run_command  .venv/bin/python -c "from sympy import Matrix; print(Matrix([0, 0, 0]) == 0)"
+ 31.      5.0s  run_command  .venv/bin/python -c "from sympy.physics.vector import ReferenceFrame; N = ReferenceFrame('N'); d = N.x | N.x; print('sum dyadic:');
+try:
+    print(sum([d]))
+except Exception as e:
+    print(type(e), e
+ 32.      0.4s  read_file  
+ 33.      5.5s  run_command  .venv/bin/python -c "from sympy.physics.vector import ReferenceFrame; from sympy import symbols; x = symbols('x'); N = ReferenceFrame('N'); v = (x - x) * N.x; print(v); print(v == 0); print(v.args)"
+ 34.      4.7s  run_command  git grep -n "self.args\." sympy/physics/vector/vector.py
+ 35.      6.6s  run_command  .venv/bin/python -c "from sympy.physics.vector import ReferenceFrame; N = ReferenceFrame('N'); 
+try:
+    N.x + (N.x | N.x)
+except Exception as e:
+    print(type(e), e)
+"
+ 36.      5.5s  run_command  .venv/bin/python -c "from sympy.physics.vector import ReferenceFrame; N = ReferenceFrame('N'); d = N.x | N.x; print(0 * d); print(type(0 * d)); print(0 * d == 0)"
+ 37.      5.4s  run_command  git grep "sum(" sympy/physics/vector/ sympy/physics/mechanics/
+ 38.      0.1s  read_file  
+ 39.      3.9s  run_command  git grep -n "sum(" sympy/physics/vector/vector.py
+ 40.      0.4s  read_file  
+ 41.      0.1s  read_file  
+ 42.      3.7s  run_command  git grep "VectorTypeError"
+ 43.      5.7s  run_command  .venv/bin/python -c "from sympy.physics.vector import ReferenceFrame, Vector, Dyadic; print(Vector(0) == Dyadic(0))"
+ 44.      4.2s  run_command  git log -S "if other == 0"
+ 45.      5.2s  search_web  
+ 46.      5.6s  search_web  
+ 47.      5.6s  search_web  
+ 48.      7.0s  search_web  
+ 49.      8.7s  search_web  
+ 50.      2.9s  search_web  
+ 51.      5.8s  search_web  
+ 52.      8.2s  search_web  
+ 53.      0.5s  edit_file  
+ 54.      0.5s  read_file  
+ 55.      0.0s  edit_file  
+ 56.     10.7s  run_command  .venv/bin/python -m pytest sympy/physics/vector/tests/ && .venv/bin/python -c "from sympy.physics.vector import ReferenceFrame, Vector; from sympy import symbols; N = ReferenceFrame('N'); result = sum
+ 57.     14.3s  run_command  .venv/bin/python -m pytest sympy/physics/mechanics/tests/
+ 58.      5.2s  run_command  git status
+
+--- final answer (SUCCESS) ---
+The issue occurred because Python's built-in `sum()` starts summation with `0` (an `int`), which delegates to `Vector.__radd__(0)` and in turn `Vector.__add__(self, other)`. Since `_check_vector` required `other` to be an instance of `Vector`, adding `0` raised `TypeError: A Vector must be supplied`.
+
+### Solution
+In [sympy/physics/vector/vector.py](file://<tmp>/benchy-agent-b0q526ho/sympy__sympy-14711/sympy/physics/vector/vector.py#L58-L64), `Vector.__add__` was updated to handle `0` as an additive identity by returning `self` when `other == 0`:
+
+```python
+    def __add__(self, other):
+        """The add operator for Vector. """
+        if other == 0:
+            return self
+        other = _check_vector(other)
+        return Vector(self.args + other.args)
+```
+
+### Verification
+1. Evaluated reproduction snippet:
+   ```python
+   from sympy.physics.vector import ReferenceFrame, Vector
+   N = ReferenceFrame('N')
+   assert sum([N.x, (0 * N.x)]) == N.x
+   ```
+2. Added unit tests for addition/subtraction with 0 and `sum(...)` over vector iterables in [sympy/physics/vector/tests/test_vector.py](file://<tmp>/benchy-agent-b0q526ho/sympy__sympy-14711/sympy/physics/vector/tests/test_vector.py#L61-L74).
+3. Ran full test suites:
+   - `sympy/physics/vector/tests/`: 46 passed.
+   - `sympy/physics/mechanics/tests/`: 52 passed, 1 skipped.
+
+
+--- stderr ---
+

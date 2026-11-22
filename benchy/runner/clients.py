@@ -104,6 +104,7 @@ class ModelSpec:
     backend: str
     model: str
     scripted: bool = False  # True = not a real model; results are a pipeline self-test only
+    agent: bool = False  # True = an agent CLI (agent mode: agent vs agent+qedcode)
 
 
 def make_model(spec: str):
@@ -114,6 +115,7 @@ def make_model(spec: str):
     openai:<url>#<m>   any OpenAI-compatible server, e.g. openai:http://127.0.0.1:1234/v1#qwen
     scripted:oracle    a scripted stand-in that replays reference fixes (self-test only)
     scripted:broken    a scripted stand-in whose fixes are wrong (self-test only)
+    agy:<model>        agent mode: Google Antigravity's agent CLI, e.g. agy:gemini-3.8-flash-medium
     """
     from qedcode.runtime.client import ModelError
 
@@ -138,6 +140,11 @@ def make_model(spec: str):
         url, _, model = rest.rpartition("#")
         client = OpenAICompatClient(model=model, base_url=url, ctx=16384)
         return client, ModelSpec(f"openai:<local server>#{model}", "openai_compat", model)
+    if kind == "agy":
+        from benchy.runner.agent_cli import AgentSpec, find_qed, find_skill_dir
+
+        agent = AgentSpec(cli="agy", model=rest, skill_dir=find_skill_dir(), qed_command=find_qed())
+        return agent, ModelSpec(spec, "agy", rest or "agy default model", agent=True)
     if kind == "scripted" and rest in ("oracle", "broken"):
         from benchy.runner.scripted import ScriptedModel
 
@@ -145,5 +152,6 @@ def make_model(spec: str):
         return client, ModelSpec(spec, "scripted", f"scripted-{rest}", scripted=True)
     raise ModelError(
         f"Benchy does not understand the model '{spec}'. Use qedcode (your QEDCode setup), "
-        "ollama:<model>, openai:<base url>#<model>, or scripted:oracle for a self-test."
+        "ollama:<model>, openai:<base url>#<model>, agy:<model> (agent mode), or scripted:oracle "
+        "for a self-test."
     )

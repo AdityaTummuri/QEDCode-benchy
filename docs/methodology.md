@@ -26,6 +26,41 @@ baseline. Benchy measures QEDCode against the bare model.
 zoo runner. `--qed-apply ab` applies only grades A/B, trading resolutions for safety. The policy is
 recorded in metadata.
 
+## Agent mode
+
+A second question, for people who code with an agent: *given one agent and one model, does adding
+QEDCode make its fixes more reliable?* `benchy run --model agy:<model>` runs Google Antigravity's
+agent CLI (`agy -p`) under two conditions:
+
+| | agent | agent+qedcode |
+|---|---|---|
+| Agent and model | `agy`, `--model` as given | the same |
+| Prompt | issue text + where the Python environment is + "make sure the fix is proven" | **the same text**; it does not name QEDCode |
+| Workspace | fresh snapshot, `.venv` pointing at the task's environment | the same, plus the QEDCode skill (`.agents/skills/qedcode`) and `qed mcp` (`.agents/mcp_config.json`) for this workspace only |
+| Permissions (one run, never saved) | the project's Python, read-only git, `ls`, `cat`, `grep`; no internet | the same, plus `qed` and QEDCode's MCP tools |
+| Time limit | `--time-limit` (passed to `agy --print-timeout`) | the same |
+
+**No internet on either side.** SWE-bench issues and their upstream fixes are public, and in a
+first test run the agent searched the web eight times before writing its fix. So both workspaces
+get a `PreToolUse` hook (`.agents/hooks.json`) that refuses the web-search and browser tools
+(permission rules do not cover `search_web`), and both runs deny URL reads and network commands
+(`gh`, `curl`, `wget`, `git fetch/clone/pull`, `pip`, `uv`, `npm`); deny rules override the user's
+own allow rules. A program the agent writes could still open a socket; the report counts refused
+web calls per attempt (`agent_web_blocked`).
+
+Setup files are hidden from git (`.git/info/exclude`), so the evaluator never sees them, and pip
+and uv are told to stay offline so the shared task environments cannot be changed. The agent
+decides by itself whether to use QEDCode; the report says how often it did (a receipt in
+`.qed/receipts/`). Besides the resolution rate, the report counts how often each side *said* it had
+fixed the issue (it finished normally, changed source code, and its final message does not say it
+failed) and how often the hidden tests then disagreed: a false claim. That reading of the final
+message is a heuristic and is labelled as one.
+
+Turns, tokens and per-tool times come from the agent's own event stream
+(`agy --output-format stream-json`, kept in each attempt's `logs/`). Benchy cannot set the
+agent's temperature or seed, so repeated runs can differ, and no cost is estimated (a flat plan). If the plan's quota or rate limit stops the agent, the run ends, the unfinished pair
+is dropped, and the report says why (`benchy run` exits with code 3).
+
 ## Controls
 
 1. **Snapshot.** For every attempt, Benchy builds a fresh git repository from the task's project
@@ -123,6 +158,8 @@ check the whole pipeline against known answers. Their reports are labelled
   repositories, but only four of them, and its numbers are not comparable with the official
   SWE-bench leaderboard (a subset, environments rebuilt without Docker, a retrieval baseline
   instead of an agent).
+- Agent mode compares one agent with and without QEDCode, not models; its "said it was fixed"
+  count is read from the agent's final message.
 - Token counts are estimates. Times depend on the machine and are comparable only within a run.
 - Agent-written code runs on your machine during evaluation (as with QEDCode itself). Run Benchy
   where you would run QEDCode.

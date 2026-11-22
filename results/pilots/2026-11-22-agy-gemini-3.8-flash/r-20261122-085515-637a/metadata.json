@@ -1,0 +1,72 @@
+{
+  "run_id": "r-20261122-085515-637a",
+  "started_at": "2026-11-22T08:55:15+00:00",
+  "finished_at": "2026-11-22T09:09:56+00:00",
+  "complete": false,
+  "is_real_measurement": true,
+  "mode": "agent",
+  "stopped_reason": "agent quota or rate limit reached: AGY_ERROR: {\"short_error\":\"RESOURCE_EXHAUSTED (code 429): Individual quota reached. Please upgrade your subscription to increase your limits. Resets in 166h37m3s.\",\"status\":\"RESOURCE_EXHAUSTED\",\"error_code\":429,\"code_kind\":\"http\",\"retryable\":true,\"error_id\":\"19bfff0b-c383-4c78-a6c2-682655f3136b-153\"",
+  "benchy_version": "0.1.0",
+  "qedcode_version": "0.1.0",
+  "suite": {
+    "name": "swebench-verified-py",
+    "version": "1.0.0",
+    "kind": "swebench",
+    "fingerprint_sha256": "bce7613e19c5abf3029f900aed86ed0d41d667cf597b55054a89325e82cc3371",
+    "tasks": [
+      "sympy__sympy-14711",
+      "sympy__sympy-15875",
+      "sphinx-doc__sphinx-9230",
+      "sphinx-doc__sphinx-9711",
+      "pydata__xarray-4629",
+      "sympy__sympy-13798",
+      "sympy__sympy-18211",
+      "sphinx-doc__sphinx-8056",
+      "sphinx-doc__sphinx-9673",
+      "pylint-dev__pylint-6386"
+    ],
+    "skipped_not_valid_here": []
+  },
+  "model": {
+    "backend": "agy",
+    "name": "gemini-3.8-flash-medium"
+  },
+  "controls": {
+    "conditions": [
+      "agent",
+      "agent+qedcode"
+    ],
+    "repetitions": 1,
+    "time_limit_s_per_condition": 900.0,
+    "order_seed": 0,
+    "qedcode_speed": "normal",
+    "qedcode_apply_policy": "any",
+    "qedcode_memory": "off",
+    "qedcode_helper_model": "off",
+    "baseline_temperature": 0.2,
+    "baseline_max_tokens": 4096,
+    "baseline_context": "bm25-13k-tokens",
+    "same_model_client_for_both": true,
+    "price_per_mtok_usd": null
+  },
+  "evaluator": {
+    "name": "benchy-swebench",
+    "version": "1"
+  },
+  "environment": {
+    "os": "Darwin",
+    "arch": "arm64",
+    "python": "3.12"
+  },
+  "limitations": [
+    "The run was stopped early; only finished attempts are included.",
+    "Why it stopped: agent quota or rate limit reached: AGY_ERROR: {\"short_error\":\"RESOURCE_EXHAUSTED (code 429): Individual quota reached. Please upgrade your subscription to increase your limits. Resets in 166h37m3s.\",\"status\":\"RESOURCE_EXHAUSTED\",\"error_code\":429,\"code_kind\":\"http\",\"retryable\":true,\"error_id\":\"19bfff0b-c383-4c78-a6c2-682655f3136b-153\".",
+    "Agent mode: both conditions are the same agent CLI with the same model, prompt, snapshot, time limit and permissions; the QEDCode side also has the QEDCode skill and MCP server. The prompt does not name QEDCode, so the agent chose whether to use it (see 'used QEDCode').",
+    "The agent's model calls run on the user's plan. Turns and tokens are the agent CLI's own counts; Benchy cannot set a temperature or seed, so repeated runs can differ.",
+    "Neither side had internet access (web tools refused by a hook, URL reads and network commands denied), so fixes could not be looked up online.",
+    "'Said it was fixed' is read from the agent's final message (it finished normally, changed source code and did not say it failed); it is a heuristic.",
+    "SWE-bench tasks run in environments rebuilt without Docker; results are not comparable with the official SWE-bench leaderboard (a subset of repositories).",
+    "SWE-bench Verified is public, so recent models may have seen these issues and fixes in training.",
+    "Times include model latency on this machine and are only comparable within this run."
+  ]
+}

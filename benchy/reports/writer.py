@@ -15,7 +15,27 @@ CSV_FIELDS = [
     "hidden_passed", "hidden_total", "visible_passed", "visible_total", "seconds",
     "model_calls", "prompt_tokens_est", "completion_tokens_est", "tokens_est", "cost_usd_est",
     "qed_status", "qed_grade", "qed_applied", "qed_candidates", "eval_error",
+    "agent_used_qedcode", "agent_receipts", "agent_claimed_fixed",
 ]  # fmt: skip
+# (without QEDCode, with QEDCode) per mode
+PAIRS = (("baseline", "qedcode"), ("agent", "agent+qedcode"))
+
+
+def pair_of(conditions) -> tuple[str, str] | None:
+    return next((p for p in PAIRS if set(p) <= set(conditions)), None)
+
+
+def agent_stats(attempts: list[dict]) -> dict:
+    """Agent mode: how often each side said it fixed the issue, and how often that was wrong."""
+    claimed = [a for a in attempts if a.get("agent_claimed_fixed")]
+    false = [a for a in claimed if not a["resolved"]]
+    return {
+        "attempts": len(attempts),
+        "used_qedcode": sum(bool(a.get("agent_used_qedcode")) for a in attempts),
+        "claimed_fixed": len(claimed),
+        "false_claims": len(false),
+        "false_claim_rate": round(len(false) / len(claimed), 4) if claimed else None,
+    }
 
 
 def summarize(attempts: list[dict], conditions: list[str]) -> dict:
@@ -28,7 +48,8 @@ def summarize(attempts: list[dict], conditions: list[str]) -> dict:
         row = per_task.setdefault(a["task_id"], empty)
         row[a["condition"]]["attempts"] += 1
         row[a["condition"]]["resolved"] += int(a["resolved"])
-    qed = [a for a in attempts if a["condition"] == "qedcode"]
+    pair = pair_of(conditions)
+    qed = [a for a in attempts if pair and a["condition"] == pair[1]]
     grades: dict[str, dict] = {}
     for a in qed:
         g = grades.setdefault(a.get("qed_grade") or "none", {"attempts": 0, "resolved": 0})
@@ -36,9 +57,14 @@ def summarize(attempts: list[dict], conditions: list[str]) -> dict:
         g["resolved"] += int(a["resolved"])
     return {
         "per_condition": per_condition,
-        "paired": paired(attempts) if {"baseline", "qedcode"} <= set(conditions) else None,
+        "paired": paired(attempts, *pair) if pair else None,
         "per_task": per_task,
         "qedcode_grades": grades,
+        "agent": (
+            {c: agent_stats([a for a in attempts if a["condition"] == c]) for c in conditions}
+            if set(conditions) & set(PAIRS[1])
+            else None
+        ),
     }
 
 
@@ -57,12 +83,36 @@ def limitations(meta: dict, summary: dict) -> list[str]:
             f"Small sample ({pairs} paired attempts). Treat differences as indicative only; "
             "the confidence intervals and the McNemar p-value show how uncertain they are."
         )
+    if meta.get("stopped_reason") and not meta["complete"]:
+        notes.append(f"Why it stopped: {meta['stopped_reason']}.")
     swe = meta.get("suite", {}).get("kind") == "swebench"
-    notes.append(
-        "Token counts are estimates (characters / 3.5), not counts from the model's tokenizer."
-    )
-    if swe:
-        skipped = meta["suite"].get("skipped_not_valid_here") or []
+    agent_mode = meta.get("mode") == "agent"
+    if agent_mode:
+        notes += [
+            "Agent mode: both conditions are the same agent CLI with the same model, prompt, "
+            "snapshot, time limit and permissions; the QEDCode side also has the QEDCode skill "
+            "and MCP server. The prompt does not name QEDCode, so the agent chose whether to use "
+            "it (see 'used QEDCode').",
+            "The agent's model calls run on the user's plan. Turns and tokens are the agent "
+            "CLI's own counts; Benchy cannot set a temperature or seed, so repeated runs can "
+            "differ.",
+            "Neither side had internet access (web tools refused by a hook, URL reads and "
+            "network commands denied), so fixes could not be looked up online.",
+            "'Said it was fixed' is read from the agent's final message (it finished normally, "
+            "changed source code and did not say it failed); it is a heuristic.",
+        ]
+    else:
+        notes.append(
+            "Token counts are estimates (characters / 3.5), not counts from the model's tokenizer."
+        )
+    if swe and agent_mode:
+        notes += [
+            "SWE-bench tasks run in environments rebuilt without Docker; results are not "
+            "comparable with the official SWE-bench leaderboard (a subset of repositories).",
+            "SWE-bench Verified is public, so recent models may have seen these issues and fixes "
+            "in training.",
+        ]
+    elif swe:
         notes += [
             "SWE-bench tasks run in environments rebuilt without Docker; results are not "
             "comparable with the official SWE-bench leaderboard (a subset of repositories, a "
@@ -73,18 +123,22 @@ def limitations(meta: dict, summary: dict) -> list[str]:
             "SWE-bench Verified is public, so recent models may have seen these issues and fixes "
             "in training.",
         ]
-        if skipped:
-            notes.append(
-                f"{len(skipped)} task(s) were skipped for both conditions because they are not "
-                "valid on this computer (see metadata.json)."
-            )
     else:
-        notes += [
+        notes.append(
             "Tasks are small single-file Python problems; results may not carry over to large "
-            "real-world repositories.",
-            "The baseline is the bare model with one plain prompt and one answer. Other agent "
-            "harnesses (with their own retries or tools) would be different baselines.",
-        ]
+            "real-world repositories."
+        )
+        if not agent_mode:
+            notes.append(
+                "The baseline is the bare model with one plain prompt and one answer. Other agent "
+                "harnesses (with their own retries or tools) would be different baselines."
+            )
+    skipped = meta["suite"].get("skipped_not_valid_here") or []
+    if swe and skipped:
+        notes.append(
+            f"{len(skipped)} task(s) were skipped for both conditions because they are not "
+            "valid on this computer (see metadata.json)."
+        )
     notes.append(
         "Times include model latency on this machine and are only comparable within this run."
     )
@@ -102,6 +156,8 @@ def _num(x) -> str:
 def render_markdown(meta: dict, summary: dict, attempts: list[dict]) -> str:
     conds = meta["controls"]["conditions"]
     pc = summary["per_condition"]
+    agent_mode = meta.get("mode") == "agent"
+    pair = pair_of(conds)
     lines = [f"# Benchy report `{meta['run_id']}`", ""]
     if not meta["is_real_measurement"]:
         lines += ["> **⚠ SELF-TEST — NOT A REAL MEASUREMENT.** Scripted stand-in model.", ""]
@@ -109,12 +165,13 @@ def render_markdown(meta: dict, summary: dict, attempts: list[dict]) -> str:
     lines += [
         f"- **Suite:** {s['name']} {s['version']} ({len(s['tasks'])} tasks, "
         f"fingerprint `{s['fingerprint_sha256'][:12]}`)",
-        f"- **Model:** {meta['model']['name']} ({meta['model']['backend']})",
+        f"- **Model:** {meta['model']['name']} ({meta['model']['backend']})"
+        + (" · **mode:** agent (agent alone vs agent + QEDCode)" if agent_mode else ""),
         f"- **Versions:** Benchy {meta['benchy_version']}, QEDCode {meta['qedcode_version']}",
         f"- **Repetitions:** {meta['controls']['repetitions']} · **time limit:** "
         f"{meta['controls']['time_limit_s_per_condition']:g}s per condition · "
-        f"**QEDCode speed:** {meta['controls']['qedcode_speed']} · **order seed:** "
-        f"{meta['controls']['order_seed']}",
+        + ("" if agent_mode else f"**QEDCode speed:** {meta['controls']['qedcode_speed']} · ")
+        + f"**order seed:** {meta['controls']['order_seed']}",
         f"- **Evaluator:** {meta['evaluator']['name']} v{meta['evaluator']['version']} "
         "(hidden tests, never shown to either condition)",
         f"- **Started:** {meta['started_at']} · **finished:** {meta['finished_at']}"
@@ -141,19 +198,37 @@ def render_markdown(meta: dict, summary: dict, attempts: list[dict]) -> str:
          f"{pc[c]['tokens_est_total']}"),
         ("Est. cost (USD)", lambda c: _num(pc[c]["cost_usd_est"])),
     ]  # fmt: skip
+    ag = summary.get("agent")
+    if agent_mode:  # turns and tokens as the agent CLI reports them; no cost (a flat plan)
+        rows = rows[:7] + [
+            ("Agent turns", lambda c: _num(pc[c]["model_calls"])),
+            (
+                "Tokens (median / total)",
+                lambda c: f"{_num(pc[c]['tokens_est_median'])} / {pc[c]['tokens_est_total']}",
+            ),
+        ]
+    if ag:
+        rows += [
+            ("Used QEDCode", lambda c: f"{ag[c]['used_qedcode']} of {ag[c]['attempts']}"),
+            ("Said it was fixed", lambda c: _num(ag[c]["claimed_fixed"])),
+            (
+                "…but the hidden tests fail",
+                lambda c: f"{ag[c]['false_claims']} ({_pct(ag[c]['false_claim_rate'])})",
+            ),
+        ]
     for label, fn in rows:
         lines.append(f"| {label} | " + " | ".join(fn(c) for c in conds) + " |")
     p = summary.get("paired")
-    if p:
+    if p and pair:
+        a, b = pair
         lines += [
             "",
             "### Paired comparison (same task, same repetition)",
             "",
             f"- Pairs: {p['pairs']} · both resolved: {p['both_resolved']} · "
             f"neither: {p['neither']}",
-            f"- Resolved only with QEDCode: **{p['only_qedcode']}** · only by the baseline: "
-            f"**{p['only_baseline']}**",
-            f"- Difference in resolution rate (QEDCode − baseline): **{_pct(p['difference'])}** "
+            f"- Resolved only by {b}: **{p['only_' + b]}** · only by {a}: **{p['only_' + a]}**",
+            f"- Difference in resolution rate ({b} − {a}): **{_pct(p['difference'])}** "
             f"· exact McNemar p = {p['mcnemar_p']}",
         ]
     if summary["qedcode_grades"]:
@@ -183,7 +258,12 @@ def render_markdown(meta: dict, summary: dict, attempts: list[dict]) -> str:
         "",
         "## Method",
         "",
-        "Both conditions use the same model client, the same fresh repository snapshot (checked "
+        (
+            "Both conditions run the same agent CLI and model with the same prompt"
+            if agent_mode
+            else "Both conditions use the same model client"
+        )
+        + ", the same fresh repository snapshot (checked "
         "by commit sha), the same time limit and the same evaluator. "
         + (
             "The evaluator applies only changes to non-test source files to the base commit, adds "

@@ -54,9 +54,12 @@ def cmd_run(args: argparse.Namespace) -> int:
     except SuiteError as exc:
         _say(f"Error: {exc}")
         return 2
-    conditions = tuple(c.strip() for c in args.conditions.split(",") if c.strip())
-    if not conditions or any(c not in ("baseline", "qedcode") for c in conditions):
-        _say("Error: --conditions takes baseline, qedcode or both (comma-separated).")
+    agent_mode = args.model.partition(":")[0] == "agy"
+    allowed = ("agent", "agent+qedcode") if agent_mode else ("baseline", "qedcode")
+    raw = args.conditions or ",".join(allowed)
+    conditions = tuple(c.strip() for c in raw.split(",") if c.strip())
+    if not conditions or any(c not in allowed for c in conditions):
+        _say(f"Error: --conditions takes {allowed[0]}, {allowed[1]} or both (comma-separated).")
         return 2
     skipped: list[str] = []
     if suite.kind == "swebench":
@@ -75,10 +78,16 @@ def cmd_run(args: argparse.Namespace) -> int:
                 "tasks whose environment differs here are not skipped. Run it once first."
             )
         else:
-            skipped = [t.id for t in tasks if not validity.get(t.id, False)]
-            tasks = [t for t in tasks if validity.get(t.id, False)]
+            skipped = [t.id for t in tasks if validity.get(t.id) is False]
+            tasks = [t for t in tasks if validity.get(t.id) is not False]
+            unchecked = [t.id for t in tasks if t.id not in validity]
             if skipped:
                 _say(f"Skipping {len(skipped)} task(s) that are not valid on this computer.")
+            if unchecked:
+                _say(
+                    f"Note: {len(unchecked)} task(s) have not been checked on this computer yet "
+                    "(`benchy suites check --tasks ...`); they run anyway."
+                )
             if not tasks:
                 _say("Error: no valid tasks left to run.")
                 return 2
@@ -90,7 +99,17 @@ def cmd_run(args: argparse.Namespace) -> int:
     except Exception as exc:
         _say(f"Error: could not set up the model: {exc}")
         return 2
-    if not spec.scripted and not client.health():
+    if spec.agent:
+        if not client.health():
+            _say(f"Error: `{client.cli}` was not found. Install it and sign in, then try again.")
+            return 2
+        if "agent+qedcode" in conditions and (client.skill_dir is None or not client.qed_command):
+            _say(
+                "Error: agent+qedcode needs the QEDCode agent skill (set BENCHY_QEDCODE_SKILL to "
+                "its skills/qedcode folder) and the `qed` command. Nothing was run."
+            )
+            return 2
+    elif not spec.scripted and not client.health():
         _say(
             f"Error: the model '{spec.model}' ({spec.backend}) is not answering. Start its "
             "server (or run `qed doctor`), then try again. Nothing was run."
@@ -127,7 +146,9 @@ def cmd_run(args: argparse.Namespace) -> int:
             pass
     print((run_dir / "report.md").read_text(encoding="utf-8"))
     _say(f"Report saved in {run_dir}")
-    return 0 if state.complete else 130
+    if state.complete:
+        return 0
+    return 3 if state.stopped_reason.startswith("agent quota") else 130
 
 
 def cmd_report(args: argparse.Namespace) -> int:
@@ -341,12 +362,17 @@ def build_parser() -> argparse.ArgumentParser:
         "--model",
         default="qedcode",
         help="qedcode (your QEDCode model), ollama:<name>, openai:<url>#<model>, "
+        "agy:<model> (agent mode: Antigravity's agent with and without QEDCode), "
         "scripted:oracle|broken (self-test)",
     )
     run.add_argument("--suite", default="benchy-core", help="built-in suite name or a folder path")
     run.add_argument("--tasks", default="", help="comma-separated task ids or prefixes")
     run.add_argument("--reps", type=int, default=1, help="repetitions per task (default 1)")
-    run.add_argument("--conditions", default="baseline,qedcode")
+    run.add_argument(
+        "--conditions",
+        default=None,
+        help="baseline,qedcode (default) or, with an agy: model, agent,agent+qedcode",
+    )
     run.add_argument("--speed", default="normal", choices=["fast", "normal", "sure"])
     run.add_argument(
         "--time-limit",

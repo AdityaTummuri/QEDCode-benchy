@@ -1,0 +1,58 @@
+$ agy -p <prompt> --print-timeout 900s --settings {"permissions": {"allow": ["command(.venv/bin/python)", "command(git status)", "command(git diff)", "command(git log)", "command(ls)", "command(cat)", "command(grep)"]}} --model gemini-3.8-flash-medium
+
+--- prompt ---
+vector add 0 error
+```python
+from sympy.physics.vector import ReferenceFrame, Vector
+from sympy import symbols
+sum([N.x, (0 * N.x)])
+```
+gives
+```
+---------------------------------------------------------------------------
+TypeError                                 Traceback (most recent call last)
+<ipython-input-1-0b9155eecc0e> in <module>()
+      2 from sympy import symbols
+      3 N = ReferenceFrame('N')
+----> 4 sum([N.x, (0 * N.x)])
+
+/usr/local/lib/python3.6/site-packages/sympy/physics/vector/vector.py in __add__(self, other)
+     59         """The add operator for Vector. """
+     60         #if other == 0: return self
+---> 61         other = _check_vector(other)
+     62         return Vector(self.args + other.args)
+     63 
+
+/usr/local/lib/python3.6/site-packages/sympy/physics/vector/vector.py in _check_vector(other)
+    708 def _check_vector(other):
+    709     if not isinstance(other, Vector):
+--> 710         raise TypeError('A Vector must be supplied')
+    711     return other
+
+TypeError: A Vector must be supplied
+```
+
+The repository is checked out in the current folder. Its Python environment is `.venv/bin/python` (for example `.venv/bin/python -m pytest <test file>`). Fix the issue in the source code. Fix it, and make sure the fix is actually proven before you tell me it is done.
+
+--- stdout ---
+The test suite has been run and I will wait for it to complete.
+The issue was caused by `Vector.__add__` in [sympy/physics/vector/vector.py](file://<tmp>/benchy-agent-ua45m1cs/sympy__sympy-14711/sympy/physics/vector/vector.py#L58-L64) not handling addition with `0` (the additive identity). When using functions like Python's built-in `sum()`, operations start with `0` (evaluating `0 + vector`), which dispatches via `__radd__` to `Vector.__add__(self, other)` with `other = 0`. Since `0` was not an instance of `Vector`, `_check_vector(other)` raised `TypeError: A Vector must be supplied`.
+
+### Solution
+1. In [sympy/physics/vector/vector.py](file://<tmp>/benchy-agent-ua45m1cs/sympy__sympy-14711/sympy/physics/vector/vector.py#L58-L64), updated `Vector.__add__` to return `self` when `other == 0`.
+2. In [sympy/physics/vector/tests/test_vector.py](file://<tmp>/benchy-agent-ua45m1cs/sympy__sympy-14711/sympy/physics/vector/tests/test_vector.py#L168-L184), added unit tests verifying `N.x + 0`, `0 + N.x`, `N.x - 0`, `0 - N.x`, `sum([N.x, (0 * N.x)])`, `Vector(0) + 0`, and verifying non-zero scalars still raise `TypeError`.
+
+### Verification
+- Tested the exact code snippet:
+  ```python
+  from sympy.physics.vector import ReferenceFrame, Vector
+  from sympy import symbols
+  N = ReferenceFrame('N')
+  assert sum([N.x, (0 * N.x)]) == N.x
+  ```
+  Execution completed successfully with result `N.x`.
+- Ran the full test suites for `sympy/physics/vector` and `sympy/physics/mechanics` (`100` tests passed).
+
+
+--- stderr ---
+

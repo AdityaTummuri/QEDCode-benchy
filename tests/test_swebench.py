@@ -437,3 +437,34 @@ def test_swebench_reports_state_their_own_limitations(fake, tmp_path):
     md = (run_dir / "report.md").read_text()
     assert "not comparable with the official SWE-bench leaderboard" in md
     assert "single-file" not in md and "FAIL_TO_PASS" in md
+
+
+def test_run_skips_only_tasks_found_invalid(fake, tmp_path, capsys):
+    from benchy.cli import main
+
+    suite, _, _ = fake
+    validity.save_validity(suite, {"some-other-task": True})  # this task: never checked
+    out = tmp_path / "out"
+    assert (
+        main(
+            [
+                "run",
+                "--model",
+                "scripted:oracle",
+                "--suite",
+                str(suite.path),
+                "--speed",
+                "fast",
+                "--out",
+                str(out),
+            ]
+        )
+        == 0
+    )
+    captured = capsys.readouterr()
+    assert "have not been checked" in captured.out + captured.err
+    validity.save_validity(suite, {"fakeorg__calc-1": False})
+    assert (
+        main(["run", "--model", "scripted:oracle", "--suite", str(suite.path), "--out", str(out)])
+        == 2
+    )

@@ -45,6 +45,7 @@ select = ["E", "F", "I", "UP", "B"]
 
 [tool.ruff.lint.per-file-ignores]
 "tests/**" = ["E501"]  # scripted replies and fixtures are long on purpose
+"tests/test_agent_mode.py" = ["E501", "F811"]  # reuses the `fake` fixture from test_swebench
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]

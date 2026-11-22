@@ -29,6 +29,7 @@ from benchy import __version__
 from benchy.evaluators.pytest_eval import Evaluator
 from benchy.runner import baseline as baseline_mod
 from benchy.runner import baseline_swe
+from benchy.runner.agent_cli import AGENT_CONDITIONS, QuotaExhausted, run_agent
 from benchy.runner.clients import MeteredClient, ModelSpec
 from benchy.runner.qedcode_agent import run_qedcode
 from benchy.suite import Suite, Task, prepare_workspace
@@ -69,6 +70,7 @@ class RunState:
     attempts: list[dict] = field(default_factory=list)
     finished_at: str = ""
     complete: bool = False
+    stopped_reason: str = ""
 
 
 def new_run_id() -> str:
@@ -117,7 +119,35 @@ def run_attempt(
         started = time.monotonic()
         metered = MeteredClient(client, deadline=started + cfg.time_limit_s)
         extra: dict = {}
-        if condition == "baseline" and task.swe is not None:
+        if condition in AGENT_CONDITIONS:
+            out = run_agent(
+                client,
+                task.request,
+                workspace,
+                condition=condition,
+                python=task.python(),
+                limit_s=cfg.time_limit_s,
+                log_dir=log_dir,
+            )
+            if out.status == "quota":
+                raise QuotaExhausted(out.message or "the agent's plan ran out of quota")
+            status, message = out.status, out.message
+            extra = {
+                "agent_used_qedcode": out.used_qedcode,
+                "agent_receipts": out.receipts,
+                "agent_claimed_fixed": out.claimed_fixed,
+                "qed_grade": out.grade,
+                "agent_final_text": out.final_text[-600:],
+                "agent_qedcode_calls": out.qedcode_calls,
+                "agent_web_blocked": out.web_blocked,
+                "agent_tool_seconds": out.tool_seconds,
+                # Counted by the agent CLI itself (not estimated); 0 when it reported nothing.
+                "model_calls": out.turns or 0,
+                "prompt_tokens_est": out.input_tokens or 0,
+                "completion_tokens_est": out.output_tokens or 0,
+                "tokens_est": (out.input_tokens or 0) + (out.output_tokens or 0),
+            }
+        elif condition == "baseline" and task.swe is not None:
             out, shown = baseline_swe.run_baseline_swe(
                 metered,
                 task.request,
@@ -160,7 +190,7 @@ def run_attempt(
         (log_dir / "transcript.json").write_text(
             json.dumps(metered.transcript, indent=1), encoding="utf-8"
         )
-        if condition == "qedcode":
+        if condition == "qedcode":  # the model-mode QEDCode condition
             (log_dir / "qedcode_events.txt").write_text("\n".join(out.events), encoding="utf-8")
     usage = metered.usage
     return {
@@ -201,6 +231,8 @@ def metadata(cfg: ExperimentConfig, state: RunState) -> dict:
         "finished_at": state.finished_at,
         "complete": state.complete,
         "is_real_measurement": not cfg.model.scripted,
+        "mode": "agent" if cfg.model.agent else "model",
+        "stopped_reason": state.stopped_reason,
         "benchy_version": __version__,
         "qedcode_version": qedcode_version(),
         "suite": {
@@ -299,7 +331,16 @@ def run_experiment(
                         f"hidden {attempt['hidden_passed']}/{attempt['hidden_total']})"
                     )
         state.complete = True
+    except QuotaExhausted as exc:
+        state.stopped_reason = f"agent quota or rate limit reached: {exc}"
+        # Keep only complete pairs: the unfinished pair would compare one side with nothing.
+        state.attempts = [a for a in state.attempts if (a["task_id"], a["rep"]) != (task.id, rep)]
+        progress(
+            f"Stopped: the agent's plan reached its quota or rate limit ({exc}). Writing a "
+            "report of the finished task pairs; run the remaining tasks later."
+        )
     except KeyboardInterrupt:
+        state.stopped_reason = "stopped by you"
         progress("Stopped by you. Writing a report of the attempts that finished...")
     finally:
         state.finished_at = _now()

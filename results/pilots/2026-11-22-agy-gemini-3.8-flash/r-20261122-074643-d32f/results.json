@@ -1,0 +1,222 @@
+{
+  "schema_version": 1,
+  "run_id": "r-20261122-074643-d32f",
+  "metadata": {
+    "run_id": "r-20261122-074643-d32f",
+    "started_at": "2026-11-22T07:46:43+00:00",
+    "finished_at": "2026-11-22T08:14:14+00:00",
+    "complete": true,
+    "is_real_measurement": true,
+    "mode": "agent",
+    "stopped_reason": "",
+    "benchy_version": "0.1.0",
+    "qedcode_version": "0.1.0",
+    "suite": {
+      "name": "swebench-verified-py",
+      "version": "1.0.0",
+      "kind": "swebench",
+      "fingerprint_sha256": "bce7613e19c5abf3029f900aed86ed0d41d667cf597b55054a89325e82cc3371",
+      "tasks": [
+        "sympy__sympy-14711"
+      ],
+      "skipped_not_valid_here": []
+    },
+    "model": {
+      "backend": "agy",
+      "name": "gemini-3.8-flash-medium"
+    },
+    "controls": {
+      "conditions": [
+        "agent",
+        "agent+qedcode"
+      ],
+      "repetitions": 1,
+      "time_limit_s_per_condition": 900.0,
+      "order_seed": 0,
+      "qedcode_speed": "normal",
+      "qedcode_apply_policy": "any",
+      "qedcode_memory": "off",
+      "qedcode_helper_model": "off",
+      "baseline_temperature": 0.2,
+      "baseline_max_tokens": 4096,
+      "baseline_context": "bm25-13k-tokens",
+      "same_model_client_for_both": true,
+      "price_per_mtok_usd": null
+    },
+    "evaluator": {
+      "name": "benchy-swebench",
+      "version": "1"
+    },
+    "environment": {
+      "os": "Darwin",
+      "arch": "arm64",
+      "python": "3.12"
+    },
+    "limitations": [
+      "Small sample (1 paired attempts). Treat differences as indicative only; the confidence intervals and the McNemar p-value show how uncertain they are.",
+      "Agent mode: both conditions are the same agent CLI with the same model, prompt, snapshot, time limit and permissions; the QEDCode side also has the QEDCode skill and MCP server. The prompt does not name QEDCode, so the agent chose whether to use it (see 'used QEDCode').",
+      "The agent's model calls run on the user's plan: Benchy cannot count tokens, set a temperature or seed the model, so repeated runs can differ.",
+      "'Said it was fixed' is read from the agent's final message (it finished normally, changed source code and did not say it failed); it is a heuristic.",
+      "SWE-bench tasks run in environments rebuilt without Docker; results are not comparable with the official SWE-bench leaderboard (a subset of repositories).",
+      "SWE-bench Verified is public, so recent models may have seen these issues and fixes in training.",
+      "Times include model latency on this machine and are only comparable within this run."
+    ]
+  },
+  "summary": {
+    "per_condition": {
+      "agent": {
+        "attempts": 1,
+        "resolved": 1,
+        "resolution_rate": 1.0,
+        "resolution_ci95": [
+          0.2065,
+          1.0
+        ],
+        "regressions": 0,
+        "regression_rate": 0.0,
+        "timeouts": 0,
+        "errors": 0,
+        "no_change": 0,
+        "median_seconds": 733.37,
+        "median_seconds_resolved": 733.37,
+        "model_calls": 0,
+        "tokens_est_total": 0,
+        "tokens_est_median": 0,
+        "cost_usd_est": null
+      },
+      "agent+qedcode": {
+        "attempts": 1,
+        "resolved": 1,
+        "resolution_rate": 1.0,
+        "resolution_ci95": [
+          0.2065,
+          1.0
+        ],
+        "regressions": 0,
+        "regression_rate": 0.0,
+        "timeouts": 1,
+        "errors": 0,
+        "no_change": 0,
+        "median_seconds": 908.11,
+        "median_seconds_resolved": 908.11,
+        "model_calls": 0,
+        "tokens_est_total": 0,
+        "tokens_est_median": 0,
+        "cost_usd_est": null
+      }
+    },
+    "paired": {
+      "pairs": 1,
+      "both_resolved": 1,
+      "only_agent": 0,
+      "only_agent+qedcode": 0,
+      "neither": 0,
+      "difference": 0.0,
+      "mcnemar_p": 1.0
+    },
+    "per_task": {
+      "sympy__sympy-14711": {
+        "agent": {
+          "resolved": 1,
+          "attempts": 1
+        },
+        "agent+qedcode": {
+          "resolved": 1,
+          "attempts": 1
+        }
+      }
+    },
+    "qedcode_grades": {
+      "none": {
+        "attempts": 1,
+        "resolved": 1
+      }
+    },
+    "agent": {
+      "agent": {
+        "attempts": 1,
+        "used_qedcode": 0,
+        "claimed_fixed": 1,
+        "false_claims": 0,
+        "false_claim_rate": 0.0
+      },
+      "agent+qedcode": {
+        "attempts": 1,
+        "used_qedcode": 0,
+        "claimed_fixed": 0,
+        "false_claims": 0,
+        "false_claim_rate": null
+      }
+    }
+  },
+  "attempts": [
+    {
+      "task_id": "sympy__sympy-14711",
+      "rep": 1,
+      "condition": "agent",
+      "order": 0,
+      "snapshot_commit": "e9eb6a1cce71a5faa67520fdd3356dedbd597661",
+      "status": "done",
+      "message": "",
+      "seconds": 733.37,
+      "model_calls": 0,
+      "prompt_tokens_est": 0,
+      "completion_tokens_est": 0,
+      "tokens_est": 0,
+      "cost_usd_est": null,
+      "resolved": true,
+      "regression": false,
+      "hidden_passed": 1,
+      "hidden_total": 1,
+      "visible_passed": 2,
+      "visible_total": 2,
+      "regressed_tests": [],
+      "changed_files": [
+        "sympy/physics/vector/vector.py"
+      ],
+      "discarded_test_changes": [
+        "sympy/physics/vector/tests/test_vector.py"
+      ],
+      "eval_error": "",
+      "agent_used_qedcode": false,
+      "agent_receipts": 0,
+      "agent_claimed_fixed": true,
+      "qed_grade": null,
+      "agent_final_text": "ympy/physics/vector/tests/test_vector.py#L168-L184), added unit tests verifying `N.x + 0`, `0 + N.x`, `N.x - 0`, `0 - N.x`, `sum([N.x, (0 * N.x)])`, `Vector(0) + 0`, and verifying non-zero scalars still raise `TypeError`.\n\n### Verification\n- Tested the exact code snippet:\n  ```python\n  from sympy.physics.vector import ReferenceFrame, Vector\n  from sympy import symbols\n  N = ReferenceFrame('N')\n  assert sum([N.x, (0 * N.x)]) == N.x\n  ```\n  Execution completed successfully with result `N.x`.\n- Ran the full test suites for `sympy/physics/vector` and `sympy/physics/mechanics` (`100` tests passed)."
+    },
+    {
+      "task_id": "sympy__sympy-14711",
+      "rep": 1,
+      "condition": "agent+qedcode",
+      "order": 1,
+      "snapshot_commit": "e9eb6a1cce71a5faa67520fdd3356dedbd597661",
+      "status": "timeout",
+      "message": "the agent ran over 900s",
+      "seconds": 908.11,
+      "model_calls": 0,
+      "prompt_tokens_est": 0,
+      "completion_tokens_est": 0,
+      "tokens_est": 0,
+      "cost_usd_est": null,
+      "resolved": true,
+      "regression": false,
+      "hidden_passed": 1,
+      "hidden_total": 1,
+      "visible_passed": 2,
+      "visible_total": 2,
+      "regressed_tests": [],
+      "changed_files": [
+        "sympy/physics/vector/vector.py"
+      ],
+      "discarded_test_changes": [
+        "sympy/physics/vector/tests/test_vector_add_0.py"
+      ],
+      "eval_error": "",
+      "agent_used_qedcode": false,
+      "agent_receipts": 0,
+      "agent_claimed_fixed": false,
+      "qed_grade": null,
+      "agent_final_text": ""
+    }
+  ]
+}
