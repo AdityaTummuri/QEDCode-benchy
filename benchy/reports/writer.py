@@ -201,7 +201,7 @@ def render_markdown(meta: dict, summary: dict, attempts: list[dict]) -> str:
     ag = summary.get("agent")
     if agent_mode:  # turns and tokens as the agent CLI reports them; no cost (a flat plan)
         rows = rows[:7] + [
-            ("Agent turns", lambda c: _num(pc[c]["model_calls"])),
+            ("Model responses", lambda c: _num(pc[c]["model_calls"])),
             (
                 "Tokens (median / total)",
                 lambda c: f"{_num(pc[c]['tokens_est_median'])} / {pc[c]['tokens_est_total']}",

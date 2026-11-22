@@ -165,6 +165,7 @@ def parse_stream(stdout: str) -> StreamSummary:
     out = StreamSummary()
     text: list[str] = []
     usage_in = usage_out = 0
+    responses = 0  # model responses (one per step the model takes)
     seen_usage = False
     for line in stdout.splitlines():
         try:
@@ -175,7 +176,7 @@ def parse_stream(stdout: str) -> StreamSummary:
             res = ev.get("result") or {}
             out.status = str(res.get("status", ""))
             out.final_text = str(res.get("response", ""))
-            out.turns = res.get("num_turns")
+            # (num_turns counts the user's prompts, not model steps: see `responses` below)
             usage = res.get("usage") or {}
             if usage:
                 out.input_tokens = int(usage.get("input_tokens", 0))
@@ -188,6 +189,8 @@ def parse_stream(stdout: str) -> StreamSummary:
             if step.get("text_delta"):
                 text.append(step["text_delta"])
             usage = step.get("usage") or {}
+            if step.get("state") == "DONE":
+                responses += 1
             if usage and step.get("state") == "DONE":
                 seen_usage = True
                 usage_in += int(usage.get("input_tokens", 0))
@@ -212,6 +215,7 @@ def parse_stream(stdout: str) -> StreamSummary:
                 }
             )
             out.qedcode_calls += _is_qedcode_step(name, params)
+    out.turns = responses or None
     if not out.final_text:
         out.final_text = "".join(text)
     if out.input_tokens is None and seen_usage:  # stopped before the result event

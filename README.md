@@ -1,3 +1,10 @@
+<p align="center">
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="assets/logo-dark.svg">
+    <img src="assets/logo-light.svg" alt="QEDCode" width="300">
+  </picture>
+</p>
+
 # QEDCode Benchy
 
 **An honest way to measure whether [QEDCode](https://github.com/AdityaTummuri/QEDCode) helps.**
@@ -112,6 +119,7 @@ How contributions are checked: [docs/contributing.md](docs/contributing.md).
 | Suite | Tasks | What it is |
 |---|---|---|
 | `swebench-verified-py` 1.0.0 | 143 | [SWE-bench Verified](suites/swebench-verified-py/README.md) instances from sympy, sphinx, pylint and xarray, on the whole repository, judged by SWE-bench's FAIL_TO_PASS / PASS_TO_PASS tests. The standard suite: use it for results you publish. |
+| `benchy-fresh` 1.0.0 (private) | 34 | [Real projects with newly planted bugs](docs/fresh-suites.md) (boltons, pyparsing, tomlkit, more-itertools, networkx): no model can have seen these fixes. Not published, because it holds the answers. |
 | `benchy-core` 1.0.0 | 8 | small Python tasks (seven bug fixes, one feature) written for Benchy. Quick to run; good for trying a model and checking the pipeline. |
 
 ```bash

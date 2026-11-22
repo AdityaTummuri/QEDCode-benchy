@@ -145,7 +145,21 @@ def spec_for(repo: str, version: str) -> EnvSpec:
     return spec
 
 
+# Benchy's own fresh suites: real projects with newly planted bugs (tools/plant_bugs.py). Their
+# instances live in a private suite folder; the repositories are local bare clones named
+# benchy-fresh/<project>. Modern projects: one uv environment per project, Python 3.12.
+FRESH_SPECS = {
+    "benchy-fresh/boltons": EnvSpec(python="3.12", pip=("pytest",)),
+    "benchy-fresh/more-itertools": EnvSpec(python="3.12", pip=("pytest",)),
+    "benchy-fresh/tomlkit": EnvSpec(python="3.12", pip=("pytest", "PyYAML")),
+    "benchy-fresh/pyparsing": EnvSpec(python="3.12", pip=("pytest",), install=".[diagrams]"),
+    "benchy-fresh/networkx": EnvSpec(python="3.12", pip=("pytest",), install="."),
+}
+
+
 def _spec_for(repo: str, version: str) -> EnvSpec:
+    if repo in FRESH_SPECS:
+        return FRESH_SPECS[repo]
     if repo == "sympy/sympy":
         # SWE-bench runs sympy's own bin/test; its test files are plain pytest functions.
         return EnvSpec(python="3.9", pip=("mpmath==1.3.0", "pytest"))
