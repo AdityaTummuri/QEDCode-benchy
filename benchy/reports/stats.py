@@ -85,3 +85,51 @@ def paired(attempts: list[dict], a: str = "baseline", b: str = "qedcode") -> dic
         "difference": round((only_b - only_a) / n, 4),  # paired rate of b minus rate of a
         "mcnemar_p": round(mcnemar_exact(only_a, only_b), 4),
     }
+
+
+def grade_honesty(attempts: list[dict]) -> dict:
+    """Of QEDCode results graded A (and B), how many pass the hidden tests?
+
+    "When QEDCode says A, it was right k of n times" is the number that makes a grade mean
+    something; every wrong A is a bug in QEDCode."""
+    out = {}
+    for grade in ("A", "B"):
+        graded = [
+            a for a in attempts if a["condition"] == "qedcode" and a.get("qed_grade") == grade
+        ]
+        right = sum(a["resolved"] for a in graded)
+        lo, hi = wilson(right, len(graded))
+        out[grade] = {
+            "graded": len(graded),
+            "resolved": right,
+            "rate": round(right / len(graded), 4) if graded else None,
+            "ci95": [round(lo, 4), round(hi, 4)],
+        }
+    return out
+
+
+def silent_failures(attempts: list[dict]) -> dict:
+    """Changes that look done but fail the hidden tests, per condition.
+
+    A bare model's wrong change always looks done (it has no grade); a QEDCode change is silent
+    only when it came back as A or B. Wrong changes graded C or D were flagged, not silent."""
+    out = {}
+    for condition in ("baseline", "qedcode"):
+        changed = [
+            a
+            for a in attempts
+            if a["condition"] == condition
+            and a["status"] not in ("no_change", "unparsable", "error", "timeout")
+        ]
+        wrong = [a for a in changed if not a["resolved"]]
+        if condition == "qedcode":
+            silent = [a for a in wrong if a.get("qed_grade") in ("A", "B")]
+        else:
+            silent = wrong
+        out[condition] = {
+            "changes": len(changed),
+            "wrong": len(wrong),
+            "silent": len(silent),
+            "silent_rate": round(len(silent) / len(changed), 4) if changed else None,
+        }
+    return out

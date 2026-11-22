@@ -34,7 +34,7 @@ judged by the same **independent evaluator**, using hidden tests that neither si
 _No community results yet. Run `benchy run`, then `benchy share` to preview what a contribution contains._
 <!-- benchy:stats:end -->
 
-Dashboard: [`dashboard/index.html`](dashboard/index.html) (serve the repository, e.g. GitHub Pages).
+Dashboard: **[adityatummuri.github.io/QEDCode-benchy](https://adityatummuri.github.io/QEDCode-benchy/)** (built from [`dashboard/index.html`](dashboard/index.html)): resolution rates with intervals, grade honesty (when QEDCode said A, how often the hidden tests agreed), silent failures and the best models for a 6 GB card.
 Data: [`leaderboard/leaderboard.json`](leaderboard/leaderboard.json), generated only by
 `bot/aggregate.py` from the records in [`results/submissions/`](results/submissions/).
 A passing schema check does not prove a run happened, so results are labelled

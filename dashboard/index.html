@@ -57,6 +57,10 @@
   .facts b { color: var(--ink); font-weight: 600; }
   .empty { text-align: center; padding: 48px 16px; color: var(--muted); }
   .notes { color: var(--muted); font-size: 13px; margin-top: 28px; padding-left: 18px; }
+  .sub { font-size: 13px; font-weight: 600; margin: 14px 0 2px; }
+  table.best { width: 100%; border-collapse: collapse; font-size: 14px; }
+  table.best th, table.best td { text-align: left; padding: 8px 6px; border-top: 1px solid var(--line); }
+  table.best th { color: var(--muted); font-weight: 600; font-size: 12.5px; }
   a { color: var(--qed); }
   @media (max-width: 560px) {
     .row { grid-template-columns: 70px 1fr; }
@@ -71,6 +75,11 @@
     <a href="https://github.com/AdityaTummuri/QEDCode">QEDCode</a>. Hidden tests that neither side saw
     decide each outcome. Bars show the verified resolution rate. The whiskers are 95% intervals.</p>
   <div class="totals" id="totals"></div>
+  <section class="card" id="best" hidden>
+    <h2>Best for a 6 GB card</h2>
+    <div class="meta">Models that run fully on a 6 GB GPU, ranked by QEDCode's verified resolution rate.</div>
+    <table class="best"><thead><tr><th>model</th><th>suite</th><th>QEDCode resolved</th><th>bare resolved</th><th>grade A right</th></tr></thead><tbody id="best-rows"></tbody></table>
+  </section>
   <div id="groups"></div>
   <ul class="notes" id="notes"></ul>
 </main>
@@ -149,8 +158,37 @@
       facts.appendChild(fact("median s", (g.baseline.median_seconds ?? "–") + " / " +
         (g.qedcode.median_seconds ?? "–")));
       card.appendChild(facts);
+      var honesty = g.grade_honesty || {};
+      if (honesty.A && honesty.A.graded) {
+        card.appendChild(el("div", "sub", "Grade honesty: when QEDCode said A or B, did the hidden tests agree?"));
+        ["A", "B"].forEach(function (grade) {
+          var h = honesty[grade];
+          if (h && h.graded) {
+            card.appendChild(bar("graded " + grade, { resolution_rate: h.rate, resolution_ci95: h.ci95, resolved: h.resolved, attempts: h.graded }, "var(--qed)"));
+          }
+        });
+      }
+      var silent = g.silent_failures;
+      if (silent) {
+        var sf = el("div", "facts");
+        sf.appendChild(fact("silent failures (looked done, were wrong)", silent.baseline.silent + " bare / " + silent.qedcode.silent + " QEDCode"));
+        card.appendChild(sf);
+      }
       groupsEl.appendChild(card);
     });
+    var best = board.groups.filter(function (g) { return g.fits_6gb && g.qedcode.attempts; })
+      .sort(function (a, b) { return (b.qedcode.resolution_rate || 0) - (a.qedcode.resolution_rate || 0); });
+    if (best.length) {
+      document.getElementById("best").hidden = false;
+      var rows = document.getElementById("best-rows");
+      best.forEach(function (g) {
+        var tr = el("tr");
+        var hA = (g.grade_honesty || {}).A || {};
+        [g.model, g.suite, pct(g.qedcode.resolution_rate), pct(g.baseline.resolution_rate),
+         hA.graded ? hA.resolved + "/" + hA.graded : "–"].forEach(function (v) { tr.appendChild(el("td", "", v)); });
+        rows.appendChild(tr);
+      });
+    }
     var notes = document.getElementById("notes");
     board.notes.forEach(function (n) { notes.appendChild(el("li", "", n)); });
   }

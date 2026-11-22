@@ -18,12 +18,30 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT))
 
-from benchy.reports.stats import paired, summarize_condition  # noqa: E402
+from benchy.reports.stats import (  # noqa: E402
+    grade_honesty,
+    paired,
+    silent_failures,
+    summarize_condition,
+)
 from benchy.submission.validate import known_suites, validate_bytes  # noqa: E402
 
 START = "<!-- benchy:stats:start -->"
 END = "<!-- benchy:stats:end -->"
 COMMUNITY = "community-reported (schema-validated)"
+# Models that run fully on a 6 GB card with a useful context (QEDCode's catalog sizes, and the
+# same models as Ollama tags). The dashboard's "best for a 6 GB card" table uses this.
+FITS_6GB = {
+    "qwen3.5-4b-q4km",
+    "qwen3.5:4b",
+    "qwen3.5-2b-q4km",
+    "qwen3.5:2b",
+    "qwen2.5-coder-7b-q4km",
+    "qwen2.5-coder:7b",
+    "ollama:qwen3.5:4b",
+    "ollama:qwen3.5:2b",
+    "ollama:qwen2.5-coder:7b",
+}
 REPRODUCED = "independently reproduced"
 
 
@@ -93,6 +111,9 @@ def build_leaderboard(records: list[dict], reproduced: set[str], skipped: list[s
                 "baseline": per["baseline"],
                 "qedcode": per["qedcode"],
                 "paired": paired(attempts),
+                "grade_honesty": grade_honesty(attempts),
+                "silent_failures": silent_failures(attempts),
+                "fits_6gb": key[3].lower() in FITS_6GB,
                 "submission_ids": sorted(r["submission_id"] for r in members),
             }
         )

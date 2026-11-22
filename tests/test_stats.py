@@ -54,3 +54,40 @@ def test_summary_counts_failures_in_the_denominator():
     assert s["attempts"] == 3 and s["resolved"] == 1 and s["resolution_rate"] == 0.3333
     assert s["timeouts"] == 1 and s["errors"] == 1 and s["regressions"] == 1
     assert s["cost_usd_est"] is None
+
+
+def _graded(condition: str, resolved: bool, grade=None, status: str = "done") -> dict:
+    return {"condition": condition, "resolved": resolved, "qed_grade": grade, "status": status}
+
+
+def test_grade_honesty_counts_how_often_a_grade_was_right() -> None:
+    from benchy.reports.stats import grade_honesty
+
+    attempts = [
+        _graded("qedcode", True, "A"),
+        _graded("qedcode", True, "A"),
+        _graded("qedcode", False, "A"),
+        _graded("qedcode", False, "B"),
+        _graded("qedcode", False, "C"),
+        _graded("baseline", True),
+    ]
+    h = grade_honesty(attempts)
+    assert h["A"]["graded"] == 3 and h["A"]["resolved"] == 2 and h["A"]["rate"] == 0.6667
+    assert h["B"]["graded"] == 1 and h["B"]["resolved"] == 0
+    assert 0 < h["A"]["ci95"][0] < h["A"]["rate"] < h["A"]["ci95"][1] <= 1
+
+
+def test_silent_failures_are_wrong_changes_that_looked_done() -> None:
+    from benchy.reports.stats import silent_failures
+
+    attempts = [
+        _graded("baseline", False),
+        _graded("baseline", True),
+        _graded("baseline", False, status="no_change"),
+        _graded("qedcode", False, "B"),
+        _graded("qedcode", False, "C"),
+        _graded("qedcode", True, "A"),
+    ]
+    s = silent_failures(attempts)
+    assert s["baseline"] == {"changes": 2, "wrong": 1, "silent": 1, "silent_rate": 0.5}
+    assert s["qedcode"]["wrong"] == 2 and s["qedcode"]["silent"] == 1  # the C was flagged
