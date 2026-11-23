@@ -23,7 +23,7 @@ also in `results/submissions/`.
    `008_slugify_feature`, with qwen2.5-coder:7b: the task says "drop punctuation", the model's own
    test dropped dashes too, and the hidden test keeps them. An under-specified task meets the
    limit of a test written by the same model; the task text was not changed after the fact.
-3. **Silent failures: 14 bare, 4 with QEDCode.** A bare model's wrong change always looks done.
+3. **Silent failures: 11 bare, 4 with QEDCode.** A bare model's wrong change always looks done.
    QEDCode's other misses came back as "no fix", not as a wrong change.
 4. **A real QEDCode bug, found and fixed.** In a recorded `qed try` run a repair edited the repro
    test (to add a missing import) and the fail-before check reused the old failures, so a test
