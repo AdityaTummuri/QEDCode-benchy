@@ -1,0 +1,33 @@
+[stage] Taking a snapshot of your project...
+[stage] Finding files ...... src/csvlite/parser.py
+[stage] Running all your tests to see what already passes...
+[stage] Writing a test that shows the problem...
+[stage] Writing a test that shows the problem ... done (it fails now)
+[stage] Try 1: asking the model (temperature 0.2)...
+[check] c1 · apply: Edits applied to src/csvlite/parser.py.
+[check] c1 · parse: 2 changed file(s) parse.
+[check] c1 · scope: 2 file(s), 15 changed line(s), all within scope.
+[check] c1 · risk: No risky patterns in the new code.
+[check] c1 · lint: No new serious lint errors in 2 file(s).
+[check] c1 · fbpa: The new test does not pass with the change. 3 of 3 tests failed; first: tests.test_qed_parse_csv_line_crashes_with::test_empty_line
+[candidate] c1: rejected at fbpa
+[stage] Try 2: asking the model (temperature 0.7)...
+[check] c2 · apply: Edits applied to src/csvlite/parser.py.
+[check] c2 · parse: Syntax error in src/csvlite/parser.py, line 10: expected an indented block after 'if' statement on line 9
+[candidate] c2: rejected at parse
+[stage] Try 3: asking the model (temperature 0.9)...
+[check] c3 · apply: Edits applied to src/csvlite/parser.py.
+[check] c3 · parse: 2 changed file(s) parse.
+[check] c3 · scope: 2 file(s), 15 changed line(s), all within scope.
+[check] c3 · risk: No risky patterns in the new code.
+[check] c3 · lint: No new serious lint errors in 2 file(s).
+[check] c3 · fbpa: 3 test(s) failed before the change and pass now.
+[check] c3 · targeted: 7/7 tests pass.
+[candidate] c3: grade B
+[stage] Running all tests on c3...
+[check] c3 · full: 7/7 tests pass.
+[candidate] c3: grade A
+[stage] Measuring proof strength (small breakages of the changed lines)...
+[log] Proof strength 2/2: the new tests caught 2 of 2 mutants.
+[stage] Explaining the change...
+[result] Grade A · repro test failed before, passes now · 7/7 tests pass · proof strength 2/2 · lint clean · no protected files changed

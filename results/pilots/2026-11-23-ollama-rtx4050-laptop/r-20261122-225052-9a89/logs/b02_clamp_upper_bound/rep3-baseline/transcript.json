@@ -1,0 +1,8 @@
+[
+ {
+  "tag": "benchy_baseline",
+  "temperature": 0.2,
+  "prompt": "You are a careful software engineer working on a small Python project.\n\nTASK: clamp(value, low, high) returns the wrong number when value is above high: clamp(15, 0, 10) gives 0 instead of 10.\n\nPROJECT FILES:\n--- pyproject.toml ---\n[tool.pytest.ini_options]\npythonpath = [\"src\"]\ntestpaths = [\"tests\"]\n\n--- src/numkit/__init__.py ---\n\n--- src/numkit/bounds.py ---\n\"\"\"Keep numbers inside a range.\"\"\"\n\n\ndef clamp(value, low, high):\n    \"\"\"Return value limited to the closed range [low, high].\"\"\"\n    if low > high:\n        raise ValueError(\"low must not exceed high\")\n    if value < low:\n        return low\n    if value > high:\n        return low\n    return value\n\n--- tests/test_bounds.py ---\nimport pytest\n\nfrom numkit.bounds import clamp\n\n\ndef test_inside_range_is_unchanged():\n    assert clamp(5, 0, 10) == 5\n\n\ndef test_below_range_goes_to_low():\n    assert clamp(-3, 0, 10) == 0\n\n\ndef test_bad_range():\n    with pytest.raises(ValueError):\n        clamp(1, 5, 2)\n\n\nMake the change the task asks for. Reply with the COMPLETE new contents of every file you change,\neach in this exact format, and nothing else:\n\nFILE: <path relative to the project root>\n```python\n<entire file contents>\n```\n",
+  "reply": "FILE: src/numkit/bounds.py\n```python\n\"\"\"Keep numbers inside a range.\"\"\"\n\n\ndef clamp(value, low, high):\n    \"\"\"Return value limited to the closed range [low, high].\"\"\"\n    if low > high:\n        raise ValueError(\"low must not exceed high\")\n    if value < low:\n        return low\n    if value > high:\n        return high\n    return value\n```"
+ }
+]

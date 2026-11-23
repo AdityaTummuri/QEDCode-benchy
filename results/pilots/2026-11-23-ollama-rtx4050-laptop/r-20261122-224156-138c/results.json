@@ -1,0 +1,2163 @@
+{
+  "schema_version": 1,
+  "run_id": "r-20261122-224156-138c",
+  "metadata": {
+    "run_id": "r-20261122-224156-138c",
+    "started_at": "2026-11-22T22:41:56+00:00",
+    "finished_at": "2026-11-22T22:50:51+00:00",
+    "complete": true,
+    "is_real_measurement": true,
+    "mode": "model",
+    "stopped_reason": "",
+    "benchy_version": "0.1.0",
+    "qedcode_version": "0.1.0",
+    "suite": {
+      "name": "bugzoo",
+      "version": "unversioned",
+      "kind": "folder",
+      "fingerprint_sha256": "16f7a8116244af5acbb7e159c05817c0da629c11f31898b9c6ee8851a35af210",
+      "tasks": [
+        "001_paginate_off_by_one",
+        "002_discount_threshold",
+        "003_mutable_default",
+        "004_empty_input_crash",
+        "005_integer_average",
+        "006_missing_config_key",
+        "007_sort_order",
+        "008_slugify_feature",
+        "009_factorial_zero",
+        "010_cart_quantity"
+      ],
+      "skipped_not_valid_here": []
+    },
+    "model": {
+      "backend": "ollama",
+      "name": "qwen3.5:4b"
+    },
+    "controls": {
+      "conditions": [
+        "baseline",
+        "qedcode"
+      ],
+      "repetitions": 3,
+      "time_limit_s_per_condition": 600.0,
+      "order_seed": 0,
+      "qedcode_speed": "normal",
+      "qedcode_apply_policy": "any",
+      "qedcode_memory": "off",
+      "qedcode_helper_model": "off",
+      "baseline_temperature": 0.2,
+      "baseline_max_tokens": 4096,
+      "baseline_context": "every project file",
+      "same_model_client_for_both": true,
+      "price_per_mtok_usd": null
+    },
+    "evaluator": {
+      "name": "benchy-pytest-hidden",
+      "version": "1"
+    },
+    "environment": {
+      "os": "Linux",
+      "arch": "x86_64",
+      "python": "3.12"
+    },
+    "limitations": [
+      "Token counts are estimates (characters / 3.5), not counts from the model's tokenizer.",
+      "Tasks are small single-file Python problems; results may not carry over to large real-world repositories.",
+      "The baseline is the bare model with one plain prompt and one answer. Other agent harnesses (with their own retries or tools) would be different baselines.",
+      "Times include model latency on this machine and are only comparable within this run."
+    ]
+  },
+  "summary": {
+    "per_condition": {
+      "baseline": {
+        "attempts": 30,
+        "resolved": 28,
+        "resolution_rate": 0.9333,
+        "resolution_ci95": [
+          0.7868,
+          0.9815
+        ],
+        "regressions": 0,
+        "regression_rate": 0.0,
+        "timeouts": 0,
+        "errors": 0,
+        "no_change": 0,
+        "median_seconds": 2.74,
+        "median_seconds_resolved": 2.63,
+        "model_calls": 30,
+        "tokens_est_total": 17035,
+        "tokens_est_median": 575.0,
+        "cost_usd_est": null
+      },
+      "qedcode": {
+        "attempts": 30,
+        "resolved": 26,
+        "resolution_rate": 0.8667,
+        "resolution_ci95": [
+          0.7032,
+          0.9469
+        ],
+        "regressions": 0,
+        "regression_rate": 0.0,
+        "timeouts": 0,
+        "errors": 0,
+        "no_change": 4,
+        "median_seconds": 11.48,
+        "median_seconds_resolved": 11.38,
+        "model_calls": 163,
+        "tokens_est_total": 101172,
+        "tokens_est_median": 2852.5,
+        "cost_usd_est": null
+      }
+    },
+    "paired": {
+      "pairs": 30,
+      "both_resolved": 25,
+      "only_baseline": 3,
+      "only_qedcode": 1,
+      "neither": 1,
+      "difference": -0.0667,
+      "mcnemar_p": 0.625
+    },
+    "per_task": {
+      "001_paginate_off_by_one": {
+        "baseline": {
+          "resolved": 3,
+          "attempts": 3
+        },
+        "qedcode": {
+          "resolved": 2,
+          "attempts": 3
+        }
+      },
+      "002_discount_threshold": {
+        "baseline": {
+          "resolved": 3,
+          "attempts": 3
+        },
+        "qedcode": {
+          "resolved": 3,
+          "attempts": 3
+        }
+      },
+      "003_mutable_default": {
+        "baseline": {
+          "resolved": 3,
+          "attempts": 3
+        },
+        "qedcode": {
+          "resolved": 3,
+          "attempts": 3
+        }
+      },
+      "004_empty_input_crash": {
+        "baseline": {
+          "resolved": 3,
+          "attempts": 3
+        },
+        "qedcode": {
+          "resolved": 3,
+          "attempts": 3
+        }
+      },
+      "005_integer_average": {
+        "baseline": {
+          "resolved": 3,
+          "attempts": 3
+        },
+        "qedcode": {
+          "resolved": 3,
+          "attempts": 3
+        }
+      },
+      "006_missing_config_key": {
+        "baseline": {
+          "resolved": 3,
+          "attempts": 3
+        },
+        "qedcode": {
+          "resolved": 2,
+          "attempts": 3
+        }
+      },
+      "007_sort_order": {
+        "baseline": {
+          "resolved": 3,
+          "attempts": 3
+        },
+        "qedcode": {
+          "resolved": 3,
+          "attempts": 3
+        }
+      },
+      "008_slugify_feature": {
+        "baseline": {
+          "resolved": 1,
+          "attempts": 3
+        },
+        "qedcode": {
+          "resolved": 1,
+          "attempts": 3
+        }
+      },
+      "009_factorial_zero": {
+        "baseline": {
+          "resolved": 3,
+          "attempts": 3
+        },
+        "qedcode": {
+          "resolved": 3,
+          "attempts": 3
+        }
+      },
+      "010_cart_quantity": {
+        "baseline": {
+          "resolved": 3,
+          "attempts": 3
+        },
+        "qedcode": {
+          "resolved": 3,
+          "attempts": 3
+        }
+      }
+    },
+    "qedcode_grades": {
+      "A": {
+        "attempts": 26,
+        "resolved": 26
+      },
+      "none": {
+        "attempts": 4,
+        "resolved": 0
+      }
+    },
+    "agent": null
+  },
+  "attempts": [
+    {
+      "task_id": "001_paginate_off_by_one",
+      "rep": 1,
+      "condition": "qedcode",
+      "order": 0,
+      "snapshot_commit": "ecd95ccb629c388bba8a4769818baccabc0ecf09",
+      "status": "done",
+      "message": "Grade A \u00b7 repro test failed before, passes now \u00b7 7/7 tests pass \u00b7 proof strength 1/1 \u00b7 lint clean \u00b7 no protected files changed",
+      "seconds": 15.46,
+      "model_calls": 5,
+      "prompt_tokens_est": 2639,
+      "completion_tokens_est": 501,
+      "tokens_est": 3140,
+      "cost_usd_est": null,
+      "resolved": true,
+      "regression": false,
+      "hidden_passed": 3,
+      "hidden_total": 3,
+      "visible_passed": 5,
+      "visible_total": 5,
+      "regressed_tests": [],
+      "changed_files": [
+        "src/shop/pages.py"
+      ],
+      "discarded_test_changes": [
+        "tests/test_qed_my_shop_s_product_list.py"
+      ],
+      "eval_error": "",
+      "qed_status": "done",
+      "qed_grade": "A",
+      "qed_applied": true,
+      "qed_candidates": 1
+    },
+    {
+      "task_id": "001_paginate_off_by_one",
+      "rep": 1,
+      "condition": "baseline",
+      "order": 1,
+      "snapshot_commit": "ecd95ccb629c388bba8a4769818baccabc0ecf09",
+      "status": "done",
+      "message": "",
+      "seconds": 2.44,
+      "model_calls": 1,
+      "prompt_tokens_est": 426,
+      "completion_tokens_est": 123,
+      "tokens_est": 549,
+      "cost_usd_est": null,
+      "resolved": true,
+      "regression": false,
+      "hidden_passed": 3,
+      "hidden_total": 3,
+      "visible_passed": 5,
+      "visible_total": 5,
+      "regressed_tests": [],
+      "changed_files": [
+        "src/shop/pages.py"
+      ],
+      "discarded_test_changes": [],
+      "eval_error": "",
+      "files_written": [
+        "src/shop/pages.py"
+      ],
+      "rejected_paths": []
+    },
+    {
+      "task_id": "002_discount_threshold",
+      "rep": 1,
+      "condition": "qedcode",
+      "order": 0,
+      "snapshot_commit": "23ca9df91b65822e2efc7ade4c669dd410c2a903",
+      "status": "done",
+      "message": "Grade A \u00b7 repro test failed before, passes now \u00b7 6/6 tests pass \u00b7 proof strength 1/1 \u00b7 lint clean \u00b7 no protected files changed",
+      "seconds": 11.68,
+      "model_calls": 5,
+      "prompt_tokens_est": 2342,
+      "completion_tokens_est": 475,
+      "tokens_est": 2817,
+      "cost_usd_est": null,
+      "resolved": true,
+      "regression": false,
+      "hidden_passed": 3,
+      "hidden_total": 3,
+      "visible_passed": 4,
+      "visible_total": 4,
+      "regressed_tests": [],
+      "changed_files": [
+        "src/store/pricing.py"
+      ],
+      "discarded_test_changes": [
+        "tests/test_qed_customers_who_spend_exactly_100.py"
+      ],
+      "eval_error": "",
+      "qed_status": "done",
+      "qed_grade": "A",
+      "qed_applied": true,
+      "qed_candidates": 1
+    },
+    {
+      "task_id": "002_discount_threshold",
+      "rep": 1,
+      "condition": "baseline",
+      "order": 1,
+      "snapshot_commit": "23ca9df91b65822e2efc7ade4c669dd410c2a903",
+      "status": "done",
+      "message": "",
+      "seconds": 2.37,
+      "model_calls": 1,
+      "prompt_tokens_est": 387,
+      "completion_tokens_est": 119,
+      "tokens_est": 506,
+      "cost_usd_est": null,
+      "resolved": true,
+      "regression": false,
+      "hidden_passed": 3,
+      "hidden_total": 3,
+      "visible_passed": 4,
+      "visible_total": 4,
+      "regressed_tests": [],
+      "changed_files": [
+        "src/store/pricing.py"
+      ],
+      "discarded_test_changes": [],
+      "eval_error": "",
+      "files_written": [
+        "src/store/pricing.py"
+      ],
+      "rejected_paths": []
+    },
+    {
+      "task_id": "003_mutable_default",
+      "rep": 1,
+      "condition": "baseline",
+      "order": 0,
+      "snapshot_commit": "e6aa905d567e5cd45fbaf2a332b1ab5e58ca1675",
+      "status": "done",
+      "message": "",
+      "seconds": 2.05,
+      "model_calls": 1,
+      "prompt_tokens_est": 351,
+      "completion_tokens_est": 101,
+      "tokens_est": 452,
+      "cost_usd_est": null,
+      "resolved": true,
+      "regression": false,
+      "hidden_passed": 2,
+      "hidden_total": 2,
+      "visible_passed": 3,
+      "visible_total": 3,
+      "regressed_tests": [],
+      "changed_files": [
+        "src/tagger/tags.py"
+      ],
+      "discarded_test_changes": [],
+      "eval_error": "",
+      "files_written": [
+        "src/tagger/tags.py"
+      ],
+      "rejected_paths": []
+    },
+    {
+      "task_id": "003_mutable_default",
+      "rep": 1,
+      "condition": "qedcode",
+      "order": 1,
+      "snapshot_commit": "e6aa905d567e5cd45fbaf2a332b1ab5e58ca1675",
+      "status": "done",
+      "message": "Grade A \u00b7 repro test failed before, passes now \u00b7 5/5 tests pass \u00b7 proof strength 1/1 \u00b7 lint clean \u00b7 no protected files changed",
+      "seconds": 12.2,
+      "model_calls": 5,
+      "prompt_tokens_est": 2469,
+      "completion_tokens_est": 585,
+      "tokens_est": 3054,
+      "cost_usd_est": null,
+      "resolved": true,
+      "regression": false,
+      "hidden_passed": 2,
+      "hidden_total": 2,
+      "visible_passed": 3,
+      "visible_total": 3,
+      "regressed_tests": [],
+      "changed_files": [
+        "src/tagger/tags.py"
+      ],
+      "discarded_test_changes": [
+        "tests/test_qed_add_tag_keeps_remembering_tags.py"
+      ],
+      "eval_error": "",
+      "qed_status": "done",
+      "qed_grade": "A",
+      "qed_applied": true,
+      "qed_candidates": 1
+    },
+    {
+      "task_id": "004_empty_input_crash",
+      "rep": 1,
+      "condition": "qedcode",
+      "order": 0,
+      "snapshot_commit": "a908674b8ee548919729af138f42a7a4f8978f79",
+      "status": "done",
+      "message": "Grade A \u00b7 repro test failed before, passes now \u00b7 6/6 tests pass \u00b7 proof strength 2/2 \u00b7 lint clean \u00b7 no protected files changed",
+      "seconds": 11.64,
+      "model_calls": 5,
+      "prompt_tokens_est": 2388,
+      "completion_tokens_est": 538,
+      "tokens_est": 2926,
+      "cost_usd_est": null,
+      "resolved": true,
+      "regression": false,
+      "hidden_passed": 2,
+      "hidden_total": 2,
+      "visible_passed": 4,
+      "visible_total": 4,
+      "regressed_tests": [],
+      "changed_files": [
+        "src/csvlite/parser.py"
+      ],
+      "discarded_test_changes": [
+        "tests/test_qed_parse_csv_line_crashes_with.py"
+      ],
+      "eval_error": "",
+      "qed_status": "done",
+      "qed_grade": "A",
+      "qed_applied": true,
+      "qed_candidates": 1
+    },
+    {
+      "task_id": "004_empty_input_crash",
+      "rep": 1,
+      "condition": "baseline",
+      "order": 1,
+      "snapshot_commit": "a908674b8ee548919729af138f42a7a4f8978f79",
+      "status": "done",
+      "message": "",
+      "seconds": 2.92,
+      "model_calls": 1,
+      "prompt_tokens_est": 449,
+      "completion_tokens_est": 171,
+      "tokens_est": 620,
+      "cost_usd_est": null,
+      "resolved": true,
+      "regression": false,
+      "hidden_passed": 2,
+      "hidden_total": 2,
+      "visible_passed": 4,
+      "visible_total": 4,
+      "regressed_tests": [],
+      "changed_files": [
+        "src/csvlite/parser.py"
+      ],
+      "discarded_test_changes": [],
+      "eval_error": "",
+      "files_written": [
+        "src/csvlite/parser.py"
+      ],
+      "rejected_paths": []
+    },
+    {
+      "task_id": "005_integer_average",
+      "rep": 1,
+      "condition": "baseline",
+      "order": 0,
+      "snapshot_commit": "14db5e97aa639530a615c2a2e95d59778301db9b",
+      "status": "done",
+      "message": "",
+      "seconds": 4.46,
+      "model_calls": 1,
+      "prompt_tokens_est": 364,
+      "completion_tokens_est": 237,
+      "tokens_est": 601,
+      "cost_usd_est": null,
+      "resolved": true,
+      "regression": false,
+      "hidden_passed": 2,
+      "hidden_total": 2,
+      "visible_passed": 4,
+      "visible_total": 4,
+      "regressed_tests": [],
+      "changed_files": [
+        "src/stats/core.py"
+      ],
+      "discarded_test_changes": [
+        "tests/test_core.py"
+      ],
+      "eval_error": "",
+      "files_written": [
+        "src/stats/core.py",
+        "tests/test_core.py"
+      ],
+      "rejected_paths": []
+    },
+    {
+      "task_id": "005_integer_average",
+      "rep": 1,
+      "condition": "qedcode",
+      "order": 1,
+      "snapshot_commit": "14db5e97aa639530a615c2a2e95d59778301db9b",
+      "status": "done",
+      "message": "Grade A \u00b7 repro test failed before, passes now \u00b7 6/6 tests pass \u00b7 proof strength 2/2 \u00b7 lint clean \u00b7 no protected files changed",
+      "seconds": 9.09,
+      "model_calls": 5,
+      "prompt_tokens_est": 1988,
+      "completion_tokens_est": 317,
+      "tokens_est": 2305,
+      "cost_usd_est": null,
+      "resolved": true,
+      "regression": false,
+      "hidden_passed": 2,
+      "hidden_total": 2,
+      "visible_passed": 4,
+      "visible_total": 4,
+      "regressed_tests": [],
+      "changed_files": [
+        "src/stats/core.py"
+      ],
+      "discarded_test_changes": [
+        "tests/test_qed_average_1_2_gives_me.py"
+      ],
+      "eval_error": "",
+      "qed_status": "done",
+      "qed_grade": "A",
+      "qed_applied": true,
+      "qed_candidates": 1
+    },
+    {
+      "task_id": "006_missing_config_key",
+      "rep": 1,
+      "condition": "qedcode",
+      "order": 0,
+      "snapshot_commit": "0f6ea094d3f7089ddda22876d7b1caf12fba5665",
+      "status": "no_change",
+      "message": "No fix passed the checks. The closest attempt (c1) failed at targeted: 1 test(s) fail that passed before the change; first: tests.test_loader::test_name_is_required (Failed: DID NOT RAISE KeyError)",
+      "seconds": 26.29,
+      "model_calls": 8,
+      "prompt_tokens_est": 5320,
+      "completion_tokens_est": 1285,
+      "tokens_est": 6605,
+      "cost_usd_est": null,
+      "resolved": false,
+      "regression": false,
+      "hidden_passed": 1,
+      "hidden_total": 2,
+      "visible_passed": 3,
+      "visible_total": 3,
+      "regressed_tests": [],
+      "changed_files": [],
+      "discarded_test_changes": [],
+      "eval_error": "",
+      "qed_status": "no_fix",
+      "qed_grade": null,
+      "qed_applied": false,
+      "qed_candidates": 4
+    },
+    {
+      "task_id": "006_missing_config_key",
+      "rep": 1,
+      "condition": "baseline",
+      "order": 1,
+      "snapshot_commit": "0f6ea094d3f7089ddda22876d7b1caf12fba5665",
+      "status": "done",
+      "message": "",
+      "seconds": 2.6,
+      "model_calls": 1,
+      "prompt_tokens_est": 475,
+      "completion_tokens_est": 141,
+      "tokens_est": 616,
+      "cost_usd_est": null,
+      "resolved": true,
+      "regression": false,
+      "hidden_passed": 2,
+      "hidden_total": 2,
+      "visible_passed": 3,
+      "visible_total": 3,
+      "regressed_tests": [],
+      "changed_files": [
+        "src/appconf/loader.py"
+      ],
+      "discarded_test_changes": [],
+      "eval_error": "",
+      "files_written": [
+        "src/appconf/loader.py"
+      ],
+      "rejected_paths": []
+    },
+    {
+      "task_id": "007_sort_order",
+      "rep": 1,
+      "condition": "baseline",
+      "order": 0,
+      "snapshot_commit": "04b832a4177bc950863ea0fccdcc438f59641b10",
+      "status": "done",
+      "message": "",
+      "seconds": 1.66,
+      "model_calls": 1,
+      "prompt_tokens_est": 350,
+      "completion_tokens_est": 94,
+      "tokens_est": 444,
+      "cost_usd_est": null,
+      "resolved": true,
+      "regression": false,
+      "hidden_passed": 2,
+      "hidden_total": 2,
+      "visible_passed": 4,
+      "visible_total": 4,
+      "regressed_tests": [],
+      "changed_files": [
+        "src/board/scores.py"
+      ],
+      "discarded_test_changes": [],
+      "eval_error": "",
+      "files_written": [
+        "src/board/scores.py"
+      ],
+      "rejected_paths": []
+    },
+    {
+      "task_id": "007_sort_order",
+      "rep": 1,
+      "condition": "qedcode",
+      "order": 1,
+      "snapshot_commit": "04b832a4177bc950863ea0fccdcc438f59641b10",
+      "status": "done",
+      "message": "Grade A \u00b7 repro test failed before, passes now \u00b7 5/5 tests pass \u00b7 proof strength 2/2 \u00b7 lint clean \u00b7 no protected files changed",
+      "seconds": 9.32,
+      "model_calls": 5,
+      "prompt_tokens_est": 2197,
+      "completion_tokens_est": 367,
+      "tokens_est": 2564,
+      "cost_usd_est": null,
+      "resolved": true,
+      "regression": false,
+      "hidden_passed": 2,
+      "hidden_total": 2,
+      "visible_passed": 4,
+      "visible_total": 4,
+      "regressed_tests": [],
+      "changed_files": [
+        "src/board/scores.py"
+      ],
+      "discarded_test_changes": [
+        "tests/test_qed_top_scores_returns_the_lowest.py"
+      ],
+      "eval_error": "",
+      "qed_status": "done",
+      "qed_grade": "A",
+      "qed_applied": true,
+      "qed_candidates": 1
+    },
+    {
+      "task_id": "008_slugify_feature",
+      "rep": 1,
+      "condition": "qedcode",
+      "order": 0,
+      "snapshot_commit": "d1f9819d4108cdc759dd579d754eef3d596dfbe4",
+      "status": "no_change",
+      "message": "No fix passed the checks. The closest attempt (c1) failed at fbpa: The new test does not pass with the change. 1 of 3 tests failed; first: tests.test_qed_please_add_a_slugify_text::test_slugify_drop_punctuation",
+      "seconds": 19.31,
+      "model_calls": 7,
+      "prompt_tokens_est": 4577,
+      "completion_tokens_est": 959,
+      "tokens_est": 5536,
+      "cost_usd_est": null,
+      "resolved": false,
+      "regression": false,
+      "hidden_passed": 0,
+      "hidden_total": 1,
+      "visible_passed": 3,
+      "visible_total": 3,
+      "regressed_tests": [],
+      "changed_files": [],
+      "discarded_test_changes": [],
+      "eval_error": "",
+      "qed_status": "no_fix",
+      "qed_grade": null,
+      "qed_applied": false,
+      "qed_candidates": 4
+    },
+    {
+      "task_id": "008_slugify_feature",
+      "rep": 1,
+      "condition": "baseline",
+      "order": 1,
+      "snapshot_commit": "d1f9819d4108cdc759dd579d754eef3d596dfbe4",
+      "status": "done",
+      "message": "",
+      "seconds": 6.93,
+      "model_calls": 1,
+      "prompt_tokens_est": 366,
+      "completion_tokens_est": 413,
+      "tokens_est": 779,
+      "cost_usd_est": null,
+      "resolved": false,
+      "regression": false,
+      "hidden_passed": 2,
+      "hidden_total": 3,
+      "visible_passed": 3,
+      "visible_total": 3,
+      "regressed_tests": [],
+      "changed_files": [
+        "src/textutil/text.py"
+      ],
+      "discarded_test_changes": [
+        "tests/test_text.py"
+      ],
+      "eval_error": "",
+      "files_written": [
+        "src/textutil/text.py",
+        "tests/test_text.py"
+      ],
+      "rejected_paths": []
+    },
+    {
+      "task_id": "009_factorial_zero",
+      "rep": 1,
+      "condition": "baseline",
+      "order": 0,
+      "snapshot_commit": "b7700231b18d0c43a0e2c50c4a09d06c8cafd226",
+      "status": "done",
+      "message": "",
+      "seconds": 2.82,
+      "model_calls": 1,
+      "prompt_tokens_est": 343,
+      "completion_tokens_est": 129,
+      "tokens_est": 472,
+      "cost_usd_est": null,
+      "resolved": true,
+      "regression": false,
+      "hidden_passed": 2,
+      "hidden_total": 2,
+      "visible_passed": 2,
+      "visible_total": 2,
+      "regressed_tests": [],
+      "changed_files": [
+        "src/mathx/numbers.py"
+      ],
+      "discarded_test_changes": [],
+      "eval_error": "",
+      "files_written": [
+        "src/mathx/numbers.py"
+      ],
+      "rejected_paths": []
+    },
+    {
+      "task_id": "009_factorial_zero",
+      "rep": 1,
+      "condition": "qedcode",
+      "order": 1,
+      "snapshot_commit": "b7700231b18d0c43a0e2c50c4a09d06c8cafd226",
+      "status": "done",
+      "message": "Grade A \u00b7 repro test failed before, passes now \u00b7 5/5 tests pass \u00b7 proof strength 2/2 \u00b7 lint clean \u00b7 no protected files changed",
+      "seconds": 9.21,
+      "model_calls": 5,
+      "prompt_tokens_est": 2057,
+      "completion_tokens_est": 313,
+      "tokens_est": 2370,
+      "cost_usd_est": null,
+      "resolved": true,
+      "regression": false,
+      "hidden_passed": 2,
+      "hidden_total": 2,
+      "visible_passed": 2,
+      "visible_total": 2,
+      "regressed_tests": [],
+      "changed_files": [
+        "src/mathx/numbers.py"
+      ],
+      "discarded_test_changes": [
+        "tests/test_qed_factorial_0_returns_0_but.py"
+      ],
+      "eval_error": "",
+      "qed_status": "done",
+      "qed_grade": "A",
+      "qed_applied": true,
+      "qed_candidates": 1
+    },
+    {
+      "task_id": "010_cart_quantity",
+      "rep": 1,
+      "condition": "qedcode",
+      "order": 0,
+      "snapshot_commit": "c74aa3dc0b19be26609ddab10fdbc2bcdc7eb28a",
+      "status": "done",
+      "message": "Grade A \u00b7 repro test failed before, passes now \u00b7 5/5 tests pass \u00b7 proof strength 2/2 \u00b7 lint clean \u00b7 no protected files changed",
+      "seconds": 11.1,
+      "model_calls": 5,
+      "prompt_tokens_est": 2451,
+      "completion_tokens_est": 394,
+      "tokens_est": 2845,
+      "cost_usd_est": null,
+      "resolved": true,
+      "regression": false,
+      "hidden_passed": 2,
+      "hidden_total": 2,
+      "visible_passed": 3,
+      "visible_total": 3,
+      "regressed_tests": [],
+      "changed_files": [
+        "src/shopcart/cart.py"
+      ],
+      "discarded_test_changes": [
+        "tests/test_qed_cart_total_ignores_the_quantity.py"
+      ],
+      "eval_error": "",
+      "qed_status": "done",
+      "qed_grade": "A",
+      "qed_applied": true,
+      "qed_candidates": 1
+    },
+    {
+      "task_id": "010_cart_quantity",
+      "rep": 1,
+      "condition": "baseline",
+      "order": 1,
+      "snapshot_commit": "c74aa3dc0b19be26609ddab10fdbc2bcdc7eb28a",
+      "status": "done",
+      "message": "",
+      "seconds": 3.39,
+      "model_calls": 1,
+      "prompt_tokens_est": 439,
+      "completion_tokens_est": 187,
+      "tokens_est": 626,
+      "cost_usd_est": null,
+      "resolved": true,
+      "regression": false,
+      "hidden_passed": 2,
+      "hidden_total": 2,
+      "visible_passed": 3,
+      "visible_total": 3,
+      "regressed_tests": [],
+      "changed_files": [
+        "src/shopcart/cart.py"
+      ],
+      "discarded_test_changes": [],
+      "eval_error": "",
+      "files_written": [
+        "src/shopcart/cart.py"
+      ],
+      "rejected_paths": []
+    },
+    {
+      "task_id": "001_paginate_off_by_one",
+      "rep": 2,
+      "condition": "qedcode",
+      "order": 0,
+      "snapshot_commit": "ecd95ccb629c388bba8a4769818baccabc0ecf09",
+      "status": "no_change",
+      "message": "No fix passed the checks. The closest attempt (c1) failed at fbpa: The new test does not pass with the change. 1 of 2 tests failed; first: tests.test_qed_my_shop_s_product_list::test_last_page_shows_remaining_items",
+      "seconds": 18.44,
+      "model_calls": 7,
+      "prompt_tokens_est": 5204,
+      "completion_tokens_est": 777,
+      "tokens_est": 5981,
+      "cost_usd_est": null,
+      "resolved": false,
+      "regression": false,
+      "hidden_passed": 1,
+      "hidden_total": 3,
+      "visible_passed": 5,
+      "visible_total": 5,
+      "regressed_tests": [],
+      "changed_files": [],
+      "discarded_test_changes": [],
+      "eval_error": "",
+      "qed_status": "no_fix",
+      "qed_grade": null,
+      "qed_applied": false,
+      "qed_candidates": 4
+    },
+    {
+      "task_id": "001_paginate_off_by_one",
+      "rep": 2,
+      "condition": "baseline",
+      "order": 1,
+      "snapshot_commit": "ecd95ccb629c388bba8a4769818baccabc0ecf09",
+      "status": "done",
+      "message": "",
+      "seconds": 2.35,
+      "model_calls": 1,
+      "prompt_tokens_est": 426,
+      "completion_tokens_est": 123,
+      "tokens_est": 549,
+      "cost_usd_est": null,
+      "resolved": true,
+      "regression": false,
+      "hidden_passed": 3,
+      "hidden_total": 3,
+      "visible_passed": 5,
+      "visible_total": 5,
+      "regressed_tests": [],
+      "changed_files": [
+        "src/shop/pages.py"
+      ],
+      "discarded_test_changes": [],
+      "eval_error": "",
+      "files_written": [
+        "src/shop/pages.py"
+      ],
+      "rejected_paths": []
+    },
+    {
+      "task_id": "002_discount_threshold",
+      "rep": 2,
+      "condition": "baseline",
+      "order": 0,
+      "snapshot_commit": "23ca9df91b65822e2efc7ade4c669dd410c2a903",
+      "status": "done",
+      "message": "",
+      "seconds": 2.25,
+      "model_calls": 1,
+      "prompt_tokens_est": 387,
+      "completion_tokens_est": 119,
+      "tokens_est": 506,
+      "cost_usd_est": null,
+      "resolved": true,
+      "regression": false,
+      "hidden_passed": 3,
+      "hidden_total": 3,
+      "visible_passed": 4,
+      "visible_total": 4,
+      "regressed_tests": [],
+      "changed_files": [
+        "src/store/pricing.py"
+      ],
+      "discarded_test_changes": [],
+      "eval_error": "",
+      "files_written": [
+        "src/store/pricing.py"
+      ],
+      "rejected_paths": []
+    },
+    {
+      "task_id": "002_discount_threshold",
+      "rep": 2,
+      "condition": "qedcode",
+      "order": 1,
+      "snapshot_commit": "23ca9df91b65822e2efc7ade4c669dd410c2a903",
+      "status": "done",
+      "message": "Grade A \u00b7 repro test failed before, passes now \u00b7 6/6 tests pass \u00b7 proof strength 1/1 \u00b7 lint clean \u00b7 no protected files changed",
+      "seconds": 11.41,
+      "model_calls": 5,
+      "prompt_tokens_est": 2346,
+      "completion_tokens_est": 476,
+      "tokens_est": 2822,
+      "cost_usd_est": null,
+      "resolved": true,
+      "regression": false,
+      "hidden_passed": 3,
+      "hidden_total": 3,
+      "visible_passed": 4,
+      "visible_total": 4,
+      "regressed_tests": [],
+      "changed_files": [
+        "src/store/pricing.py"
+      ],
+      "discarded_test_changes": [
+        "tests/test_qed_customers_who_spend_exactly_100.py"
+      ],
+      "eval_error": "",
+      "qed_status": "done",
+      "qed_grade": "A",
+      "qed_applied": true,
+      "qed_candidates": 1
+    },
+    {
+      "task_id": "003_mutable_default",
+      "rep": 2,
+      "condition": "baseline",
+      "order": 0,
+      "snapshot_commit": "e6aa905d567e5cd45fbaf2a332b1ab5e58ca1675",
+      "status": "done",
+      "message": "",
+      "seconds": 2.02,
+      "model_calls": 1,
+      "prompt_tokens_est": 351,
+      "completion_tokens_est": 101,
+      "tokens_est": 452,
+      "cost_usd_est": null,
+      "resolved": true,
+      "regression": false,
+      "hidden_passed": 2,
+      "hidden_total": 2,
+      "visible_passed": 3,
+      "visible_total": 3,
+      "regressed_tests": [],
+      "changed_files": [
+        "src/tagger/tags.py"
+      ],
+      "discarded_test_changes": [],
+      "eval_error": "",
+      "files_written": [
+        "src/tagger/tags.py"
+      ],
+      "rejected_paths": []
+    },
+    {
+      "task_id": "003_mutable_default",
+      "rep": 2,
+      "condition": "qedcode",
+      "order": 1,
+      "snapshot_commit": "e6aa905d567e5cd45fbaf2a332b1ab5e58ca1675",
+      "status": "done",
+      "message": "Grade A \u00b7 repro test failed before, passes now \u00b7 5/5 tests pass \u00b7 proof strength 1/1 \u00b7 lint clean \u00b7 no protected files changed",
+      "seconds": 27.02,
+      "model_calls": 8,
+      "prompt_tokens_est": 6236,
+      "completion_tokens_est": 1370,
+      "tokens_est": 7606,
+      "cost_usd_est": null,
+      "resolved": true,
+      "regression": false,
+      "hidden_passed": 2,
+      "hidden_total": 2,
+      "visible_passed": 3,
+      "visible_total": 3,
+      "regressed_tests": [],
+      "changed_files": [
+        "src/tagger/tags.py"
+      ],
+      "discarded_test_changes": [
+        "tests/test_qed_add_tag_keeps_remembering_tags.py"
+      ],
+      "eval_error": "",
+      "qed_status": "done",
+      "qed_grade": "A",
+      "qed_applied": true,
+      "qed_candidates": 4
+    },
+    {
+      "task_id": "004_empty_input_crash",
+      "rep": 2,
+      "condition": "baseline",
+      "order": 0,
+      "snapshot_commit": "a908674b8ee548919729af138f42a7a4f8978f79",
+      "status": "done",
+      "message": "",
+      "seconds": 2.85,
+      "model_calls": 1,
+      "prompt_tokens_est": 449,
+      "completion_tokens_est": 171,
+      "tokens_est": 620,
+      "cost_usd_est": null,
+      "resolved": true,
+      "regression": false,
+      "hidden_passed": 2,
+      "hidden_total": 2,
+      "visible_passed": 4,
+      "visible_total": 4,
+      "regressed_tests": [],
+      "changed_files": [
+        "src/csvlite/parser.py"
+      ],
+      "discarded_test_changes": [],
+      "eval_error": "",
+      "files_written": [
+        "src/csvlite/parser.py"
+      ],
+      "rejected_paths": []
+    },
+    {
+      "task_id": "004_empty_input_crash",
+      "rep": 2,
+      "condition": "qedcode",
+      "order": 1,
+      "snapshot_commit": "a908674b8ee548919729af138f42a7a4f8978f79",
+      "status": "done",
+      "message": "Grade A \u00b7 repro test failed before, passes now \u00b7 6/6 tests pass \u00b7 proof strength 2/2 \u00b7 lint clean \u00b7 no protected files changed",
+      "seconds": 10.92,
+      "model_calls": 5,
+      "prompt_tokens_est": 2348,
+      "completion_tokens_est": 465,
+      "tokens_est": 2813,
+      "cost_usd_est": null,
+      "resolved": true,
+      "regression": false,
+      "hidden_passed": 2,
+      "hidden_total": 2,
+      "visible_passed": 4,
+      "visible_total": 4,
+      "regressed_tests": [],
+      "changed_files": [
+        "src/csvlite/parser.py"
+      ],
+      "discarded_test_changes": [
+        "tests/test_qed_parse_csv_line_crashes_with.py"
+      ],
+      "eval_error": "",
+      "qed_status": "done",
+      "qed_grade": "A",
+      "qed_applied": true,
+      "qed_candidates": 1
+    },
+    {
+      "task_id": "005_integer_average",
+      "rep": 2,
+      "condition": "baseline",
+      "order": 0,
+      "snapshot_commit": "14db5e97aa639530a615c2a2e95d59778301db9b",
+      "status": "done",
+      "message": "",
+      "seconds": 4.48,
+      "model_calls": 1,
+      "prompt_tokens_est": 364,
+      "completion_tokens_est": 237,
+      "tokens_est": 601,
+      "cost_usd_est": null,
+      "resolved": true,
+      "regression": false,
+      "hidden_passed": 2,
+      "hidden_total": 2,
+      "visible_passed": 4,
+      "visible_total": 4,
+      "regressed_tests": [],
+      "changed_files": [
+        "src/stats/core.py"
+      ],
+      "discarded_test_changes": [
+        "tests/test_core.py"
+      ],
+      "eval_error": "",
+      "files_written": [
+        "src/stats/core.py",
+        "tests/test_core.py"
+      ],
+      "rejected_paths": []
+    },
+    {
+      "task_id": "005_integer_average",
+      "rep": 2,
+      "condition": "qedcode",
+      "order": 1,
+      "snapshot_commit": "14db5e97aa639530a615c2a2e95d59778301db9b",
+      "status": "done",
+      "message": "Grade A \u00b7 repro test failed before, passes now \u00b7 6/6 tests pass \u00b7 proof strength 2/2 \u00b7 lint clean \u00b7 no protected files changed",
+      "seconds": 9.17,
+      "model_calls": 5,
+      "prompt_tokens_est": 1994,
+      "completion_tokens_est": 331,
+      "tokens_est": 2325,
+      "cost_usd_est": null,
+      "resolved": true,
+      "regression": false,
+      "hidden_passed": 2,
+      "hidden_total": 2,
+      "visible_passed": 4,
+      "visible_total": 4,
+      "regressed_tests": [],
+      "changed_files": [
+        "src/stats/core.py"
+      ],
+      "discarded_test_changes": [
+        "tests/test_qed_average_1_2_gives_me.py"
+      ],
+      "eval_error": "",
+      "qed_status": "done",
+      "qed_grade": "A",
+      "qed_applied": true,
+      "qed_candidates": 1
+    },
+    {
+      "task_id": "006_missing_config_key",
+      "rep": 2,
+      "condition": "qedcode",
+      "order": 0,
+      "snapshot_commit": "0f6ea094d3f7089ddda22876d7b1caf12fba5665",
+      "status": "done",
+      "message": "Grade A \u00b7 repro test failed before, passes now \u00b7 4/4 tests pass \u00b7 proof strength 2/2 \u00b7 lint clean \u00b7 no protected files changed",
+      "seconds": 11.46,
+      "model_calls": 5,
+      "prompt_tokens_est": 2465,
+      "completion_tokens_est": 488,
+      "tokens_est": 2953,
+      "cost_usd_est": null,
+      "resolved": true,
+      "regression": false,
+      "hidden_passed": 2,
+      "hidden_total": 2,
+      "visible_passed": 3,
+      "visible_total": 3,
+      "regressed_tests": [],
+      "changed_files": [
+        "src/appconf/loader.py"
+      ],
+      "discarded_test_changes": [
+        "tests/test_qed_load_config_crashes_with_a.py"
+      ],
+      "eval_error": "",
+      "qed_status": "done",
+      "qed_grade": "A",
+      "qed_applied": true,
+      "qed_candidates": 1
+    },
+    {
+      "task_id": "006_missing_config_key",
+      "rep": 2,
+      "condition": "baseline",
+      "order": 1,
+      "snapshot_commit": "0f6ea094d3f7089ddda22876d7b1caf12fba5665",
+      "status": "done",
+      "message": "",
+      "seconds": 2.66,
+      "model_calls": 1,
+      "prompt_tokens_est": 475,
+      "completion_tokens_est": 145,
+      "tokens_est": 620,
+      "cost_usd_est": null,
+      "resolved": true,
+      "regression": false,
+      "hidden_passed": 2,
+      "hidden_total": 2,
+      "visible_passed": 3,
+      "visible_total": 3,
+      "regressed_tests": [],
+      "changed_files": [
+        "src/appconf/loader.py"
+      ],
+      "discarded_test_changes": [],
+      "eval_error": "",
+      "files_written": [
+        "src/appconf/loader.py"
+      ],
+      "rejected_paths": []
+    },
+    {
+      "task_id": "007_sort_order",
+      "rep": 2,
+      "condition": "qedcode",
+      "order": 0,
+      "snapshot_commit": "04b832a4177bc950863ea0fccdcc438f59641b10",
+      "status": "done",
+      "message": "Grade A \u00b7 repro test failed before, passes now \u00b7 6/6 tests pass \u00b7 proof strength 2/2 \u00b7 lint clean \u00b7 no protected files changed",
+      "seconds": 11.67,
+      "model_calls": 5,
+      "prompt_tokens_est": 2334,
+      "completion_tokens_est": 473,
+      "tokens_est": 2807,
+      "cost_usd_est": null,
+      "resolved": true,
+      "regression": false,
+      "hidden_passed": 2,
+      "hidden_total": 2,
+      "visible_passed": 4,
+      "visible_total": 4,
+      "regressed_tests": [],
+      "changed_files": [
+        "src/board/scores.py"
+      ],
+      "discarded_test_changes": [
+        "tests/test_qed_top_scores_returns_the_lowest.py"
+      ],
+      "eval_error": "",
+      "qed_status": "done",
+      "qed_grade": "A",
+      "qed_applied": true,
+      "qed_candidates": 1
+    },
+    {
+      "task_id": "007_sort_order",
+      "rep": 2,
+      "condition": "baseline",
+      "order": 1,
+      "snapshot_commit": "04b832a4177bc950863ea0fccdcc438f59641b10",
+      "status": "done",
+      "message": "",
+      "seconds": 1.69,
+      "model_calls": 1,
+      "prompt_tokens_est": 350,
+      "completion_tokens_est": 94,
+      "tokens_est": 444,
+      "cost_usd_est": null,
+      "resolved": true,
+      "regression": false,
+      "hidden_passed": 2,
+      "hidden_total": 2,
+      "visible_passed": 4,
+      "visible_total": 4,
+      "regressed_tests": [],
+      "changed_files": [
+        "src/board/scores.py"
+      ],
+      "discarded_test_changes": [],
+      "eval_error": "",
+      "files_written": [
+        "src/board/scores.py"
+      ],
+      "rejected_paths": []
+    },
+    {
+      "task_id": "008_slugify_feature",
+      "rep": 2,
+      "condition": "qedcode",
+      "order": 0,
+      "snapshot_commit": "d1f9819d4108cdc759dd579d754eef3d596dfbe4",
+      "status": "no_change",
+      "message": "No fix passed the checks. The closest attempt (r1) failed at fbpa: The new test does not pass with the change. 1 of 3 tests failed; first: tests.test_qed_please_add_a_slugify_text::test_slugify_with_punctuation",
+      "seconds": 14.66,
+      "model_calls": 7,
+      "prompt_tokens_est": 4523,
+      "completion_tokens_est": 721,
+      "tokens_est": 5244,
+      "cost_usd_est": null,
+      "resolved": false,
+      "regression": false,
+      "hidden_passed": 0,
+      "hidden_total": 1,
+      "visible_passed": 3,
+      "visible_total": 3,
+      "regressed_tests": [],
+      "changed_files": [],
+      "discarded_test_changes": [],
+      "eval_error": "",
+      "qed_status": "no_fix",
+      "qed_grade": null,
+      "qed_applied": false,
+      "qed_candidates": 4
+    },
+    {
+      "task_id": "008_slugify_feature",
+      "rep": 2,
+      "condition": "baseline",
+      "order": 1,
+      "snapshot_commit": "d1f9819d4108cdc759dd579d754eef3d596dfbe4",
+      "status": "done",
+      "message": "",
+      "seconds": 7.11,
+      "model_calls": 1,
+      "prompt_tokens_est": 366,
+      "completion_tokens_est": 409,
+      "tokens_est": 775,
+      "cost_usd_est": null,
+      "resolved": true,
+      "regression": false,
+      "hidden_passed": 3,
+      "hidden_total": 3,
+      "visible_passed": 3,
+      "visible_total": 3,
+      "regressed_tests": [],
+      "changed_files": [
+        "src/textutil/text.py"
+      ],
+      "discarded_test_changes": [
+        "tests/test_text.py"
+      ],
+      "eval_error": "",
+      "files_written": [
+        "src/textutil/text.py",
+        "tests/test_text.py"
+      ],
+      "rejected_paths": []
+    },
+    {
+      "task_id": "009_factorial_zero",
+      "rep": 2,
+      "condition": "baseline",
+      "order": 0,
+      "snapshot_commit": "b7700231b18d0c43a0e2c50c4a09d06c8cafd226",
+      "status": "done",
+      "message": "",
+      "seconds": 2.84,
+      "model_calls": 1,
+      "prompt_tokens_est": 343,
+      "completion_tokens_est": 129,
+      "tokens_est": 472,
+      "cost_usd_est": null,
+      "resolved": true,
+      "regression": false,
+      "hidden_passed": 2,
+      "hidden_total": 2,
+      "visible_passed": 2,
+      "visible_total": 2,
+      "regressed_tests": [],
+      "changed_files": [
+        "src/mathx/numbers.py"
+      ],
+      "discarded_test_changes": [],
+      "eval_error": "",
+      "files_written": [
+        "src/mathx/numbers.py"
+      ],
+      "rejected_paths": []
+    },
+    {
+      "task_id": "009_factorial_zero",
+      "rep": 2,
+      "condition": "qedcode",
+      "order": 1,
+      "snapshot_commit": "b7700231b18d0c43a0e2c50c4a09d06c8cafd226",
+      "status": "done",
+      "message": "Grade A \u00b7 repro test failed before, passes now \u00b7 5/5 tests pass \u00b7 proof strength 2/2 \u00b7 lint clean \u00b7 no protected files changed",
+      "seconds": 9.51,
+      "model_calls": 5,
+      "prompt_tokens_est": 2126,
+      "completion_tokens_est": 340,
+      "tokens_est": 2466,
+      "cost_usd_est": null,
+      "resolved": true,
+      "regression": false,
+      "hidden_passed": 2,
+      "hidden_total": 2,
+      "visible_passed": 2,
+      "visible_total": 2,
+      "regressed_tests": [],
+      "changed_files": [
+        "src/mathx/numbers.py"
+      ],
+      "discarded_test_changes": [
+        "tests/test_qed_factorial_0_returns_0_but.py"
+      ],
+      "eval_error": "",
+      "qed_status": "done",
+      "qed_grade": "A",
+      "qed_applied": true,
+      "qed_candidates": 1
+    },
+    {
+      "task_id": "010_cart_quantity",
+      "rep": 2,
+      "condition": "baseline",
+      "order": 0,
+      "snapshot_commit": "c74aa3dc0b19be26609ddab10fdbc2bcdc7eb28a",
+      "status": "done",
+      "message": "",
+      "seconds": 3.13,
+      "model_calls": 1,
+      "prompt_tokens_est": 439,
+      "completion_tokens_est": 187,
+      "tokens_est": 626,
+      "cost_usd_est": null,
+      "resolved": true,
+      "regression": false,
+      "hidden_passed": 2,
+      "hidden_total": 2,
+      "visible_passed": 3,
+      "visible_total": 3,
+      "regressed_tests": [],
+      "changed_files": [
+        "src/shopcart/cart.py"
+      ],
+      "discarded_test_changes": [],
+      "eval_error": "",
+      "files_written": [
+        "src/shopcart/cart.py"
+      ],
+      "rejected_paths": []
+    },
+    {
+      "task_id": "010_cart_quantity",
+      "rep": 2,
+      "condition": "qedcode",
+      "order": 1,
+      "snapshot_commit": "c74aa3dc0b19be26609ddab10fdbc2bcdc7eb28a",
+      "status": "done",
+      "message": "Grade A \u00b7 repro test failed before, passes now \u00b7 5/5 tests pass \u00b7 proof strength 2/2 \u00b7 lint clean \u00b7 no protected files changed",
+      "seconds": 11.18,
+      "model_calls": 5,
+      "prompt_tokens_est": 2441,
+      "completion_tokens_est": 428,
+      "tokens_est": 2869,
+      "cost_usd_est": null,
+      "resolved": true,
+      "regression": false,
+      "hidden_passed": 2,
+      "hidden_total": 2,
+      "visible_passed": 3,
+      "visible_total": 3,
+      "regressed_tests": [],
+      "changed_files": [
+        "src/shopcart/cart.py"
+      ],
+      "discarded_test_changes": [
+        "tests/test_qed_cart_total_ignores_the_quantity.py"
+      ],
+      "eval_error": "",
+      "qed_status": "done",
+      "qed_grade": "A",
+      "qed_applied": true,
+      "qed_candidates": 1
+    },
+    {
+      "task_id": "001_paginate_off_by_one",
+      "rep": 3,
+      "condition": "qedcode",
+      "order": 0,
+      "snapshot_commit": "ecd95ccb629c388bba8a4769818baccabc0ecf09",
+      "status": "done",
+      "message": "Grade A \u00b7 repro test failed before, passes now \u00b7 8/8 tests pass \u00b7 proof strength 1/1 \u00b7 lint clean \u00b7 no protected files changed",
+      "seconds": 14.23,
+      "model_calls": 5,
+      "prompt_tokens_est": 2959,
+      "completion_tokens_est": 662,
+      "tokens_est": 3621,
+      "cost_usd_est": null,
+      "resolved": true,
+      "regression": false,
+      "hidden_passed": 3,
+      "hidden_total": 3,
+      "visible_passed": 5,
+      "visible_total": 5,
+      "regressed_tests": [],
+      "changed_files": [
+        "src/shop/pages.py"
+      ],
+      "discarded_test_changes": [
+        "tests/test_qed_my_shop_s_product_list.py"
+      ],
+      "eval_error": "",
+      "qed_status": "done",
+      "qed_grade": "A",
+      "qed_applied": true,
+      "qed_candidates": 1
+    },
+    {
+      "task_id": "001_paginate_off_by_one",
+      "rep": 3,
+      "condition": "baseline",
+      "order": 1,
+      "snapshot_commit": "ecd95ccb629c388bba8a4769818baccabc0ecf09",
+      "status": "done",
+      "message": "",
+      "seconds": 2.49,
+      "model_calls": 1,
+      "prompt_tokens_est": 426,
+      "completion_tokens_est": 123,
+      "tokens_est": 549,
+      "cost_usd_est": null,
+      "resolved": true,
+      "regression": false,
+      "hidden_passed": 3,
+      "hidden_total": 3,
+      "visible_passed": 5,
+      "visible_total": 5,
+      "regressed_tests": [],
+      "changed_files": [
+        "src/shop/pages.py"
+      ],
+      "discarded_test_changes": [],
+      "eval_error": "",
+      "files_written": [
+        "src/shop/pages.py"
+      ],
+      "rejected_paths": []
+    },
+    {
+      "task_id": "002_discount_threshold",
+      "rep": 3,
+      "condition": "qedcode",
+      "order": 0,
+      "snapshot_commit": "23ca9df91b65822e2efc7ade4c669dd410c2a903",
+      "status": "done",
+      "message": "Grade A \u00b7 repro test failed before, passes now \u00b7 6/6 tests pass \u00b7 proof strength 1/1 \u00b7 lint clean \u00b7 no protected files changed",
+      "seconds": 11.49,
+      "model_calls": 5,
+      "prompt_tokens_est": 2330,
+      "completion_tokens_est": 459,
+      "tokens_est": 2789,
+      "cost_usd_est": null,
+      "resolved": true,
+      "regression": false,
+      "hidden_passed": 3,
+      "hidden_total": 3,
+      "visible_passed": 4,
+      "visible_total": 4,
+      "regressed_tests": [],
+      "changed_files": [
+        "src/store/pricing.py"
+      ],
+      "discarded_test_changes": [
+        "tests/test_qed_customers_who_spend_exactly_100.py"
+      ],
+      "eval_error": "",
+      "qed_status": "done",
+      "qed_grade": "A",
+      "qed_applied": true,
+      "qed_candidates": 1
+    },
+    {
+      "task_id": "002_discount_threshold",
+      "rep": 3,
+      "condition": "baseline",
+      "order": 1,
+      "snapshot_commit": "23ca9df91b65822e2efc7ade4c669dd410c2a903",
+      "status": "done",
+      "message": "",
+      "seconds": 2.39,
+      "model_calls": 1,
+      "prompt_tokens_est": 387,
+      "completion_tokens_est": 119,
+      "tokens_est": 506,
+      "cost_usd_est": null,
+      "resolved": true,
+      "regression": false,
+      "hidden_passed": 3,
+      "hidden_total": 3,
+      "visible_passed": 4,
+      "visible_total": 4,
+      "regressed_tests": [],
+      "changed_files": [
+        "src/store/pricing.py"
+      ],
+      "discarded_test_changes": [],
+      "eval_error": "",
+      "files_written": [
+        "src/store/pricing.py"
+      ],
+      "rejected_paths": []
+    },
+    {
+      "task_id": "003_mutable_default",
+      "rep": 3,
+      "condition": "baseline",
+      "order": 0,
+      "snapshot_commit": "e6aa905d567e5cd45fbaf2a332b1ab5e58ca1675",
+      "status": "done",
+      "message": "",
+      "seconds": 2.06,
+      "model_calls": 1,
+      "prompt_tokens_est": 351,
+      "completion_tokens_est": 101,
+      "tokens_est": 452,
+      "cost_usd_est": null,
+      "resolved": true,
+      "regression": false,
+      "hidden_passed": 2,
+      "hidden_total": 2,
+      "visible_passed": 3,
+      "visible_total": 3,
+      "regressed_tests": [],
+      "changed_files": [
+        "src/tagger/tags.py"
+      ],
+      "discarded_test_changes": [],
+      "eval_error": "",
+      "files_written": [
+        "src/tagger/tags.py"
+      ],
+      "rejected_paths": []
+    },
+    {
+      "task_id": "003_mutable_default",
+      "rep": 3,
+      "condition": "qedcode",
+      "order": 1,
+      "snapshot_commit": "e6aa905d567e5cd45fbaf2a332b1ab5e58ca1675",
+      "status": "done",
+      "message": "Grade A \u00b7 repro test failed before, passes now \u00b7 5/5 tests pass \u00b7 proof strength 1/1 \u00b7 lint clean \u00b7 no protected files changed",
+      "seconds": 12.73,
+      "model_calls": 5,
+      "prompt_tokens_est": 2337,
+      "completion_tokens_est": 586,
+      "tokens_est": 2923,
+      "cost_usd_est": null,
+      "resolved": true,
+      "regression": false,
+      "hidden_passed": 2,
+      "hidden_total": 2,
+      "visible_passed": 3,
+      "visible_total": 3,
+      "regressed_tests": [],
+      "changed_files": [
+        "src/tagger/tags.py"
+      ],
+      "discarded_test_changes": [
+        "tests/test_qed_add_tag_keeps_remembering_tags.py"
+      ],
+      "eval_error": "",
+      "qed_status": "done",
+      "qed_grade": "A",
+      "qed_applied": true,
+      "qed_candidates": 1
+    },
+    {
+      "task_id": "004_empty_input_crash",
+      "rep": 3,
+      "condition": "qedcode",
+      "order": 0,
+      "snapshot_commit": "a908674b8ee548919729af138f42a7a4f8978f79",
+      "status": "done",
+      "message": "Grade A \u00b7 repro test failed before, passes now \u00b7 6/6 tests pass \u00b7 proof strength 2/2 \u00b7 lint clean \u00b7 no protected files changed",
+      "seconds": 11.63,
+      "model_calls": 5,
+      "prompt_tokens_est": 2340,
+      "completion_tokens_est": 520,
+      "tokens_est": 2860,
+      "cost_usd_est": null,
+      "resolved": true,
+      "regression": false,
+      "hidden_passed": 2,
+      "hidden_total": 2,
+      "visible_passed": 4,
+      "visible_total": 4,
+      "regressed_tests": [],
+      "changed_files": [
+        "src/csvlite/parser.py"
+      ],
+      "discarded_test_changes": [
+        "tests/test_qed_parse_csv_line_crashes_with.py"
+      ],
+      "eval_error": "",
+      "qed_status": "done",
+      "qed_grade": "A",
+      "qed_applied": true,
+      "qed_candidates": 1
+    },
+    {
+      "task_id": "004_empty_input_crash",
+      "rep": 3,
+      "condition": "baseline",
+      "order": 1,
+      "snapshot_commit": "a908674b8ee548919729af138f42a7a4f8978f79",
+      "status": "done",
+      "message": "",
+      "seconds": 2.94,
+      "model_calls": 1,
+      "prompt_tokens_est": 449,
+      "completion_tokens_est": 171,
+      "tokens_est": 620,
+      "cost_usd_est": null,
+      "resolved": true,
+      "regression": false,
+      "hidden_passed": 2,
+      "hidden_total": 2,
+      "visible_passed": 4,
+      "visible_total": 4,
+      "regressed_tests": [],
+      "changed_files": [
+        "src/csvlite/parser.py"
+      ],
+      "discarded_test_changes": [],
+      "eval_error": "",
+      "files_written": [
+        "src/csvlite/parser.py"
+      ],
+      "rejected_paths": []
+    },
+    {
+      "task_id": "005_integer_average",
+      "rep": 3,
+      "condition": "qedcode",
+      "order": 0,
+      "snapshot_commit": "14db5e97aa639530a615c2a2e95d59778301db9b",
+      "status": "done",
+      "message": "Grade A \u00b7 repro test failed before, passes now \u00b7 6/6 tests pass \u00b7 proof strength 2/2 \u00b7 lint clean \u00b7 no protected files changed",
+      "seconds": 9.01,
+      "model_calls": 5,
+      "prompt_tokens_est": 1977,
+      "completion_tokens_est": 318,
+      "tokens_est": 2295,
+      "cost_usd_est": null,
+      "resolved": true,
+      "regression": false,
+      "hidden_passed": 2,
+      "hidden_total": 2,
+      "visible_passed": 4,
+      "visible_total": 4,
+      "regressed_tests": [],
+      "changed_files": [
+        "src/stats/core.py"
+      ],
+      "discarded_test_changes": [
+        "tests/test_qed_average_1_2_gives_me.py"
+      ],
+      "eval_error": "",
+      "qed_status": "done",
+      "qed_grade": "A",
+      "qed_applied": true,
+      "qed_candidates": 1
+    },
+    {
+      "task_id": "005_integer_average",
+      "rep": 3,
+      "condition": "baseline",
+      "order": 1,
+      "snapshot_commit": "14db5e97aa639530a615c2a2e95d59778301db9b",
+      "status": "done",
+      "message": "",
+      "seconds": 4.53,
+      "model_calls": 1,
+      "prompt_tokens_est": 364,
+      "completion_tokens_est": 243,
+      "tokens_est": 607,
+      "cost_usd_est": null,
+      "resolved": true,
+      "regression": false,
+      "hidden_passed": 2,
+      "hidden_total": 2,
+      "visible_passed": 4,
+      "visible_total": 4,
+      "regressed_tests": [],
+      "changed_files": [
+        "src/stats/core.py"
+      ],
+      "discarded_test_changes": [
+        "tests/test_core.py"
+      ],
+      "eval_error": "",
+      "files_written": [
+        "src/stats/core.py",
+        "tests/test_core.py"
+      ],
+      "rejected_paths": []
+    },
+    {
+      "task_id": "006_missing_config_key",
+      "rep": 3,
+      "condition": "qedcode",
+      "order": 0,
+      "snapshot_commit": "0f6ea094d3f7089ddda22876d7b1caf12fba5665",
+      "status": "done",
+      "message": "Grade A \u00b7 repro test failed before, passes now \u00b7 4/4 tests pass \u00b7 proof strength 2/2 \u00b7 lint clean \u00b7 no protected files changed",
+      "seconds": 10.67,
+      "model_calls": 5,
+      "prompt_tokens_est": 2371,
+      "completion_tokens_est": 427,
+      "tokens_est": 2798,
+      "cost_usd_est": null,
+      "resolved": true,
+      "regression": false,
+      "hidden_passed": 2,
+      "hidden_total": 2,
+      "visible_passed": 3,
+      "visible_total": 3,
+      "regressed_tests": [],
+      "changed_files": [
+        "src/appconf/loader.py"
+      ],
+      "discarded_test_changes": [
+        "tests/test_qed_load_config_crashes_with_a.py"
+      ],
+      "eval_error": "",
+      "qed_status": "done",
+      "qed_grade": "A",
+      "qed_applied": true,
+      "qed_candidates": 1
+    },
+    {
+      "task_id": "006_missing_config_key",
+      "rep": 3,
+      "condition": "baseline",
+      "order": 1,
+      "snapshot_commit": "0f6ea094d3f7089ddda22876d7b1caf12fba5665",
+      "status": "done",
+      "message": "",
+      "seconds": 2.58,
+      "model_calls": 1,
+      "prompt_tokens_est": 475,
+      "completion_tokens_est": 141,
+      "tokens_est": 616,
+      "cost_usd_est": null,
+      "resolved": true,
+      "regression": false,
+      "hidden_passed": 2,
+      "hidden_total": 2,
+      "visible_passed": 3,
+      "visible_total": 3,
+      "regressed_tests": [],
+      "changed_files": [
+        "src/appconf/loader.py"
+      ],
+      "discarded_test_changes": [],
+      "eval_error": "",
+      "files_written": [
+        "src/appconf/loader.py"
+      ],
+      "rejected_paths": []
+    },
+    {
+      "task_id": "007_sort_order",
+      "rep": 3,
+      "condition": "qedcode",
+      "order": 0,
+      "snapshot_commit": "04b832a4177bc950863ea0fccdcc438f59641b10",
+      "status": "done",
+      "message": "Grade A \u00b7 repro test failed before, passes now \u00b7 6/6 tests pass \u00b7 proof strength 2/2 \u00b7 lint clean \u00b7 no protected files changed",
+      "seconds": 11.36,
+      "model_calls": 5,
+      "prompt_tokens_est": 2292,
+      "completion_tokens_est": 448,
+      "tokens_est": 2740,
+      "cost_usd_est": null,
+      "resolved": true,
+      "regression": false,
+      "hidden_passed": 2,
+      "hidden_total": 2,
+      "visible_passed": 4,
+      "visible_total": 4,
+      "regressed_tests": [],
+      "changed_files": [
+        "src/board/scores.py"
+      ],
+      "discarded_test_changes": [
+        "tests/test_qed_top_scores_returns_the_lowest.py"
+      ],
+      "eval_error": "",
+      "qed_status": "done",
+      "qed_grade": "A",
+      "qed_applied": true,
+      "qed_candidates": 1
+    },
+    {
+      "task_id": "007_sort_order",
+      "rep": 3,
+      "condition": "baseline",
+      "order": 1,
+      "snapshot_commit": "04b832a4177bc950863ea0fccdcc438f59641b10",
+      "status": "done",
+      "message": "",
+      "seconds": 1.69,
+      "model_calls": 1,
+      "prompt_tokens_est": 350,
+      "completion_tokens_est": 94,
+      "tokens_est": 444,
+      "cost_usd_est": null,
+      "resolved": true,
+      "regression": false,
+      "hidden_passed": 2,
+      "hidden_total": 2,
+      "visible_passed": 4,
+      "visible_total": 4,
+      "regressed_tests": [],
+      "changed_files": [
+        "src/board/scores.py"
+      ],
+      "discarded_test_changes": [],
+      "eval_error": "",
+      "files_written": [
+        "src/board/scores.py"
+      ],
+      "rejected_paths": []
+    },
+    {
+      "task_id": "008_slugify_feature",
+      "rep": 3,
+      "condition": "baseline",
+      "order": 0,
+      "snapshot_commit": "d1f9819d4108cdc759dd579d754eef3d596dfbe4",
+      "status": "done",
+      "message": "",
+      "seconds": 7.65,
+      "model_calls": 1,
+      "prompt_tokens_est": 366,
+      "completion_tokens_est": 447,
+      "tokens_est": 813,
+      "cost_usd_est": null,
+      "resolved": false,
+      "regression": false,
+      "hidden_passed": 2,
+      "hidden_total": 3,
+      "visible_passed": 3,
+      "visible_total": 3,
+      "regressed_tests": [],
+      "changed_files": [
+        "src/textutil/__init__.py",
+        "src/textutil/text.py"
+      ],
+      "discarded_test_changes": [
+        "tests/test_text.py"
+      ],
+      "eval_error": "",
+      "files_written": [
+        "src/textutil/__init__.py",
+        "src/textutil/text.py",
+        "tests/test_text.py"
+      ],
+      "rejected_paths": []
+    },
+    {
+      "task_id": "008_slugify_feature",
+      "rep": 3,
+      "condition": "qedcode",
+      "order": 1,
+      "snapshot_commit": "d1f9819d4108cdc759dd579d754eef3d596dfbe4",
+      "status": "done",
+      "message": "Grade A \u00b7 repro test failed before, passes now \u00b7 6/6 tests pass \u00b7 proof strength 1/1 \u00b7 lint clean \u00b7 no protected files changed",
+      "seconds": 14.16,
+      "model_calls": 6,
+      "prompt_tokens_est": 3130,
+      "completion_tokens_est": 649,
+      "tokens_est": 3779,
+      "cost_usd_est": null,
+      "resolved": true,
+      "regression": false,
+      "hidden_passed": 3,
+      "hidden_total": 3,
+      "visible_passed": 3,
+      "visible_total": 3,
+      "regressed_tests": [],
+      "changed_files": [
+        "src/textutil/text.py"
+      ],
+      "discarded_test_changes": [
+        "tests/test_qed_please_add_a_slugify_text.py"
+      ],
+      "eval_error": "",
+      "qed_status": "done",
+      "qed_grade": "A",
+      "qed_applied": true,
+      "qed_candidates": 2
+    },
+    {
+      "task_id": "009_factorial_zero",
+      "rep": 3,
+      "condition": "qedcode",
+      "order": 0,
+      "snapshot_commit": "b7700231b18d0c43a0e2c50c4a09d06c8cafd226",
+      "status": "done",
+      "message": "Grade A \u00b7 repro test failed before, passes now \u00b7 5/5 tests pass \u00b7 proof strength 2/2 \u00b7 lint clean \u00b7 no protected files changed",
+      "seconds": 9.6,
+      "model_calls": 5,
+      "prompt_tokens_est": 2072,
+      "completion_tokens_est": 355,
+      "tokens_est": 2427,
+      "cost_usd_est": null,
+      "resolved": true,
+      "regression": false,
+      "hidden_passed": 2,
+      "hidden_total": 2,
+      "visible_passed": 2,
+      "visible_total": 2,
+      "regressed_tests": [],
+      "changed_files": [
+        "src/mathx/numbers.py"
+      ],
+      "discarded_test_changes": [
+        "tests/test_qed_factorial_0_returns_0_but.py"
+      ],
+      "eval_error": "",
+      "qed_status": "done",
+      "qed_grade": "A",
+      "qed_applied": true,
+      "qed_candidates": 1
+    },
+    {
+      "task_id": "009_factorial_zero",
+      "rep": 3,
+      "condition": "baseline",
+      "order": 1,
+      "snapshot_commit": "b7700231b18d0c43a0e2c50c4a09d06c8cafd226",
+      "status": "done",
+      "message": "",
+      "seconds": 2.84,
+      "model_calls": 1,
+      "prompt_tokens_est": 343,
+      "completion_tokens_est": 129,
+      "tokens_est": 472,
+      "cost_usd_est": null,
+      "resolved": true,
+      "regression": false,
+      "hidden_passed": 2,
+      "hidden_total": 2,
+      "visible_passed": 2,
+      "visible_total": 2,
+      "regressed_tests": [],
+      "changed_files": [
+        "src/mathx/numbers.py"
+      ],
+      "discarded_test_changes": [],
+      "eval_error": "",
+      "files_written": [
+        "src/mathx/numbers.py"
+      ],
+      "rejected_paths": []
+    },
+    {
+      "task_id": "010_cart_quantity",
+      "rep": 3,
+      "condition": "qedcode",
+      "order": 0,
+      "snapshot_commit": "c74aa3dc0b19be26609ddab10fdbc2bcdc7eb28a",
+      "status": "done",
+      "message": "Grade A \u00b7 repro test failed before, passes now \u00b7 5/5 tests pass \u00b7 proof strength 2/2 \u00b7 lint clean \u00b7 no protected files changed",
+      "seconds": 11.29,
+      "model_calls": 5,
+      "prompt_tokens_est": 2445,
+      "completion_tokens_est": 447,
+      "tokens_est": 2892,
+      "cost_usd_est": null,
+      "resolved": true,
+      "regression": false,
+      "hidden_passed": 2,
+      "hidden_total": 2,
+      "visible_passed": 3,
+      "visible_total": 3,
+      "regressed_tests": [],
+      "changed_files": [
+        "src/shopcart/cart.py"
+      ],
+      "discarded_test_changes": [
+        "tests/test_qed_cart_total_ignores_the_quantity.py"
+      ],
+      "eval_error": "",
+      "qed_status": "done",
+      "qed_grade": "A",
+      "qed_applied": true,
+      "qed_candidates": 1
+    },
+    {
+      "task_id": "010_cart_quantity",
+      "rep": 3,
+      "condition": "baseline",
+      "order": 1,
+      "snapshot_commit": "c74aa3dc0b19be26609ddab10fdbc2bcdc7eb28a",
+      "status": "done",
+      "message": "",
+      "seconds": 3.28,
+      "model_calls": 1,
+      "prompt_tokens_est": 439,
+      "completion_tokens_est": 187,
+      "tokens_est": 626,
+      "cost_usd_est": null,
+      "resolved": true,
+      "regression": false,
+      "hidden_passed": 2,
+      "hidden_total": 2,
+      "visible_passed": 3,
+      "visible_total": 3,
+      "regressed_tests": [],
+      "changed_files": [
+        "src/shopcart/cart.py"
+      ],
+      "discarded_test_changes": [],
+      "eval_error": "",
+      "files_written": [
+        "src/shopcart/cart.py"
+      ],
+      "rejected_paths": []
+    }
+  ]
+}

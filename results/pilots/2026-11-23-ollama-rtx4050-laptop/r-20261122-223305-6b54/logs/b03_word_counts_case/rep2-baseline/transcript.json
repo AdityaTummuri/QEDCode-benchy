@@ -1,0 +1,8 @@
+[
+ {
+  "tag": "benchy_baseline",
+  "temperature": 0.2,
+  "prompt": "You are a careful software engineer working on a small Python project.\n\nTASK: word_counts() treats 'The' and 'the' as different words. Counting should ignore letter case (keys in lower case).\n\nPROJECT FILES:\n--- pyproject.toml ---\n[tool.pytest.ini_options]\npythonpath = [\"src\"]\ntestpaths = [\"tests\"]\n\n--- src/textkit/__init__.py ---\n\n--- src/textkit/counts.py ---\n\"\"\"Word statistics for short texts.\"\"\"\n\nimport re\n\n_WORD = re.compile(r\"[A-Za-z']+\")\n\n\ndef word_counts(text):\n    \"\"\"Return a dict mapping each word in `text` to how often it appears.\"\"\"\n    counts = {}\n    for word in _WORD.findall(text):\n        counts[word] = counts.get(word, 0) + 1\n    return counts\n\n--- tests/test_counts.py ---\nfrom textkit.counts import word_counts\n\n\ndef test_simple_counts():\n    assert word_counts(\"a b a\") == {\"a\": 2, \"b\": 1}\n\n\ndef test_punctuation_is_ignored():\n    assert word_counts(\"hi, hi!\") == {\"hi\": 2}\n\n\ndef test_empty_text():\n    assert word_counts(\"\") == {}\n\n\nMake the change the task asks for. Reply with the COMPLETE new contents of every file you change,\neach in this exact format, and nothing else:\n\nFILE: <path relative to the project root>\n```python\n<entire file contents>\n```\n",
+  "reply": "FILE: src/textkit/counts.py\n```python\n\"\"\"Word statistics for short texts.\"\"\"\n\nimport re\n\n_WORD = re.compile(r\"[A-Za-z']+\")\n\n\ndef word_counts(text):\n    \"\"\"Return a dict mapping each word in `text` to how often it appears.\"\"\"\n    counts = {}\n    for word in _WORD.findall(text):\n        counts[word.lower()] = counts.get(word.lower(), 0) + 1\n    return counts\n```"
+ }
+]

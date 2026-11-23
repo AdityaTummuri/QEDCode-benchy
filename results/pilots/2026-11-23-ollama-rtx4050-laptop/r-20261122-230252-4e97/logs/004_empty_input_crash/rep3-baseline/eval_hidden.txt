@@ -1,0 +1,44 @@
+FF                                                                       [100%]
+=================================== FAILURES ===================================
+_____________________ test_empty_line_gives_an_empty_list ______________________
+
+    def test_empty_line_gives_an_empty_list():
+>       assert parse_csv_line("") == []
+               ^^^^^^^^^^^^^^^^^^
+
+hidden/test_hidden.py:5: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+line = ''
+
+    def parse_csv_line(line):
+        """Split one CSV line into trimmed fields. Lines starting with # are comments."""
+        line = line.strip()
+>       if line[0] == "#":
+           ^^^^^^^
+E       IndexError: string index out of range
+
+src/csvlite/parser.py:7: IndexError
+________________ test_whitespace_only_line_gives_an_empty_list _________________
+
+    def test_whitespace_only_line_gives_an_empty_list():
+>       assert parse_csv_line("   ") == []
+               ^^^^^^^^^^^^^^^^^^^^^
+
+hidden/test_hidden.py:9: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+line = ''
+
+    def parse_csv_line(line):
+        """Split one CSV line into trimmed fields. Lines starting with # are comments."""
+        line = line.strip()
+>       if line[0] == "#":
+           ^^^^^^^
+E       IndexError: string index out of range
+
+src/csvlite/parser.py:7: IndexError
+=========================== short test summary info ============================
+FAILED hidden/test_hidden.py::test_empty_line_gives_an_empty_list - IndexErro...
+FAILED hidden/test_hidden.py::test_whitespace_only_line_gives_an_empty_list
+2 failed in 0.02s

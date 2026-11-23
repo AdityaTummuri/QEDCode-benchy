@@ -1,7 +1,200 @@
 {
-  "accepted_submissions": 0,
-  "groups": [],
-  "last_run_date": null,
+  "accepted_submissions": 2,
+  "groups": [
+    {
+      "backend": "ollama",
+      "baseline": {
+        "attempts": 24,
+        "errors": 0,
+        "median_seconds": 8.05,
+        "median_seconds_resolved": 8.05,
+        "model_calls": 24,
+        "no_change": 0,
+        "regression_rate": 0.0,
+        "regressions": 0,
+        "resolution_ci95": [
+          0.862,
+          1.0
+        ],
+        "resolution_rate": 1.0,
+        "resolved": 24,
+        "timeouts": 0,
+        "tokens_est_median": 564.5,
+        "tokens_est_total": 13554
+      },
+      "baseline_context": "every project file",
+      "fits_6gb": true,
+      "grade_honesty": {
+        "A": {
+          "ci95": [
+            0.8318,
+            1.0
+          ],
+          "graded": 19,
+          "rate": 1.0,
+          "resolved": 19
+        },
+        "B": {
+          "ci95": [
+            0.3755,
+            0.9638
+          ],
+          "graded": 5,
+          "rate": 0.8,
+          "resolved": 4
+        }
+      },
+      "label": "community-reported (schema-validated)",
+      "model": "qwen2.5-coder:7b",
+      "paired": {
+        "both_resolved": 23,
+        "difference": -0.0417,
+        "mcnemar_p": 1.0,
+        "neither": 0,
+        "only_baseline": 1,
+        "only_qedcode": 0,
+        "pairs": 24
+      },
+      "qedcode": {
+        "attempts": 24,
+        "errors": 0,
+        "median_seconds": 21.05,
+        "median_seconds_resolved": 20.9,
+        "model_calls": 130,
+        "no_change": 0,
+        "regression_rate": 0.0,
+        "regressions": 0,
+        "resolution_ci95": [
+          0.7976,
+          0.9926
+        ],
+        "resolution_rate": 0.9583,
+        "resolved": 23,
+        "timeouts": 0,
+        "tokens_est_median": 2857.5,
+        "tokens_est_total": 72255
+      },
+      "qedcode_speed": "normal",
+      "qedcode_version": "0.1.0",
+      "reproduced_submissions": 0,
+      "silent_failures": {
+        "baseline": {
+          "changes": 24,
+          "silent": 0,
+          "silent_rate": 0.0,
+          "wrong": 0
+        },
+        "qedcode": {
+          "changes": 24,
+          "silent": 1,
+          "silent_rate": 0.0417,
+          "wrong": 1
+        }
+      },
+      "submission_ids": [
+        "6c19f93926cf9035d3ba0635e7f6504f88bfd07a45d03426ce3405746fbaa12f"
+      ],
+      "submissions": 1,
+      "suite": "benchy-core 1.0.0"
+    },
+    {
+      "backend": "ollama",
+      "baseline": {
+        "attempts": 24,
+        "errors": 0,
+        "median_seconds": 2.5,
+        "median_seconds_resolved": 2.3,
+        "model_calls": 24,
+        "no_change": 0,
+        "regression_rate": 0.0833,
+        "regressions": 2,
+        "resolution_ci95": [
+          0.5953,
+          0.9076
+        ],
+        "resolution_rate": 0.7917,
+        "resolved": 19,
+        "timeouts": 0,
+        "tokens_est_median": 511.0,
+        "tokens_est_total": 12327
+      },
+      "baseline_context": "every project file",
+      "fits_6gb": true,
+      "grade_honesty": {
+        "A": {
+          "ci95": [
+            0.8454,
+            1.0
+          ],
+          "graded": 21,
+          "rate": 1.0,
+          "resolved": 21
+        },
+        "B": {
+          "ci95": [
+            0.2065,
+            1.0
+          ],
+          "graded": 1,
+          "rate": 1.0,
+          "resolved": 1
+        }
+      },
+      "label": "community-reported (schema-validated)",
+      "model": "qwen3.5:4b",
+      "paired": {
+        "both_resolved": 18,
+        "difference": 0.125,
+        "mcnemar_p": 0.375,
+        "neither": 1,
+        "only_baseline": 1,
+        "only_qedcode": 4,
+        "pairs": 24
+      },
+      "qedcode": {
+        "attempts": 24,
+        "errors": 0,
+        "median_seconds": 13.75,
+        "median_seconds_resolved": 12.65,
+        "model_calls": 133,
+        "no_change": 2,
+        "regression_rate": 0.0,
+        "regressions": 0,
+        "resolution_ci95": [
+          0.7415,
+          0.9768
+        ],
+        "resolution_rate": 0.9167,
+        "resolved": 22,
+        "timeouts": 0,
+        "tokens_est_median": 2850.5,
+        "tokens_est_total": 89459
+      },
+      "qedcode_speed": "normal",
+      "qedcode_version": "0.1.0",
+      "reproduced_submissions": 0,
+      "silent_failures": {
+        "baseline": {
+          "changes": 24,
+          "silent": 5,
+          "silent_rate": 0.2083,
+          "wrong": 5
+        },
+        "qedcode": {
+          "changes": 22,
+          "silent": 0,
+          "silent_rate": 0.0,
+          "wrong": 0
+        }
+      },
+      "submission_ids": [
+        "4c452b01d40c77b0793bc741d1e261950dafff993a7b48d63e31cf0536756a1f"
+      ],
+      "submissions": 1,
+      "suite": "benchy-core 1.0.0"
+    }
+  ],
+  "last_run_date": "2026-11-22",
   "notes": [
     "Community-reported results passed schema and consistency checks; that does not prove a run happened as described.",
     "Independently reproduced = a maintainer re-ran it and listed it in results/reproduced.json.",

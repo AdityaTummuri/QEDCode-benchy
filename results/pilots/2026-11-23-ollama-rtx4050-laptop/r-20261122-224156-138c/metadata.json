@@ -1,0 +1,67 @@
+{
+  "run_id": "r-20261122-224156-138c",
+  "started_at": "2026-11-22T22:41:56+00:00",
+  "finished_at": "2026-11-22T22:50:51+00:00",
+  "complete": true,
+  "is_real_measurement": true,
+  "mode": "model",
+  "stopped_reason": "",
+  "benchy_version": "0.1.0",
+  "qedcode_version": "0.1.0",
+  "suite": {
+    "name": "bugzoo",
+    "version": "unversioned",
+    "kind": "folder",
+    "fingerprint_sha256": "16f7a8116244af5acbb7e159c05817c0da629c11f31898b9c6ee8851a35af210",
+    "tasks": [
+      "001_paginate_off_by_one",
+      "002_discount_threshold",
+      "003_mutable_default",
+      "004_empty_input_crash",
+      "005_integer_average",
+      "006_missing_config_key",
+      "007_sort_order",
+      "008_slugify_feature",
+      "009_factorial_zero",
+      "010_cart_quantity"
+    ],
+    "skipped_not_valid_here": []
+  },
+  "model": {
+    "backend": "ollama",
+    "name": "qwen3.5:4b"
+  },
+  "controls": {
+    "conditions": [
+      "baseline",
+      "qedcode"
+    ],
+    "repetitions": 3,
+    "time_limit_s_per_condition": 600.0,
+    "order_seed": 0,
+    "qedcode_speed": "normal",
+    "qedcode_apply_policy": "any",
+    "qedcode_memory": "off",
+    "qedcode_helper_model": "off",
+    "baseline_temperature": 0.2,
+    "baseline_max_tokens": 4096,
+    "baseline_context": "every project file",
+    "same_model_client_for_both": true,
+    "price_per_mtok_usd": null
+  },
+  "evaluator": {
+    "name": "benchy-pytest-hidden",
+    "version": "1"
+  },
+  "environment": {
+    "os": "Linux",
+    "arch": "x86_64",
+    "python": "3.12"
+  },
+  "limitations": [
+    "Token counts are estimates (characters / 3.5), not counts from the model's tokenizer.",
+    "Tasks are small single-file Python problems; results may not carry over to large real-world repositories.",
+    "The baseline is the bare model with one plain prompt and one answer. Other agent harnesses (with their own retries or tools) would be different baselines.",
+    "Times include model latency on this machine and are only comparable within this run."
+  ]
+}

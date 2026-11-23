@@ -1,0 +1,37 @@
+FFF                                                                      [100%]
+=================================== FAILURES ===================================
+______________________________ test_four_and_nine ______________________________
+
+    def test_four_and_nine():
+>       assert to_roman(4) == "IV"
+E       AssertionError: assert 'IIII' == 'IV'
+E         
+E         - IV
+E         + IIII
+
+hidden/test_hidden.py:5: AssertionError
+___________________________ test_forty_ninety_and_up ___________________________
+
+    def test_forty_ninety_and_up():
+>       assert to_roman(40) == "XL"
+E       AssertionError: assert 'XXXX' == 'XL'
+E         
+E         - XL
+E         + XXXX
+
+hidden/test_hidden.py:10: AssertionError
+__________________________________ test_mixed __________________________________
+
+    def test_mixed():
+>       assert to_roman(1994) == "MCMXCIV"
+E       AssertionError: assert 'MDCCCCLXXXXIIII' == 'MCMXCIV'
+E         
+E         - MCMXCIV
+E         + MDCCCCLXXXXIIII
+
+hidden/test_hidden.py:17: AssertionError
+=========================== short test summary info ============================
+FAILED hidden/test_hidden.py::test_four_and_nine - AssertionError: assert 'II...
+FAILED hidden/test_hidden.py::test_forty_ninety_and_up - AssertionError: asse...
+FAILED hidden/test_hidden.py::test_mixed - AssertionError: assert 'MDCCCCLXXX...
+3 failed in 0.02s

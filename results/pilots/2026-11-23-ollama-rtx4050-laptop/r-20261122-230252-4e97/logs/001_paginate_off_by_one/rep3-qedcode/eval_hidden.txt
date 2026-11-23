@@ -1,0 +1,27 @@
+F.F                                                                      [100%]
+=================================== FAILURES ===================================
+______________________ test_full_pages_have_the_page_size ______________________
+
+    def test_full_pages_have_the_page_size():
+        items = [1, 2, 3, 4, 5]
+>       assert paginate(items, 1, 2) == [1, 2]
+E       assert [1] == [1, 2]
+E         
+E         Right contains one more item: 2
+E         Use -v to get more diff
+
+hidden/test_hidden.py:6: AssertionError
+____________________________ test_page_size_of_one _____________________________
+
+    def test_page_size_of_one():
+>       assert paginate(["a", "b"], 2, 1) == ["b"]
+E       AssertionError: assert [] == ['b']
+E         
+E         Right contains one more item: 'b'
+E         Use -v to get more diff
+
+hidden/test_hidden.py:15: AssertionError
+=========================== short test summary info ============================
+FAILED hidden/test_hidden.py::test_full_pages_have_the_page_size - assert [1]...
+FAILED hidden/test_hidden.py::test_page_size_of_one - AssertionError: assert ...
+2 failed, 1 passed in 0.02s

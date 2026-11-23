@@ -1,0 +1,16 @@
+
+==================================== ERRORS ====================================
+____________________ ERROR collecting hidden/test_hidden.py ____________________
+ImportError while importing test module '/tmp/benchy-eval-ydo30tk7/p/hidden/test_hidden.py'.
+Hint: make sure your test modules/packages have valid Python names.
+Traceback:
+/usr/lib/python3.12/importlib/__init__.py:90: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+hidden/test_hidden.py:1: in <module>
+    from textutil.text import slugify
+E   ImportError: cannot import name 'slugify' from 'textutil.text' (/tmp/benchy-eval-ydo30tk7/p/src/textutil/text.py)
+=========================== short test summary info ============================
+ERROR hidden/test_hidden.py
+!!!!!!!!!!!!!!!!!!!! Interrupted: 1 error during collection !!!!!!!!!!!!!!!!!!!!
+1 error in 0.05s

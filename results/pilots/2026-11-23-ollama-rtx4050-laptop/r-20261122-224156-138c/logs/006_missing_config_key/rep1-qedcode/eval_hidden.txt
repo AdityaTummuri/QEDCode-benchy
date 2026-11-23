@@ -1,0 +1,29 @@
+F.                                                                       [100%]
+=================================== FAILURES ===================================
+_____________________ test_missing_timeout_defaults_to_30 ______________________
+
+tmp_path = PosixPath('/tmp/pytest-of-aditya/pytest-11/test_missing_timeout_defaults_0')
+
+    def test_missing_timeout_defaults_to_30(tmp_path):
+        path = tmp_path / "config.json"
+        path.write_text(json.dumps({"name": "demo"}), encoding="utf-8")
+>       assert load_config(path) == {"name": "demo", "timeout": 30}
+               ^^^^^^^^^^^^^^^^^
+
+hidden/test_hidden.py:9: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+path = PosixPath('/tmp/pytest-of-aditya/pytest-11/test_missing_timeout_defaults_0/config.json')
+
+    def load_config(path):
+        """Read a JSON settings file and return the settings the app uses."""
+        with open(path, encoding="utf-8") as handle:
+            data = json.load(handle)
+>       return {"name": data["name"], "timeout": data["timeout"]}
+                                                 ^^^^^^^^^^^^^^^
+E       KeyError: 'timeout'
+
+src/appconf/loader.py:10: KeyError
+=========================== short test summary info ============================
+FAILED hidden/test_hidden.py::test_missing_timeout_defaults_to_30 - KeyError:...
+1 failed, 1 passed in 0.02s

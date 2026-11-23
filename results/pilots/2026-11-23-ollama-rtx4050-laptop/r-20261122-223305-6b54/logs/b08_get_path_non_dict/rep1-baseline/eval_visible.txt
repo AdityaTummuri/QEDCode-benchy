@@ -1,0 +1,22 @@
+F.F                                                                      [100%]
+=================================== FAILURES ===================================
+______________________________ test_existing_path ______________________________
+
+    def test_existing_path():
+>       assert get_path({"a": {"b": 1}}, "a.b") == 1
+E       AssertionError: assert None == 1
+E        +  where None = get_path({'a': {'b': 1}}, 'a.b')
+
+tests/test_paths.py:5: AssertionError
+________________________________ test_top_level ________________________________
+
+    def test_top_level():
+>       assert get_path({"x": 3}, "x") == 3
+E       AssertionError: assert None == 3
+E        +  where None = get_path({'x': 3}, 'x')
+
+tests/test_paths.py:13: AssertionError
+=========================== short test summary info ============================
+FAILED tests/test_paths.py::test_existing_path - AssertionError: assert None ...
+FAILED tests/test_paths.py::test_top_level - AssertionError: assert None == 3
+2 failed, 1 passed in 0.02s

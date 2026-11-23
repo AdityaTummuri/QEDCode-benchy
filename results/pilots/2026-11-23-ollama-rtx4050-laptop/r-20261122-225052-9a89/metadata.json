@@ -1,0 +1,66 @@
+{
+  "run_id": "r-20261122-225052-9a89",
+  "started_at": "2026-11-22T22:50:52+00:00",
+  "finished_at": "2026-11-22T23:02:52+00:00",
+  "complete": true,
+  "is_real_measurement": true,
+  "mode": "model",
+  "stopped_reason": "",
+  "benchy_version": "0.1.0",
+  "qedcode_version": "0.1.0",
+  "suite": {
+    "name": "benchy-core",
+    "version": "1.0.0",
+    "kind": "folder",
+    "fingerprint_sha256": "0d6751707950d9210edee1e2cc20d31488a4f0322ec5cce3d9041a1b45a690e0",
+    "tasks": [
+      "b01_chunk_drops_tail",
+      "b02_clamp_upper_bound",
+      "b03_word_counts_case",
+      "b04_duration_minutes",
+      "b05_retry_attempts",
+      "b06_merge_touching_intervals",
+      "b07_roman_subtractive",
+      "b08_get_path_non_dict"
+    ],
+    "skipped_not_valid_here": []
+  },
+  "model": {
+    "backend": "ollama",
+    "name": "qwen2.5-coder:7b"
+  },
+  "controls": {
+    "conditions": [
+      "baseline",
+      "qedcode"
+    ],
+    "repetitions": 3,
+    "time_limit_s_per_condition": 600.0,
+    "order_seed": 0,
+    "qedcode_speed": "normal",
+    "qedcode_apply_policy": "any",
+    "qedcode_memory": "off",
+    "qedcode_helper_model": "off",
+    "baseline_temperature": 0.2,
+    "baseline_max_tokens": 4096,
+    "baseline_context": "every project file",
+    "same_model_client_for_both": true,
+    "price_per_mtok_usd": null
+  },
+  "evaluator": {
+    "name": "benchy-pytest-hidden",
+    "version": "1"
+  },
+  "environment": {
+    "os": "Linux",
+    "arch": "x86_64",
+    "python": "3.12"
+  },
+  "limitations": [
+    "Small sample (24 paired attempts). Treat differences as indicative only; the confidence intervals and the McNemar p-value show how uncertain they are.",
+    "Token counts are estimates (characters / 3.5), not counts from the model's tokenizer.",
+    "Tasks are small single-file Python problems; results may not carry over to large real-world repositories.",
+    "The baseline is the bare model with one plain prompt and one answer. Other agent harnesses (with their own retries or tools) would be different baselines.",
+    "Times include model latency on this machine and are only comparable within this run."
+  ]
+}

@@ -1,0 +1,41 @@
+[stage] Taking a snapshot of your project...
+[stage] Finding files ...... src/appconf/loader.py
+[stage] Running all your tests to see what already passes...
+[stage] Writing a test that shows the problem...
+[stage] Writing a test that shows the problem ... done (it fails now)
+[stage] Try 1: asking the model (temperature 0.2)...
+[check] c1 · apply: Edits applied to src/appconf/loader.py.
+[check] c1 · parse: 2 changed file(s) parse.
+[check] c1 · scope: 2 file(s), 20 changed line(s), all within scope.
+[check] c1 · risk: No risky patterns in the new code.
+[check] c1 · lint: No new serious lint errors in 2 file(s).
+[check] c1 · fbpa: 1 test(s) failed before the change and pass now.
+[check] c1 · targeted: 1 test(s) fail that passed before the change; first: tests.test_loader::test_name_is_required (Failed: DID NOT RAISE KeyError)
+[candidate] c1: rejected at targeted
+[stage] Try 2: asking the model (temperature 0.7)...
+[warning] The coder reply had the wrong format (no EDIT blocks found); asking again.
+[check] c2 · apply: Edits applied to src/appconf/loader.py.
+[check] c2 · parse: 2 changed file(s) parse.
+[check] c2 · scope: 2 file(s), 20 changed line(s), all within scope.
+[check] c2 · risk: No risky patterns in the new code.
+[check] c2 · lint: No new serious lint errors in 2 file(s).
+[check] c2 · fbpa: 1 test(s) failed before the change and pass now.
+[check] c2 · targeted: 1 test(s) fail that passed before the change; first: tests.test_loader::test_name_is_required (Failed: DID NOT RAISE KeyError)
+[candidate] c2: rejected at targeted
+[stage] Try 3: asking the model (temperature 0.9)...
+[check] c3 · apply: Edits applied to src/appconf/loader.py.
+[check] c3 · parse: 2 changed file(s) parse.
+[check] c3 · scope: 2 file(s), 20 changed line(s), all within scope.
+[check] c3 · risk: No risky patterns in the new code.
+[check] c3 · lint: No new serious lint errors in 2 file(s).
+[check] c3 · fbpa: 1 test(s) failed before the change and pass now.
+[check] c3 · targeted: 1 test(s) fail that passed before the change; first: tests.test_loader::test_name_is_required (Failed: DID NOT RAISE KeyError)
+[candidate] c3: rejected at targeted
+[stage] Repairing c1 (it failed at targeted)...
+[check] r1 · apply: Edits applied to tests/test_qed_load_config_crashes_with_a.py.
+[check] r1 · parse: 2 changed file(s) parse.
+[check] r1 · scope: 2 file(s), 24 changed line(s), all within scope.
+[check] r1 · risk: No risky patterns in the new code.
+[check] r1 · lint: No new serious lint errors in 2 file(s).
+[check] r1 · fbpa: The new test does not pass with the change. 1 of 2 tests failed; first: tests.test_qed_load_config_crashes_with_a::test_name_is_required
+[candidate] r1: rejected at fbpa

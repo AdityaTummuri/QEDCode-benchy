@@ -1,0 +1,8 @@
+[
+ {
+  "tag": "benchy_baseline",
+  "temperature": 0.2,
+  "prompt": "You are a careful software engineer working on a small Python project.\n\nTASK: top_scores returns the lowest scores first. I want the highest scores, best first.\n\nPROJECT FILES:\n--- pyproject.toml ---\n[tool.pytest.ini_options]\npythonpath = [\"src\"]\ntestpaths = [\"tests\"]\n\n--- src/board/__init__.py ---\n\n--- src/board/scores.py ---\n\"\"\"Leaderboard helpers.\"\"\"\n\n\ndef top_scores(scores, n=3):\n    \"\"\"Return the n highest scores, best first.\"\"\"\n    return sorted(scores)[:n]\n\n\ndef best_score(scores):\n    \"\"\"Return the single highest score, or None for no scores.\"\"\"\n    return max(scores) if scores else None\n\n--- tests/test_scores.py ---\nfrom board.scores import best_score, top_scores\n\n\ndef test_no_scores_give_an_empty_list():\n    assert top_scores([]) == []\n\n\ndef test_a_single_score():\n    assert top_scores([5]) == [5]\n\n\ndef test_asking_for_zero_scores():\n    assert top_scores([1, 2, 3], n=0) == []\n\n\ndef test_best_score():\n    assert best_score([3, 9, 1]) == 9\n    assert best_score([]) is None\n\n\nMake the change the task asks for. Reply with the COMPLETE new contents of every file you change,\neach in this exact format, and nothing else:\n\nFILE: <path relative to the project root>\n```python\n<entire file contents>\n```\n",
+  "reply": "FILE: src/board/scores.py\n```python\n\"\"\"Leaderboard helpers.\"\"\"\n\n\ndef top_scores(scores, n=3):\n    \"\"\"Return the n highest scores, best first.\"\"\"\n    return sorted(scores, reverse=True)[:n]\n\n\ndef best_score(scores):\n    \"\"\"Return the single highest score, or None for no scores.\"\"\"\n    return max(scores) if scores else None\n```"
+ }
+]

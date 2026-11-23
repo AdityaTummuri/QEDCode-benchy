@@ -1,0 +1,29 @@
+[stage] Taking a snapshot of your project...
+[stage] Finding files ...... src/timekit/durations.py
+[stage] Running all your tests to see what already passes...
+[stage] Writing a test that shows the problem...
+[stage] Writing a test that shows the problem ... done (it fails now)
+[stage] Try 1: asking the model (temperature 0.2)...
+[check] c1 · apply: Edits applied to .
+[check] c1 · parse: 1 changed file(s) parse.
+[check] c1 · scope: 1 file(s), 11 changed line(s), all within scope.
+[check] c1 · risk: No risky patterns in the new code.
+[check] c1 · lint: No new serious lint errors in 1 file(s).
+[check] c1 · fbpa: The new test does not pass with the change. 2 of 2 tests failed; first: tests.test_qed_parse_duration_10m_returns_36000::test_10m
+[candidate] c1: rejected at fbpa
+[stage] Try 2: asking the model (temperature 0.7)...
+[check] c2 · apply: Edits applied to src/timekit/durations.py.
+[check] c2 · parse: 2 changed file(s) parse.
+[check] c2 · scope: 2 file(s), 13 changed line(s), all within scope.
+[check] c2 · risk: No risky patterns in the new code.
+[check] c2 · lint: No new serious lint errors in 2 file(s).
+[check] c2 · fbpa: 2 test(s) failed before the change and pass now.
+[check] c2 · targeted: 5/5 tests pass.
+[candidate] c2: grade B
+[stage] Running all tests on c2...
+[check] c2 · full: 5/5 tests pass.
+[candidate] c2: grade A
+[stage] Measuring proof strength (small breakages of the changed lines)...
+[log] Proof strength 2/3: the new tests caught 2 of 3 mutants.
+[stage] Explaining the change...
+[result] Grade A · repro test failed before, passes now · 5/5 tests pass · proof strength 2/3 · lint clean · no protected files changed

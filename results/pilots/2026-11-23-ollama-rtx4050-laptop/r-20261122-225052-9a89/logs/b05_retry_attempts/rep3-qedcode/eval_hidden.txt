@@ -1,0 +1,71 @@
+FFF                                                                      [100%]
+=================================== FAILURES ===================================
+__________________ test_succeeds_on_the_last_allowed_attempt ___________________
+
+    def test_succeeds_on_the_last_allowed_attempt():
+        fn = Flaky(failures=2)
+>       assert retry(fn, attempts=3) == "ok"
+               ^^^^^^^^^^^^^^^^^^^^^
+
+hidden/test_hidden.py:20: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+src/flowkit/retry.py:16: in retry
+    raise last_error
+src/flowkit/retry.py:11: in retry
+    return fn()
+           ^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <test_hidden.Flaky object at 0x739b74af3e90>
+
+    def __call__(self):
+        self.calls += 1
+        if self.calls <= self.failures:
+>           raise RuntimeError("not yet")
+E           RuntimeError: not yet
+
+hidden/test_hidden.py:14: RuntimeError
+__________________ test_gives_up_after_exactly_attempts_calls __________________
+
+    def test_gives_up_after_exactly_attempts_calls():
+        fn = Flaky(failures=10)
+        with pytest.raises(RuntimeError):
+            retry(fn, attempts=4)
+>       assert fn.calls == 4
+E       assert 3 == 4
+E        +  where 3 = <test_hidden.Flaky object at 0x739b74af4050>.calls
+
+hidden/test_hidden.py:28: AssertionError
+____________________ test_single_attempt_raises_immediately ____________________
+
+    def test_single_attempt_raises_immediately():
+        fn = Flaky(failures=1)
+        with pytest.raises(RuntimeError):
+>           retry(fn, attempts=1)
+
+hidden/test_hidden.py:34: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+fn = <test_hidden.Flaky object at 0x739b74af4ce0>, attempts = 1
+exceptions = (<class 'Exception'>,)
+
+    def retry(fn, attempts=3, exceptions=(Exception,)):
+        """Call fn() up to `attempts` times; return its first result or re-raise the last error."""
+        if attempts < 1:
+            raise ValueError("attempts must be at least 1")
+        last_error = None
+        for _ in range(attempts - 1):
+            try:
+                return fn()
+            except exceptions as exc:
+                last_error = exc
+        if last_error is None:
+>           raise ValueError("fn did not raise an exception")
+E           ValueError: fn did not raise an exception
+
+src/flowkit/retry.py:15: ValueError
+=========================== short test summary info ============================
+FAILED hidden/test_hidden.py::test_succeeds_on_the_last_allowed_attempt - Run...
+FAILED hidden/test_hidden.py::test_gives_up_after_exactly_attempts_calls - as...
+FAILED hidden/test_hidden.py::test_single_attempt_raises_immediately - ValueE...
+3 failed in 0.02s
