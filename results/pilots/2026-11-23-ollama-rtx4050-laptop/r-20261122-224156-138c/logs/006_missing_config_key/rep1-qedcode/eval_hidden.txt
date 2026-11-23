@@ -2,7 +2,7 @@ F.                                                                       [100%]
 =================================== FAILURES ===================================
 _____________________ test_missing_timeout_defaults_to_30 ______________________
 
-tmp_path = PosixPath('/tmp/pytest-of-aditya/pytest-11/test_missing_timeout_defaults_0')
+tmp_path = PosixPath('<tmp>/pytest-of-user/pytest-11/test_missing_timeout_defaults_0')
 
     def test_missing_timeout_defaults_to_30(tmp_path):
         path = tmp_path / "config.json"
@@ -13,7 +13,7 @@ tmp_path = PosixPath('/tmp/pytest-of-aditya/pytest-11/test_missing_timeout_defau
 hidden/test_hidden.py:9: 
 _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
 
-path = PosixPath('/tmp/pytest-of-aditya/pytest-11/test_missing_timeout_defaults_0/config.json')
+path = PosixPath('<tmp>/pytest-of-user/pytest-11/test_missing_timeout_defaults_0/config.json')
 
     def load_config(path):
         """Read a JSON settings file and return the settings the app uses."""
