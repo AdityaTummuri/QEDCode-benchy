@@ -6,10 +6,11 @@ Ten real GitHub issues from `swebench-verified-py` (the planned pilot list), one
 | | Bare model | Through QEDCode |
 |---|---|---|
 | Resolved (hidden FAIL_TO_PASS tests pass, no regressions) | 0/10 | 2/10 (`pydata__xarray-4629` graded A, `sympy__sympy-14711` graded B) |
-| Wrong changes handed back | 0 | 0 (the other 8 ended as "no fix") |
+| Wrong changes handed back | 2 (`sphinx-doc__sphinx-9673`, `pylint-dev__pylint-6386`) | 0 (the other 8 ended as "no fix") |
 
-**Read with care.** All ten bare replies were unusable diffs (for example a hunk whose removed and
-added lines are identical), so the bare side never produced an applicable change. QEDCode's edit
+**Read with care.** Eight of the ten bare replies were unusable diffs (for example a hunk whose
+removed and added lines are identical); the other two applied but did not fix the issue (first
+published as ten unusable; corrected from `results.json`). QEDCode's edit
 protocol (exact SEARCH/REPLACE blocks, checked by an applier) and its several tries are why it
 got a change through at all; part of this lift is the edit format, not only the checks. Ten tasks
 and one repetition say nothing statistically. Both QEDCode results were right: grade honesty 2/2.
