@@ -1,0 +1,10 @@
+{
+ "tests/config/test_config.py::test_can_read_toml_env_variable": "passed",
+ "tests/config/test_config.py::test_short_verbose": "failed",
+ "tests/config/test_config.py::test_unknown_confidence": "passed",
+ "tests/config/test_config.py::test_unknown_message_id": "passed",
+ "tests/config/test_config.py::test_unknown_option_name": "passed",
+ "tests/config/test_config.py::test_unknown_py_version": "passed",
+ "tests/config/test_config.py::test_unknown_short_option_name": "passed",
+ "tests/config/test_config.py::test_unknown_yes_no": "passed"
+}

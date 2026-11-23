@@ -1,0 +1,83 @@
+.F.......F.............................................................. [ 62%]
+.........................F......F....F......                             [100%]
+=================================== FAILURES ===================================
+_______________________________ test_latex_basic _______________________________
+sympy/printing/tests/test_latex.py:66: in test_latex_basic
+    assert latex(3*x**2*y, mul_symbol='\\,') == r"3\,x^{2}\,y"
+sympy/printing/latex.py:2203: in latex
+    return LatexPrinter(settings).doprint(expr)
+sympy/printing/latex.py:160: in __init__
+    mul_symbol_table[self._settings['mul_symbol']]
+E   KeyError: '\\,'
+__________________________ test_latex_symbols_failing __________________________
+sympy/printing/tests/test_latex.py:236: in test_latex_symbols_failing
+    assert latex(
+E   AssertionError: assert '\\mathrm{False}' == '\\rho \\math...\mathrm{mass}'
+E     
+E     - \rho \mathrm{volume} = \mathrm{mass}
+E     + \mathrm{False}
+
+During handling of the above exception, another exception occurred:
+sympy/utilities/pytest.py:121: in wrapper
+    raise XFail(get_function_name(func))
+E   sympy.utilities.pytest.XFail: test_latex_symbols_failing
+__________________ test_builtin_without_args_mismatched_names __________________
+sympy/printing/tests/test_latex.py:1564: in test_builtin_without_args_mismatched_names
+    assert latex(CosineTransform) == r'\mathcal{COS}'
+E   AssertionError: assert '\\operatorna...ineTransform}' == '\\mathcal{COS}'
+E     
+E     - \mathcal{COS}
+E     + \operatorname{CosineTransform}
+
+During handling of the above exception, another exception occurred:
+sympy/utilities/pytest.py:121: in wrapper
+    raise XFail(get_function_name(func))
+E   sympy.utilities.pytest.XFail: test_builtin_without_args_mismatched_names
+_______________________________ test_issue_8470 ________________________________
+sympy/printing/tests/test_latex.py:1613: in test_issue_8470
+    e = parse_expr("-B*A", evaluate=False)
+sympy/parsing/sympy_parser.py:892: in parse_expr
+    code = compile(evaluateFalse(code), '<string>', 'eval')
+E   ValueError: Name node can't be used with 'False' constant
+_______________________________ test_issue_13559 _______________________________
+sympy/printing/tests/test_latex.py:1646: in test_issue_13559
+    expr = parse_expr('5/1', evaluate=False)
+sympy/parsing/sympy_parser.py:892: in parse_expr
+    code = compile(evaluateFalse(code), '<string>', 'eval')
+E   ValueError: Name node can't be used with 'False' constant
+=============================== warnings summary ===============================
+sympy/core/basic.py:3
+  /tmp/benchy-swe-eval-wl427135/t/sympy/core/basic.py:3: DeprecationWarning: Using or importing the ABCs from 'collections' instead of from 'collections.abc' is deprecated since Python 3.3, and in 3.10 it will stop working
+    from collections import Mapping, defaultdict
+
+sympy/core/containers.py:271
+  /tmp/benchy-swe-eval-wl427135/t/sympy/core/containers.py:271: DeprecationWarning: Using or importing the ABCs from 'collections' instead of from 'collections.abc' is deprecated since Python 3.3, and in 3.10 it will stop working
+    class OrderedSet(collections.MutableSet):
+
+sympy/solvers/diophantine.py:3188
+  /tmp/benchy-swe-eval-wl427135/t/sympy/solvers/diophantine.py:3188: SyntaxWarning: "is" with a literal. Did you mean "=="?
+    if feasible is 1:  # it's prime and k == 2
+
+sympy/plotting/plot.py:28
+  /tmp/benchy-swe-eval-wl427135/t/sympy/plotting/plot.py:28: DeprecationWarning: Using or importing the ABCs from 'collections' instead of from 'collections.abc' is deprecated since Python 3.3, and in 3.10 it will stop working
+    from collections import Callable
+
+sympy/vector/coordsysrect.py:171
+  /tmp/benchy-swe-eval-wl427135/t/sympy/vector/coordsysrect.py:171: SyntaxWarning: "is" with a literal. Did you mean "=="?
+    if transformation.name is 'spherical':
+
+sympy/vector/coordsysrect.py:173
+  /tmp/benchy-swe-eval-wl427135/t/sympy/vector/coordsysrect.py:173: SyntaxWarning: "is" with a literal. Did you mean "=="?
+    elif transformation.name is 'cylindrical':
+
+sympy/printing/tests/test_latex.py::test_latex_indexed
+  /tmp/benchy-swe-eval-wl427135/t/sympy/tensor/indexed.py:155: DeprecationWarning: Using or importing the ABCs from 'collections' instead of from 'collections.abc' is deprecated since Python 3.3, and in 3.10 it will stop working
+    if isinstance(base, (NDimArray, collections.Iterable, Tuple, MatrixBase)) and all([i.is_number for i in args]):
+
+sympy/printing/tests/test_latex.py::test_PolynomialRingBase
+  /tmp/benchy-swe-eval-wl427135/t/sympy/polys/agca/modules.py:351: SyntaxWarning: "is" with a literal. Did you mean "=="?
+    elif elem is 0:
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+                                DO *NOT* COMMIT!                                
+5 failed, 111 passed, 8 warnings in 1.09s

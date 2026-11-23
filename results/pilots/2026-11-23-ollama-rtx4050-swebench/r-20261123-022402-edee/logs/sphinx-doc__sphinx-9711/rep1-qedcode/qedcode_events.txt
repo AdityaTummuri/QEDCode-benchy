@@ -1,0 +1,38 @@
+[stage] Taking a snapshot of your project...
+[stage] Finding files ...... sphinx/extension.py, sphinx/versioning.py
+[log] Added sphinx/application.py, the best search match the locator did not pick.
+[stage] Running all your tests to see what already passes...
+[stage] Writing a test that shows the problem...
+[stage] Writing a test that shows the problem ... done (it fails now)
+[stage] Try 1: asking the model (temperature 0.2)...
+[check] c1 · apply: Edits applied to sphinx/extension.py.
+[check] c1 · parse: 2 changed file(s) parse.
+[check] c1 · scope: 2 file(s), 99 changed line(s), all within scope.
+[check] c1 · risk: No risky patterns in the new code.
+[check] c1 · lint: No new serious lint errors in 2 file(s).
+[check] c1 · fbpa: The new test does not pass with the change. 3 of 3 tests failed; first: tests.test_qed_needs_extensions_checks_versions_using::test_needs_extensions_version_comparison
+[candidate] c1: rejected at fbpa
+[stage] Try 2: asking the model (temperature 0.7)...
+[check] c2 · apply: Edits applied to sphinx/extension.py.
+[check] c2 · parse: 2 changed file(s) parse.
+[check] c2 · scope: 2 file(s), 98 changed line(s), all within scope.
+[check] c2 · risk: No risky patterns in the new code.
+[check] c2 · lint: No new serious lint errors in 2 file(s).
+[check] c2 · fbpa: The new test does not pass with the change. 3 of 3 tests failed; first: tests.test_qed_needs_extensions_checks_versions_using::test_needs_extensions_version_comparison
+[candidate] c2: rejected at fbpa
+[stage] Try 3: asking the model (temperature 0.9)...
+[check] c3 · apply: Edits applied to sphinx/extension.py.
+[check] c3 · parse: 2 changed file(s) parse.
+[check] c3 · scope: 2 file(s), 102 changed line(s), all within scope.
+[check] c3 · risk: No risky patterns in the new code.
+[check] c3 · lint: No new serious lint errors in 2 file(s).
+[check] c3 · fbpa: The new test does not pass with the change. 3 of 3 tests failed; first: tests.test_qed_needs_extensions_checks_versions_using::test_needs_extensions_version_comparison
+[candidate] c3: rejected at fbpa
+[stage] Repairing c2 (it failed at fbpa)...
+[check] r1 · apply: Edits applied to tests/test_qed_needs_extensions_checks_versions_using.py.
+[check] r1 · parse: 2 changed file(s) parse.
+[check] r1 · scope: 2 file(s), 102 changed line(s), all within scope.
+[check] r1 · risk: No risky patterns in the new code.
+[check] r1 · lint: No new serious lint errors in 2 file(s).
+[check] r1 · fbpa: The new test does not pass with the change. 1 of 3 tests failed; first: tests.test_qed_needs_extensions_checks_versions_using::test_needs_extensions_version_comparison
+[candidate] r1: rejected at fbpa

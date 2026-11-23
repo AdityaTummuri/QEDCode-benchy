@@ -1,0 +1,84 @@
+...................F.F........................F......................... [ 84%]
+..........F..                                                            [100%]
+=================================== FAILURES ===================================
+______________ test_evenness_in_ternary_integer_product_with_odd _______________
+sympy/core/tests/test_arit.py:461: in test_evenness_in_ternary_integer_product_with_odd
+    assert (y*x*(x + k)).is_even is True
+E   assert None is True
+E    +  where None = ((y * x) * (x + k)).is_even
+
+During handling of the above exception, another exception occurred:
+sympy/utilities/pytest.py:129: in wrapper
+    raise XFail(get_function_name(func))
+E   sympy.utilities.pytest.XFail: test_evenness_in_ternary_integer_product_with_odd
+_______________ test_oddness_in_ternary_integer_product_with_odd _______________
+sympy/core/tests/test_arit.py:480: in test_oddness_in_ternary_integer_product_with_odd
+    assert (y*x*(x + k)).is_odd is False
+E   assert None is False
+E    +  where None = ((y * x) * (x + k)).is_odd
+
+During handling of the above exception, another exception occurred:
+sympy/utilities/pytest.py:129: in wrapper
+    raise XFail(get_function_name(func))
+E   sympy.utilities.pytest.XFail: test_oddness_in_ternary_integer_product_with_odd
+_______________________________ test_issue_3531 ________________________________
+sympy/core/tests/test_arit.py:1351: in test_issue_3531
+    assert sympify(1)/MightyNumeric((1, 2)) == "something"
+sympy/core/decorators.py:91: in __sympifyit_wrapper
+    return func(a, b)
+sympy/core/numbers.py:1625: in __div__
+    return Number.__div__(self, other)
+sympy/core/decorators.py:91: in __sympifyit_wrapper
+    return func(a, b)
+sympy/core/numbers.py:673: in __div__
+    return AtomicExpr.__div__(self, other)
+sympy/core/decorators.py:91: in __sympifyit_wrapper
+    return func(a, b)
+sympy/core/decorators.py:132: in binary_op_wrapper
+    return func(self, other)
+sympy/core/expr.py:188: in __div__
+    return Mul(self, Pow(other, S.NegativeOne))
+sympy/core/cache.py:94: in wrapper
+    retval = cfunc(*args, **kwargs)
+sympy/core/power.py:286: in __new__
+    obj = b._eval_power(e)
+E   AttributeError: 'Tuple' object has no attribute '_eval_power'
+
+During handling of the above exception, another exception occurred:
+sympy/utilities/pytest.py:129: in wrapper
+    raise XFail(get_function_name(func))
+E   sympy.utilities.pytest.XFail: test_issue_3531
+_______________________________ test_Add_is_zero _______________________________
+sympy/core/tests/test_arit.py:1991: in test_Add_is_zero
+    assert e.is_zero is None
+E   assert False is None
+E    +  where False = -2*I + (1 + I)**2.is_zero
+=============================== warnings summary ===============================
+sympy/solvers/diophantine.py:3188
+  /tmp/benchy-swe-eval-dvhyzuqc/t/sympy/solvers/diophantine.py:3188: SyntaxWarning: "is" with a literal. Did you mean "=="?
+    if feasible is 1:  # it's prime and k == 2
+
+sympy/plotting/plot.py:520
+  /tmp/benchy-swe-eval-dvhyzuqc/t/sympy/plotting/plot.py:520: SyntaxWarning: "is" with a literal. Did you mean "=="?
+    if self.xscale is 'log':
+
+sympy/plotting/plot.py:540
+  /tmp/benchy-swe-eval-dvhyzuqc/t/sympy/plotting/plot.py:540: SyntaxWarning: "is" with a literal. Did you mean "=="?
+    if self.xscale is 'log':
+
+sympy/plotting/plot.py:553
+  /tmp/benchy-swe-eval-dvhyzuqc/t/sympy/plotting/plot.py:553: SyntaxWarning: "is" with a literal. Did you mean "=="?
+    if self.xscale is 'log':
+
+sympy/plotting/plot.py:560
+  /tmp/benchy-swe-eval-dvhyzuqc/t/sympy/plotting/plot.py:560: SyntaxWarning: "is" with a literal. Did you mean "=="?
+    if self.xscale is 'log':
+
+../../..~/.qedcode/benchy/cache/envs/sympy__sympy-73b3f90093-668cd983/lib/python3.9/site-packages/_pytest/config/__init__.py:1474
+  ~/.qedcode/benchy/cache/envs/sympy__sympy-73b3f90093-668cd983/lib/python3.9/site-packages/_pytest/config/__init__.py:1474: PytestConfigWarning: Unknown config option: doctestplus
+  
+    self._warn_or_fail_if_strict(f"Unknown config option: {key}\n")
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+                                DO *NOT* COMMIT!                                
+4 failed, 81 passed, 6 warnings in 2.16s

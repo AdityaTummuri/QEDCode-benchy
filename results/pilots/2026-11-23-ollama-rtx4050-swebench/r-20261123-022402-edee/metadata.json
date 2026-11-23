@@ -1,0 +1,69 @@
+{
+  "run_id": "r-20261123-022402-edee",
+  "started_at": "2026-11-23T02:24:02+00:00",
+  "finished_at": "2026-11-23T02:59:06+00:00",
+  "complete": true,
+  "is_real_measurement": true,
+  "mode": "model",
+  "stopped_reason": "",
+  "benchy_version": "0.1.0",
+  "qedcode_version": "0.1.0",
+  "suite": {
+    "name": "swebench-verified-py",
+    "version": "1.0.0",
+    "kind": "swebench",
+    "fingerprint_sha256": "bce7613e19c5abf3029f900aed86ed0d41d667cf597b55054a89325e82cc3371",
+    "tasks": [
+      "sympy__sympy-14711",
+      "sympy__sympy-15875",
+      "sphinx-doc__sphinx-9230",
+      "sphinx-doc__sphinx-9711",
+      "pydata__xarray-4629",
+      "sympy__sympy-13798",
+      "sympy__sympy-18211",
+      "sphinx-doc__sphinx-8056",
+      "sphinx-doc__sphinx-9673",
+      "pylint-dev__pylint-6386"
+    ],
+    "skipped_not_valid_here": []
+  },
+  "model": {
+    "backend": "ollama",
+    "name": "qwen3.5:4b"
+  },
+  "controls": {
+    "conditions": [
+      "baseline",
+      "qedcode"
+    ],
+    "repetitions": 1,
+    "time_limit_s_per_condition": 900.0,
+    "order_seed": 0,
+    "qedcode_speed": "normal",
+    "qedcode_apply_policy": "any",
+    "qedcode_memory": "off",
+    "qedcode_helper_model": "off",
+    "baseline_temperature": 0.2,
+    "baseline_max_tokens": 4096,
+    "baseline_context": "bm25-13k-tokens",
+    "same_model_client_for_both": true,
+    "price_per_mtok_usd": null
+  },
+  "evaluator": {
+    "name": "benchy-swebench",
+    "version": "1"
+  },
+  "environment": {
+    "os": "Linux",
+    "arch": "x86_64",
+    "python": "3.12"
+  },
+  "limitations": [
+    "Small sample (10 paired attempts). Treat differences as indicative only; the confidence intervals and the McNemar p-value show how uncertain they are.",
+    "Token counts are estimates (characters / 3.5), not counts from the model's tokenizer.",
+    "SWE-bench tasks run in environments rebuilt without Docker; results are not comparable with the official SWE-bench leaderboard (a subset of repositories, a retrieval baseline instead of an agent).",
+    "The baseline saw the issue plus retrieved files (bm25-13k-tokens) and answered with one patch. Other harnesses would be different baselines.",
+    "SWE-bench Verified is public, so recent models may have seen these issues and fixes in training.",
+    "Times include model latency on this machine and are only comparable within this run."
+  ]
+}

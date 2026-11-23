@@ -1,0 +1,51 @@
+................F........                                                [100%]
+=================================== FAILURES ===================================
+_________________ test_autodoc_typehints_description_no_undoc __________________
+tests/test_ext_autodoc_configs.py:858: in test_autodoc_typehints_description_no_undoc
+    assert ('target.typehints.incr(a, b=1)\n'
+E   AssertionError: assert 'target.typehints.incr(a, b=1)\n\ntarget.typehints.decr(a, b=1)\n\n   Returns:\n      decremented number\n\n   Return ...*Union**[**int**, **str**]**]*) -- arg\n\n   Returns:\n      another tuple\n\n   Return type:\n      Tuple[int, int]\n' in 'target.typehints.incr(a, b=1)\n\ntarget.typehints.decr(a, b=1)\n\n   Returns:\n      decremented number\n\ntarget.typ...*Union**[**int**, **str**]**]*) -- arg\n\n   Returns:\n      another tuple\n\n   Return type:\n      Tuple[int, int]\n'
+--------------------------- Captured stdout teardown ---------------------------
+# testroot: root
+# builder: text
+# srcdir: <tmp>/pytest-of-user/pytest-148/ext-autodoc
+# outdir: <tmp>/pytest-of-user/pytest-148/ext-autodoc/_build/text
+# status: 
+[01mRunning Sphinx v4.3.0+[39;49;00m
+[01mloading pickled environment... [39;49;00mdone
+[01mbuilding [mo]: [39;49;00mtargets for 0 po files that are out of date
+[01mbuilding [text]: [39;49;00mtargets for 1 source files that are out of date
+[01mupdating environment: [39;49;00m[config changed ('autodoc_typehints_description_target')] 1 added, 0 changed, 0 removed
+[01mreading sources... [39;49;00m[100%] [35mindex[39;49;00m                                                
+[01mlooking for now-outdated files... [39;49;00mnone found
+[01mpickling environment... [39;49;00mdone
+[01mchecking consistency... [39;49;00mdone
+[01mpreparing documents... [39;49;00mdone
+[01mwriting output... [39;49;00m[100%] [32mindex[39;49;00m                                                 
+[01mbuild succeeded.[39;49;00m
+
+The text files are in ../../pytest-of-user/pytest-148/ext-autodoc/_build/text.
+
+# warning: 
+
+=============================== warnings summary ===============================
+sphinx/util/docutils.py:44
+  /tmp/benchy-swe-eval-cy4xkxjb/t/sphinx/util/docutils.py:44: DeprecationWarning: distutils Version classes are deprecated. Use packaging.version instead.
+    __version_info__ = tuple(LooseVersion(docutils.__version__).version)
+
+sphinx/highlighting.py:67
+  /tmp/benchy-swe-eval-cy4xkxjb/t/sphinx/highlighting.py:67: DeprecationWarning: distutils Version classes are deprecated. Use packaging.version instead.
+    if tuple(LooseVersion(pygmentsversion).version) <= (2, 7, 4):
+
+sphinx/registry.py:24
+  /tmp/benchy-swe-eval-cy4xkxjb/t/sphinx/registry.py:24: DeprecationWarning: pkg_resources is deprecated as an API. See https://setuptools.pypa.io/en/latest/pkg_resources.html
+    from pkg_resources import iter_entry_points
+
+../../..~/.qedcode/benchy/cache/envs/sphinx-doc__sphinx-6c6cc8a6f5-7d8a1c84/lib/python3.9/site-packages/pkg_resources/__init__.py:2832
+../../..~/.qedcode/benchy/cache/envs/sphinx-doc__sphinx-6c6cc8a6f5-7d8a1c84/lib/python3.9/site-packages/pkg_resources/__init__.py:2832
+../../..~/.qedcode/benchy/cache/envs/sphinx-doc__sphinx-6c6cc8a6f5-7d8a1c84/lib/python3.9/site-packages/pkg_resources/__init__.py:2832
+  ~/.qedcode/benchy/cache/envs/sphinx-doc__sphinx-6c6cc8a6f5-7d8a1c84/lib/python3.9/site-packages/pkg_resources/__init__.py:2832: DeprecationWarning: Deprecated call to `pkg_resources.declare_namespace('sphinxcontrib')`.
+  Implementing implicit namespace packages (as specified in PEP 420) is preferred to `pkg_resources.declare_namespace`. See https://setuptools.pypa.io/en/latest/references/keywords.html#keyword-namespace-packages
+    declare_namespace(pkg)
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+1 failed, 24 passed, 6 warnings in 0.98s

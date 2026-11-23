@@ -1,0 +1,6 @@
+{
+ "sympy/physics/vector/tests/test_vector.py::test_Vector": "passed",
+ "sympy/physics/vector/tests/test_vector.py::test_Vector_diffs": "passed",
+ "sympy/physics/vector/tests/test_vector.py::test_vector_simplify": "passed",
+ "sympy/physics/vector/tests/test_vector.py::test_vector_var_in_dcm": "passed"
+}

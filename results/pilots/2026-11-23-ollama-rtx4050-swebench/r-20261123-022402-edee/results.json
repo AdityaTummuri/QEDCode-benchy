@@ -1,0 +1,885 @@
+{
+  "schema_version": 1,
+  "run_id": "r-20261123-022402-edee",
+  "metadata": {
+    "run_id": "r-20261123-022402-edee",
+    "started_at": "2026-11-23T02:24:02+00:00",
+    "finished_at": "2026-11-23T02:59:06+00:00",
+    "complete": true,
+    "is_real_measurement": true,
+    "mode": "model",
+    "stopped_reason": "",
+    "benchy_version": "0.1.0",
+    "qedcode_version": "0.1.0",
+    "suite": {
+      "name": "swebench-verified-py",
+      "version": "1.0.0",
+      "kind": "swebench",
+      "fingerprint_sha256": "bce7613e19c5abf3029f900aed86ed0d41d667cf597b55054a89325e82cc3371",
+      "tasks": [
+        "sympy__sympy-14711",
+        "sympy__sympy-15875",
+        "sphinx-doc__sphinx-9230",
+        "sphinx-doc__sphinx-9711",
+        "pydata__xarray-4629",
+        "sympy__sympy-13798",
+        "sympy__sympy-18211",
+        "sphinx-doc__sphinx-8056",
+        "sphinx-doc__sphinx-9673",
+        "pylint-dev__pylint-6386"
+      ],
+      "skipped_not_valid_here": []
+    },
+    "model": {
+      "backend": "ollama",
+      "name": "qwen3.5:4b"
+    },
+    "controls": {
+      "conditions": [
+        "baseline",
+        "qedcode"
+      ],
+      "repetitions": 1,
+      "time_limit_s_per_condition": 900.0,
+      "order_seed": 0,
+      "qedcode_speed": "normal",
+      "qedcode_apply_policy": "any",
+      "qedcode_memory": "off",
+      "qedcode_helper_model": "off",
+      "baseline_temperature": 0.2,
+      "baseline_max_tokens": 4096,
+      "baseline_context": "bm25-13k-tokens",
+      "same_model_client_for_both": true,
+      "price_per_mtok_usd": null
+    },
+    "evaluator": {
+      "name": "benchy-swebench",
+      "version": "1"
+    },
+    "environment": {
+      "os": "Linux",
+      "arch": "x86_64",
+      "python": "3.12"
+    },
+    "limitations": [
+      "Small sample (10 paired attempts). Treat differences as indicative only; the confidence intervals and the McNemar p-value show how uncertain they are.",
+      "Token counts are estimates (characters / 3.5), not counts from the model's tokenizer.",
+      "SWE-bench tasks run in environments rebuilt without Docker; results are not comparable with the official SWE-bench leaderboard (a subset of repositories, a retrieval baseline instead of an agent).",
+      "The baseline saw the issue plus retrieved files (bm25-13k-tokens) and answered with one patch. Other harnesses would be different baselines.",
+      "SWE-bench Verified is public, so recent models may have seen these issues and fixes in training.",
+      "Times include model latency on this machine and are only comparable within this run."
+    ]
+  },
+  "summary": {
+    "per_condition": {
+      "baseline": {
+        "attempts": 10,
+        "resolved": 0,
+        "resolution_rate": 0.0,
+        "resolution_ci95": [
+          0.0,
+          0.2775
+        ],
+        "regressions": 0,
+        "regression_rate": 0.0,
+        "timeouts": 0,
+        "errors": 0,
+        "no_change": 8,
+        "median_seconds": 9.5,
+        "median_seconds_resolved": null,
+        "model_calls": 10,
+        "tokens_est_total": 139667,
+        "tokens_est_median": 13562.5,
+        "cost_usd_est": null
+      },
+      "qedcode": {
+        "attempts": 10,
+        "resolved": 2,
+        "resolution_rate": 0.2,
+        "resolution_ci95": [
+          0.0567,
+          0.5098
+        ],
+        "regressions": 0,
+        "regression_rate": 0.0,
+        "timeouts": 0,
+        "errors": 0,
+        "no_change": 8,
+        "median_seconds": 116.45,
+        "median_seconds_resolved": 114.69,
+        "model_calls": 67,
+        "tokens_est_total": 521592,
+        "tokens_est_median": 50017.0,
+        "cost_usd_est": null
+      }
+    },
+    "paired": {
+      "pairs": 10,
+      "both_resolved": 0,
+      "only_baseline": 0,
+      "only_qedcode": 2,
+      "neither": 8,
+      "difference": 0.2,
+      "mcnemar_p": 0.5
+    },
+    "per_task": {
+      "sympy__sympy-14711": {
+        "baseline": {
+          "resolved": 0,
+          "attempts": 1
+        },
+        "qedcode": {
+          "resolved": 1,
+          "attempts": 1
+        }
+      },
+      "sympy__sympy-15875": {
+        "baseline": {
+          "resolved": 0,
+          "attempts": 1
+        },
+        "qedcode": {
+          "resolved": 0,
+          "attempts": 1
+        }
+      },
+      "sphinx-doc__sphinx-9230": {
+        "baseline": {
+          "resolved": 0,
+          "attempts": 1
+        },
+        "qedcode": {
+          "resolved": 0,
+          "attempts": 1
+        }
+      },
+      "sphinx-doc__sphinx-9711": {
+        "baseline": {
+          "resolved": 0,
+          "attempts": 1
+        },
+        "qedcode": {
+          "resolved": 0,
+          "attempts": 1
+        }
+      },
+      "pydata__xarray-4629": {
+        "baseline": {
+          "resolved": 0,
+          "attempts": 1
+        },
+        "qedcode": {
+          "resolved": 1,
+          "attempts": 1
+        }
+      },
+      "sympy__sympy-13798": {
+        "baseline": {
+          "resolved": 0,
+          "attempts": 1
+        },
+        "qedcode": {
+          "resolved": 0,
+          "attempts": 1
+        }
+      },
+      "sympy__sympy-18211": {
+        "baseline": {
+          "resolved": 0,
+          "attempts": 1
+        },
+        "qedcode": {
+          "resolved": 0,
+          "attempts": 1
+        }
+      },
+      "sphinx-doc__sphinx-8056": {
+        "baseline": {
+          "resolved": 0,
+          "attempts": 1
+        },
+        "qedcode": {
+          "resolved": 0,
+          "attempts": 1
+        }
+      },
+      "sphinx-doc__sphinx-9673": {
+        "baseline": {
+          "resolved": 0,
+          "attempts": 1
+        },
+        "qedcode": {
+          "resolved": 0,
+          "attempts": 1
+        }
+      },
+      "pylint-dev__pylint-6386": {
+        "baseline": {
+          "resolved": 0,
+          "attempts": 1
+        },
+        "qedcode": {
+          "resolved": 0,
+          "attempts": 1
+        }
+      }
+    },
+    "qedcode_grades": {
+      "B": {
+        "attempts": 1,
+        "resolved": 1
+      },
+      "none": {
+        "attempts": 8,
+        "resolved": 0
+      },
+      "A": {
+        "attempts": 1,
+        "resolved": 1
+      }
+    },
+    "agent": null
+  },
+  "attempts": [
+    {
+      "task_id": "sympy__sympy-14711",
+      "rep": 1,
+      "condition": "baseline",
+      "order": 0,
+      "snapshot_commit": "e9eb6a1cce71a5faa67520fdd3356dedbd597661",
+      "status": "unparsable",
+      "message": "the patch does not apply: error: patch failed: sympy/physics/vector/vector.py:58\nerror: sympy/physics/vector/vector.py: patch does not apply",
+      "seconds": 13.68,
+      "model_calls": 1,
+      "prompt_tokens_est": 13414,
+      "completion_tokens_est": 120,
+      "tokens_est": 13534,
+      "cost_usd_est": null,
+      "resolved": false,
+      "regression": false,
+      "hidden_passed": 0,
+      "hidden_total": 1,
+      "visible_passed": 2,
+      "visible_total": 2,
+      "regressed_tests": [],
+      "changed_files": [],
+      "discarded_test_changes": [],
+      "eval_error": "",
+      "files_written": [],
+      "rejected_paths": [],
+      "baseline_context_files": [
+        "sympy/physics/vector/dyadic.py",
+        "sympy/physics/mechanics/functions.py",
+        "examples/advanced/hydrogen.py",
+        "sympy/galgebra.py",
+        "sympy/parsing/__init__.py"
+      ]
+    },
+    {
+      "task_id": "sympy__sympy-14711",
+      "rep": 1,
+      "condition": "qedcode",
+      "order": 1,
+      "snapshot_commit": "e9eb6a1cce71a5faa67520fdd3356dedbd597661",
+      "status": "done",
+      "message": "Grade B \u00b7 repro test failed before, passes now \u00b7 25/25 tests pass \u00b7 proof strength 4/4 \u00b7 lint clean \u00b7 no protected files changed",
+      "seconds": 162.27,
+      "model_calls": 5,
+      "prompt_tokens_est": 30203,
+      "completion_tokens_est": 669,
+      "tokens_est": 30872,
+      "cost_usd_est": null,
+      "resolved": true,
+      "regression": false,
+      "hidden_passed": 1,
+      "hidden_total": 1,
+      "visible_passed": 2,
+      "visible_total": 2,
+      "regressed_tests": [],
+      "changed_files": [
+        "sympy/physics/vector/vector.py"
+      ],
+      "discarded_test_changes": [
+        "sympy/polys/tests/test_qed_vector_add_0_error_python.py"
+      ],
+      "eval_error": "",
+      "qed_status": "done",
+      "qed_grade": "B",
+      "qed_applied": true,
+      "qed_candidates": 1
+    },
+    {
+      "task_id": "sympy__sympy-15875",
+      "rep": 1,
+      "condition": "qedcode",
+      "order": 0,
+      "snapshot_commit": "51f16d79a4ef433fece6a44f7bdb7acb9026463f",
+      "status": "no_change",
+      "message": "No fix passed the checks. The closest attempt (c1) failed at apply: EDIT 1 (search_replace path=sympy/core/expr.py): SEARCH text not found.",
+      "seconds": 403.71,
+      "model_calls": 8,
+      "prompt_tokens_est": 34361,
+      "completion_tokens_est": 2270,
+      "tokens_est": 36631,
+      "cost_usd_est": null,
+      "resolved": false,
+      "regression": false,
+      "hidden_passed": 0,
+      "hidden_total": 1,
+      "visible_passed": 80,
+      "visible_total": 80,
+      "regressed_tests": [],
+      "changed_files": [],
+      "discarded_test_changes": [],
+      "eval_error": "",
+      "qed_status": "no_fix",
+      "qed_grade": null,
+      "qed_applied": false,
+      "qed_candidates": 4
+    },
+    {
+      "task_id": "sympy__sympy-15875",
+      "rep": 1,
+      "condition": "baseline",
+      "order": 1,
+      "snapshot_commit": "51f16d79a4ef433fece6a44f7bdb7acb9026463f",
+      "status": "unparsable",
+      "message": "the reply contained no unified diff",
+      "seconds": 10.49,
+      "model_calls": 1,
+      "prompt_tokens_est": 13271,
+      "completion_tokens_est": 156,
+      "tokens_est": 13427,
+      "cost_usd_est": null,
+      "resolved": false,
+      "regression": false,
+      "hidden_passed": 0,
+      "hidden_total": 1,
+      "visible_passed": 80,
+      "visible_total": 80,
+      "regressed_tests": [],
+      "changed_files": [],
+      "discarded_test_changes": [],
+      "eval_error": "",
+      "files_written": [],
+      "rejected_paths": [],
+      "baseline_context_files": [
+        "sympy/ntheory/generate.py",
+        "sympy/core/assumptions.py",
+        "sympy/external/__init__.py",
+        "sympy/core/benchmarks/bench_expand.py"
+      ]
+    },
+    {
+      "task_id": "sphinx-doc__sphinx-9230",
+      "rep": 1,
+      "condition": "baseline",
+      "order": 0,
+      "snapshot_commit": "241147ba873ee635c86df558ffea523f2c32e7bc",
+      "status": "unparsable",
+      "message": "the reply contained no unified diff",
+      "seconds": 7.94,
+      "model_calls": 1,
+      "prompt_tokens_est": 13456,
+      "completion_tokens_est": 113,
+      "tokens_est": 13569,
+      "cost_usd_est": null,
+      "resolved": false,
+      "regression": false,
+      "hidden_passed": 0,
+      "hidden_total": 1,
+      "visible_passed": 44,
+      "visible_total": 44,
+      "regressed_tests": [],
+      "changed_files": [],
+      "discarded_test_changes": [],
+      "eval_error": "",
+      "files_written": [],
+      "rejected_paths": [],
+      "baseline_context_files": [
+        "sphinx/cmd/quickstart.py",
+        "setup.py",
+        "sphinx/util/requests.py",
+        "sphinx/util/images.py",
+        "sphinx/util/png.py"
+      ]
+    },
+    {
+      "task_id": "sphinx-doc__sphinx-9230",
+      "rep": 1,
+      "condition": "qedcode",
+      "order": 1,
+      "snapshot_commit": "241147ba873ee635c86df558ffea523f2c32e7bc",
+      "status": "no_change",
+      "message": "No fix passed the checks. The closest attempt (c1) failed at fbpa: The new test does not pass with the change. 2 of 2 tests failed; first: tests.test_qed_doc_rendering_is_incorrect_when::test_dict_type_rendering",
+      "seconds": 67.3,
+      "model_calls": 7,
+      "prompt_tokens_est": 54218,
+      "completion_tokens_est": 2287,
+      "tokens_est": 56505,
+      "cost_usd_est": null,
+      "resolved": false,
+      "regression": false,
+      "hidden_passed": 0,
+      "hidden_total": 1,
+      "visible_passed": 44,
+      "visible_total": 44,
+      "regressed_tests": [],
+      "changed_files": [],
+      "discarded_test_changes": [],
+      "eval_error": "",
+      "qed_status": "no_fix",
+      "qed_grade": null,
+      "qed_applied": false,
+      "qed_candidates": 4
+    },
+    {
+      "task_id": "sphinx-doc__sphinx-9711",
+      "rep": 1,
+      "condition": "qedcode",
+      "order": 0,
+      "snapshot_commit": "386f43571599448bcc3a1d2c9938911136423a89",
+      "status": "no_change",
+      "message": "No fix passed the checks. The closest attempt (c2) failed at fbpa: The new test does not pass with the change. 3 of 3 tests failed; first: tests.test_qed_needs_extensions_checks_versions_using::test_needs_extensions_version_comparison",
+      "seconds": 75.3,
+      "model_calls": 7,
+      "prompt_tokens_est": 35899,
+      "completion_tokens_est": 3763,
+      "tokens_est": 39662,
+      "cost_usd_est": null,
+      "resolved": false,
+      "regression": false,
+      "hidden_passed": 0,
+      "hidden_total": 1,
+      "visible_passed": 0,
+      "visible_total": 0,
+      "regressed_tests": [],
+      "changed_files": [],
+      "discarded_test_changes": [],
+      "eval_error": "",
+      "qed_status": "no_fix",
+      "qed_grade": null,
+      "qed_applied": false,
+      "qed_candidates": 4
+    },
+    {
+      "task_id": "sphinx-doc__sphinx-9711",
+      "rep": 1,
+      "condition": "baseline",
+      "order": 1,
+      "snapshot_commit": "386f43571599448bcc3a1d2c9938911136423a89",
+      "status": "unparsable",
+      "message": "the patch does not apply: error: patch failed: sphinx/extension.py:51\nerror: sphinx/extension.py: patch does not apply",
+      "seconds": 9.15,
+      "model_calls": 1,
+      "prompt_tokens_est": 13521,
+      "completion_tokens_est": 192,
+      "tokens_est": 13713,
+      "cost_usd_est": null,
+      "resolved": false,
+      "regression": false,
+      "hidden_passed": 0,
+      "hidden_total": 1,
+      "visible_passed": 0,
+      "visible_total": 0,
+      "regressed_tests": [],
+      "changed_files": [],
+      "discarded_test_changes": [],
+      "eval_error": "",
+      "files_written": [],
+      "rejected_paths": [],
+      "baseline_context_files": [
+        "sphinx/cmd/quickstart.py",
+        "sphinx/locale/__init__.py",
+        "sphinx/extension.py",
+        "sphinx/search/no.py",
+        "sphinx/util/build_phase.py"
+      ]
+    },
+    {
+      "task_id": "pydata__xarray-4629",
+      "rep": 1,
+      "condition": "baseline",
+      "order": 0,
+      "snapshot_commit": "e3960cfba26a1f68735211418bf19aa73b662119",
+      "status": "unparsable",
+      "message": "the patch does not apply: error: patch failed: xarray/core/merge.py:501\nerror: xarray/core/merge.py: patch does not apply",
+      "seconds": 9.05,
+      "model_calls": 1,
+      "prompt_tokens_est": 13872,
+      "completion_tokens_est": 135,
+      "tokens_est": 14007,
+      "cost_usd_est": null,
+      "resolved": false,
+      "regression": false,
+      "hidden_passed": 0,
+      "hidden_total": 1,
+      "visible_passed": 32,
+      "visible_total": 32,
+      "regressed_tests": [],
+      "changed_files": [],
+      "discarded_test_changes": [],
+      "eval_error": "",
+      "files_written": [],
+      "rejected_paths": [],
+      "baseline_context_files": [
+        "xarray/util/print_versions.py",
+        "xarray/core/combine.py",
+        "xarray/backends/locks.py",
+        "setup.py",
+        "xarray/plot/__init__.py"
+      ]
+    },
+    {
+      "task_id": "pydata__xarray-4629",
+      "rep": 1,
+      "condition": "qedcode",
+      "order": 1,
+      "snapshot_commit": "e3960cfba26a1f68735211418bf19aa73b662119",
+      "status": "done",
+      "message": "Grade A \u00b7 repro test failed before, passes now \u00b7 0/1 tests pass \u00b7 proof strength 0/2 \u00b7 lint clean \u00b7 no protected files changed",
+      "seconds": 67.1,
+      "model_calls": 5,
+      "prompt_tokens_est": 35908,
+      "completion_tokens_est": 758,
+      "tokens_est": 36666,
+      "cost_usd_est": null,
+      "resolved": true,
+      "regression": false,
+      "hidden_passed": 1,
+      "hidden_total": 1,
+      "visible_passed": 32,
+      "visible_total": 32,
+      "regressed_tests": [],
+      "changed_files": [
+        "xarray/core/merge.py"
+      ],
+      "discarded_test_changes": [
+        "xarray/tests/test_qed_merge_combine_attrs_override_does.py"
+      ],
+      "eval_error": "",
+      "qed_status": "done",
+      "qed_grade": "A",
+      "qed_applied": true,
+      "qed_candidates": 1
+    },
+    {
+      "task_id": "sympy__sympy-13798",
+      "rep": 1,
+      "condition": "baseline",
+      "order": 0,
+      "snapshot_commit": "91c25a4485670aa51796ef28438953b208aee50b",
+      "status": "unparsable",
+      "message": "the reply contained no unified diff",
+      "seconds": 9.86,
+      "model_calls": 1,
+      "prompt_tokens_est": 13359,
+      "completion_tokens_est": 145,
+      "tokens_est": 13504,
+      "cost_usd_est": null,
+      "resolved": false,
+      "regression": false,
+      "hidden_passed": 0,
+      "hidden_total": 1,
+      "visible_passed": 102,
+      "visible_total": 102,
+      "regressed_tests": [],
+      "changed_files": [],
+      "discarded_test_changes": [],
+      "eval_error": "",
+      "files_written": [],
+      "rejected_paths": [],
+      "baseline_context_files": [
+        "sympy/utilities/lambdify.py",
+        "isympy.py",
+        "sympy/physics/quantum/innerproduct.py"
+      ]
+    },
+    {
+      "task_id": "sympy__sympy-13798",
+      "rep": 1,
+      "condition": "qedcode",
+      "order": 1,
+      "snapshot_commit": "91c25a4485670aa51796ef28438953b208aee50b",
+      "status": "no_change",
+      "message": "No fix passed the checks. The closest attempt (r1) failed at fbpa: The new test does not pass with the change. 1 of 3 tests failed; first: sympy.polys.tests.test_qed_latex_and_mul_symbol_the::test_latex_default_mul_symbol_unchanged",
+      "seconds": 346.53,
+      "model_calls": 7,
+      "prompt_tokens_est": 68411,
+      "completion_tokens_est": 3725,
+      "tokens_est": 72136,
+      "cost_usd_est": null,
+      "resolved": false,
+      "regression": false,
+      "hidden_passed": 0,
+      "hidden_total": 1,
+      "visible_passed": 102,
+      "visible_total": 102,
+      "regressed_tests": [],
+      "changed_files": [],
+      "discarded_test_changes": [],
+      "eval_error": "",
+      "qed_status": "no_fix",
+      "qed_grade": null,
+      "qed_applied": false,
+      "qed_candidates": 4
+    },
+    {
+      "task_id": "sympy__sympy-18211",
+      "rep": 1,
+      "condition": "baseline",
+      "order": 0,
+      "snapshot_commit": "6bd3de5067f27bffd5b712cc5f28e48a6baaa76c",
+      "status": "unparsable",
+      "message": "the reply contained no unified diff",
+      "seconds": 10.4,
+      "model_calls": 1,
+      "prompt_tokens_est": 13359,
+      "completion_tokens_est": 197,
+      "tokens_est": 13556,
+      "cost_usd_est": null,
+      "resolved": false,
+      "regression": false,
+      "hidden_passed": 0,
+      "hidden_total": 1,
+      "visible_passed": 54,
+      "visible_total": 54,
+      "regressed_tests": [],
+      "changed_files": [],
+      "discarded_test_changes": [],
+      "eval_error": "",
+      "files_written": [],
+      "rejected_paths": [],
+      "baseline_context_files": [
+        "sympy/stats/stochastic_process_types.py",
+        "sympy/sets/conditionset.py",
+        "sympy/parsing/latex/_build_latex_antlr.py",
+        "sympy/parsing/autolev/_antlr/__init__.py",
+        "sympy/release.py"
+      ]
+    },
+    {
+      "task_id": "sympy__sympy-18211",
+      "rep": 1,
+      "condition": "qedcode",
+      "order": 1,
+      "snapshot_commit": "6bd3de5067f27bffd5b712cc5f28e48a6baaa76c",
+      "status": "no_change",
+      "message": "No fix passed the checks. The closest attempt (c2) failed at fbpa: The new test does not pass with the change. 1 of 2 tests failed; first: sympy.polys.tests.test_qed_solveset_raises_notimplementederror_instead_of::test_eq_as_set_returns_conditionset",
+      "seconds": 452.14,
+      "model_calls": 7,
+      "prompt_tokens_est": 41882,
+      "completion_tokens_est": 1647,
+      "tokens_est": 43529,
+      "cost_usd_est": null,
+      "resolved": false,
+      "regression": false,
+      "hidden_passed": 0,
+      "hidden_total": 1,
+      "visible_passed": 54,
+      "visible_total": 54,
+      "regressed_tests": [],
+      "changed_files": [],
+      "discarded_test_changes": [],
+      "eval_error": "",
+      "qed_status": "no_fix",
+      "qed_grade": null,
+      "qed_applied": false,
+      "qed_candidates": 4
+    },
+    {
+      "task_id": "sphinx-doc__sphinx-8056",
+      "rep": 1,
+      "condition": "baseline",
+      "order": 0,
+      "snapshot_commit": "99704861a830f7162206bc1b65105a5d1bf1bc99",
+      "status": "unparsable",
+      "message": "the patch does not apply: error: patch failed: sphinx/ext/napoleon/docstring.py:398\nerror: sphinx/ext/napoleon/docstring.py: patch does not apply",
+      "seconds": 9.05,
+      "model_calls": 1,
+      "prompt_tokens_est": 13562,
+      "completion_tokens_est": 150,
+      "tokens_est": 13712,
+      "cost_usd_est": null,
+      "resolved": false,
+      "regression": false,
+      "hidden_passed": 0,
+      "hidden_total": 1,
+      "visible_passed": 40,
+      "visible_total": 40,
+      "regressed_tests": [],
+      "changed_files": [],
+      "discarded_test_changes": [],
+      "eval_error": "",
+      "files_written": [],
+      "rejected_paths": [],
+      "baseline_context_files": [
+        "sphinx/cmd/quickstart.py",
+        "sphinx/ext/napoleon/__init__.py"
+      ]
+    },
+    {
+      "task_id": "sphinx-doc__sphinx-8056",
+      "rep": 1,
+      "condition": "qedcode",
+      "order": 1,
+      "snapshot_commit": "99704861a830f7162206bc1b65105a5d1bf1bc99",
+      "status": "no_change",
+      "message": "No fix passed the checks. The closest attempt (c3) failed at fbpa: The new test does not pass with the change. 3 of 3 tests failed; first: tests.test_qed_render_error_when_combining_multiple::test_multiple_params_single_line_optional",
+      "seconds": 119.67,
+      "model_calls": 7,
+      "prompt_tokens_est": 80179,
+      "completion_tokens_est": 5722,
+      "tokens_est": 85901,
+      "cost_usd_est": null,
+      "resolved": false,
+      "regression": false,
+      "hidden_passed": 0,
+      "hidden_total": 1,
+      "visible_passed": 40,
+      "visible_total": 40,
+      "regressed_tests": [],
+      "changed_files": [],
+      "discarded_test_changes": [],
+      "eval_error": "",
+      "qed_status": "no_fix",
+      "qed_grade": null,
+      "qed_applied": false,
+      "qed_candidates": 4
+    },
+    {
+      "task_id": "sphinx-doc__sphinx-9673",
+      "rep": 1,
+      "condition": "qedcode",
+      "order": 0,
+      "snapshot_commit": "147b2e3450e0e63ae8c679df020fae3654580632",
+      "status": "no_change",
+      "message": "No fix passed the checks. The closest attempt (r1) failed at fbpa: The new test does not pass with the change. 1 of 1 tests failed; first: tests.test_qed_autodoc_typehints_description_target_not::test_autodoc_typehints_description_target_documented_with_napoleon",
+      "seconds": 113.23,
+      "model_calls": 7,
+      "prompt_tokens_est": 52397,
+      "completion_tokens_est": 5494,
+      "tokens_est": 57891,
+      "cost_usd_est": null,
+      "resolved": false,
+      "regression": false,
+      "hidden_passed": 0,
+      "hidden_total": 1,
+      "visible_passed": 24,
+      "visible_total": 24,
+      "regressed_tests": [],
+      "changed_files": [],
+      "discarded_test_changes": [],
+      "eval_error": "",
+      "qed_status": "no_fix",
+      "qed_grade": null,
+      "qed_applied": false,
+      "qed_candidates": 4
+    },
+    {
+      "task_id": "sphinx-doc__sphinx-9673",
+      "rep": 1,
+      "condition": "baseline",
+      "order": 1,
+      "snapshot_commit": "147b2e3450e0e63ae8c679df020fae3654580632",
+      "status": "done",
+      "message": "",
+      "seconds": 66.24,
+      "model_calls": 1,
+      "prompt_tokens_est": 13524,
+      "completion_tokens_est": 3676,
+      "tokens_est": 17200,
+      "cost_usd_est": null,
+      "resolved": false,
+      "regression": false,
+      "hidden_passed": 0,
+      "hidden_total": 1,
+      "visible_passed": 24,
+      "visible_total": 24,
+      "regressed_tests": [],
+      "changed_files": [
+        "sphinx/ext/napoleon/__init__.py"
+      ],
+      "discarded_test_changes": [],
+      "eval_error": "",
+      "files_written": [
+        "sphinx/ext/napoleon/__init__.py"
+      ],
+      "rejected_paths": [],
+      "baseline_context_files": [
+        "sphinx/ext/napoleon/__init__.py",
+        "sphinx/ext/intersphinx.py",
+        "sphinx/ext/autodoc/type_comment.py",
+        "sphinx/writers/__init__.py"
+      ]
+    },
+    {
+      "task_id": "pylint-dev__pylint-6386",
+      "rep": 1,
+      "condition": "baseline",
+      "order": 0,
+      "snapshot_commit": "399b975f9ac31c2644d9a70dccdd66e57c0b9e0d",
+      "status": "done",
+      "message": "",
+      "seconds": 7.71,
+      "model_calls": 1,
+      "prompt_tokens_est": 13332,
+      "completion_tokens_est": 113,
+      "tokens_est": 13445,
+      "cost_usd_est": null,
+      "resolved": false,
+      "regression": false,
+      "hidden_passed": 0,
+      "hidden_total": 1,
+      "visible_passed": 7,
+      "visible_total": 7,
+      "regressed_tests": [],
+      "changed_files": [
+        "pylint/lint/base_options.py"
+      ],
+      "discarded_test_changes": [],
+      "eval_error": "",
+      "files_written": [
+        "pylint/lint/base_options.py"
+      ],
+      "rejected_paths": [],
+      "baseline_context_files": [
+        "pylint/lint/base_options.py",
+        "pylint/config/option_manager_mixin.py",
+        "pylint/checkers/__init__.py",
+        "pylint/config/help_formatter.py",
+        "script/__init__.py",
+        "setup.py"
+      ]
+    },
+    {
+      "task_id": "pylint-dev__pylint-6386",
+      "rep": 1,
+      "condition": "qedcode",
+      "order": 1,
+      "snapshot_commit": "399b975f9ac31c2644d9a70dccdd66e57c0b9e0d",
+      "status": "no_change",
+      "message": "No fix passed the checks. The closest attempt (r1) failed at fbpa: The new test does not pass with the change. 3 of 3 tests failed; first: tests.test_qed_argument_expected_for_short_verbose::test_verbose_option_short_flag_no_arg",
+      "seconds": 57.24,
+      "model_calls": 7,
+      "prompt_tokens_est": 59663,
+      "completion_tokens_est": 2136,
+      "tokens_est": 61799,
+      "cost_usd_est": null,
+      "resolved": false,
+      "regression": false,
+      "hidden_passed": 0,
+      "hidden_total": 1,
+      "visible_passed": 7,
+      "visible_total": 7,
+      "regressed_tests": [],
+      "changed_files": [],
+      "discarded_test_changes": [],
+      "eval_error": "",
+      "qed_status": "no_fix",
+      "qed_grade": null,
+      "qed_applied": false,
+      "qed_candidates": 4
+    }
+  ]
+}

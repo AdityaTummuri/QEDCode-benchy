@@ -1,0 +1,44 @@
+.......F                                                                 [100%]
+=================================== FAILURES ===================================
+______________________________ test_short_verbose ______________________________
+~/.local/share/uv/python/cpython-3.9-linux-x86_64-gnu/lib/python3.9/argparse.py:1858: in parse_known_args
+    namespace, args = self._parse_known_args(args, namespace)
+~/.local/share/uv/python/cpython-3.9-linux-x86_64-gnu/lib/python3.9/argparse.py:2067: in _parse_known_args
+    start_index = consume_optional(start_index)
+~/.local/share/uv/python/cpython-3.9-linux-x86_64-gnu/lib/python3.9/argparse.py:1997: in consume_optional
+    arg_count = match_argument(action, selected_patterns)
+~/.local/share/uv/python/cpython-3.9-linux-x86_64-gnu/lib/python3.9/argparse.py:2162: in _match_argument
+    raise ArgumentError(action, msg)
+E   argparse.ArgumentError: argument --verbose/-v: expected one argument
+
+During handling of the above exception, another exception occurred:
+tests/config/test_config.py:107: in test_short_verbose
+    Run([str(EMPTY_MODULE), "-v"], exit=False)
+pylint/lint/run.py:135: in __init__
+    args = _config_initialization(
+pylint/config/config_initialization.py:73: in _config_initialization
+    parsed_args_list = linter._parse_command_line_configuration(args_list)
+pylint/config/arguments_manager.py:258: in _parse_command_line_configuration
+    self.config, parsed_args = self._arg_parser.parse_known_args(
+~/.local/share/uv/python/cpython-3.9-linux-x86_64-gnu/lib/python3.9/argparse.py:1861: in parse_known_args
+    self.error(str(err))
+~/.local/share/uv/python/cpython-3.9-linux-x86_64-gnu/lib/python3.9/argparse.py:2582: in error
+    self.exit(2, _('%(prog)s: error: %(message)s\n') % args)
+~/.local/share/uv/python/cpython-3.9-linux-x86_64-gnu/lib/python3.9/argparse.py:2569: in exit
+    _sys.exit(status)
+E   SystemExit: 2
+----------------------------- Captured stderr call -----------------------------
+usage: pylint [options]
+pylint: error: argument --verbose/-v: expected one argument
+=============================== warnings summary ===============================
+../../..~/.qedcode/benchy/cache/envs/pylint-dev__pylint-680edebc68-d58d2938/lib/python3.9/site-packages/astroid/interpreter/_import/util.py:6
+  ~/.qedcode/benchy/cache/envs/pylint-dev__pylint-680edebc68-d58d2938/lib/python3.9/site-packages/astroid/interpreter/_import/util.py:6: DeprecationWarning: pkg_resources is deprecated as an API. See https://setuptools.pypa.io/en/latest/pkg_resources.html
+    import pkg_resources
+
+pylint/checkers/utils.py:455: 146 warnings
+tests/config/test_config.py: 14 warnings
+  /tmp/benchy-swe-eval-qe4xy0pj/t/pylint/checkers/utils.py:455: DeprecationWarning: utils.check_messages will be removed in favour of calling utils.only_required_for_messages in pylint 3.0
+    warnings.warn(
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+1 failed, 7 passed, 161 warnings in 0.26s

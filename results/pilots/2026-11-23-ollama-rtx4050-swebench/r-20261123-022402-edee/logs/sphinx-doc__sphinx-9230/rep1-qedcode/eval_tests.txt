@@ -1,0 +1,77 @@
+lass="Class" py:module="example" refdomain="py" refexplicit="False" refspecific="True" reftarget="Dict" reftype="class"><literal_emphasis>Dict</literal_emphasis></pending_xref><literal_emphasis>[</literal_emphasis><pending_xref py:class="Class" py:module="example" refdomain="py" refexplicit="False" refspecific="True" reftarget="str" reftype="class"><literal_emphasis>str</literal_emphasis></pending_xref><literal_emphasis>,</literal_emphasis>) -- blah blah</paragraph></list_item></bullet_list></field_body></field></field_list></desc_content></desc></document>
+--------------------------- Captured stdout teardown ---------------------------
+# testroot: root
+# builder: html
+# srcdir: <tmp>/pytest-of-user/pytest-120/root
+# outdir: <tmp>/pytest-of-user/pytest-120/root/_build/html
+# status: 
+[01mRunning Sphinx v4.1.0[39;49;00m
+
+# warning: 
+
+=============================== warnings summary ===============================
+sphinx/util/docutils.py:44
+  /tmp/benchy-swe-eval-6disffzz/t/sphinx/util/docutils.py:44: DeprecationWarning: distutils Version classes are deprecated. Use packaging.version instead.
+    __version_info__ = tuple(LooseVersion(docutils.__version__).version)
+
+sphinx/highlighting.py:67
+  /tmp/benchy-swe-eval-6disffzz/t/sphinx/highlighting.py:67: DeprecationWarning: distutils Version classes are deprecated. Use packaging.version instead.
+    if tuple(LooseVersion(pygmentsversion).version) <= (2, 7, 4):
+
+sphinx/registry.py:24
+  /tmp/benchy-swe-eval-6disffzz/t/sphinx/registry.py:24: DeprecationWarning: pkg_resources is deprecated as an API. See https://setuptools.pypa.io/en/latest/pkg_resources.html
+    from pkg_resources import iter_entry_points
+
+../../..~/.qedcode/benchy/cache/envs/sphinx-doc__sphinx-9a2c3c4a15-75d4d5f6/lib/python3.9/site-packages/pkg_resources/__init__.py:2832
+../../..~/.qedcode/benchy/cache/envs/sphinx-doc__sphinx-9a2c3c4a15-75d4d5f6/lib/python3.9/site-packages/pkg_resources/__init__.py:2832
+../../..~/.qedcode/benchy/cache/envs/sphinx-doc__sphinx-9a2c3c4a15-75d4d5f6/lib/python3.9/site-packages/pkg_resources/__init__.py:2832
+  ~/.qedcode/benchy/cache/envs/sphinx-doc__sphinx-9a2c3c4a15-75d4d5f6/lib/python3.9/site-packages/pkg_resources/__init__.py:2832: DeprecationWarning: Deprecated call to `pkg_resources.declare_namespace('sphinxcontrib')`.
+  Implementing implicit namespace packages (as specified in PEP 420) is preferred to `pkg_resources.declare_namespace`. See https://setuptools.pypa.io/en/latest/references/keywords.html#keyword-namespace-packages
+    declare_namespace(pkg)
+
+tests/test_domain_py.py: 33 warnings
+  ~/.qedcode/benchy/cache/envs/sphinx-doc__sphinx-9a2c3c4a15-75d4d5f6/lib/python3.9/site-packages/alabaster/layout.html:114: DeprecationWarning: 'soft_unicode' has been renamed to 'soft_str'. The old name will be removed in MarkupSafe 2.1.
+    _gaq.push(['_setAllowLinker', true]);
+
+tests/test_domain_py.py: 33 warnings
+  ~/.qedcode/benchy/cache/envs/sphinx-doc__sphinx-9a2c3c4a15-75d4d5f6/lib/python3.9/site-packages/alabaster/about.html:70: DeprecationWarning: 'soft_unicode' has been renamed to 'soft_str'. The old name will be removed in MarkupSafe 2.1.
+
+tests/test_domain_py.py: 33 warnings
+  ~/.qedcode/benchy/cache/envs/sphinx-doc__sphinx-9a2c3c4a15-75d4d5f6/lib/python3.9/site-packages/alabaster/about.html:99: DeprecationWarning: 'soft_unicode' has been renamed to 'soft_str'. The old name will be removed in MarkupSafe 2.1.
+
+tests/test_domain_py.py: 33 warnings
+  ~/.qedcode/benchy/cache/envs/sphinx-doc__sphinx-9a2c3c4a15-75d4d5f6/lib/python3.9/site-packages/alabaster/layout.html:215: DeprecationWarning: 'soft_unicode' has been renamed to 'soft_str'. The old name will be removed in MarkupSafe 2.1.
+
+tests/test_domain_py.py: 33 warnings
+  ~/.qedcode/benchy/cache/envs/sphinx-doc__sphinx-9a2c3c4a15-75d4d5f6/lib/python3.9/site-packages/alabaster/layout.html:238: DeprecationWarning: 'soft_unicode' has been renamed to 'soft_str'. The old name will be removed in MarkupSafe 2.1.
+
+tests/test_domain_py.py::test_domain_py_xrefs_abbreviations
+tests/test_domain_py.py::test_resolve_xref_for_properties
+tests/test_domain_py.py::test_domain_py_canonical
+tests/test_domain_py.py::test_python_python_use_unqualified_type_names
+tests/test_domain_py.py::test_python_python_use_unqualified_type_names_disabled
+  <template>:33: DeprecationWarning: 'soft_unicode' has been renamed to 'soft_str'. The old name will be removed in MarkupSafe 2.1.
+
+tests/test_domain_py.py::test_domain_py_xrefs_abbreviations
+tests/test_domain_py.py::test_resolve_xref_for_properties
+tests/test_domain_py.py::test_domain_py_canonical
+tests/test_domain_py.py::test_python_python_use_unqualified_type_names
+tests/test_domain_py.py::test_python_python_use_unqualified_type_names_disabled
+  <template>:224: DeprecationWarning: 'soft_unicode' has been renamed to 'soft_str'. The old name will be removed in MarkupSafe 2.1.
+
+tests/test_domain_py.py::test_domain_py_xrefs_abbreviations
+tests/test_domain_py.py::test_resolve_xref_for_properties
+tests/test_domain_py.py::test_domain_py_canonical
+tests/test_domain_py.py::test_python_python_use_unqualified_type_names
+tests/test_domain_py.py::test_python_python_use_unqualified_type_names_disabled
+  <template>:386: DeprecationWarning: 'soft_unicode' has been renamed to 'soft_str'. The old name will be removed in MarkupSafe 2.1.
+
+tests/test_domain_py.py::test_domain_py_xrefs_abbreviations
+tests/test_domain_py.py::test_resolve_xref_for_properties
+tests/test_domain_py.py::test_domain_py_canonical
+tests/test_domain_py.py::test_python_python_use_unqualified_type_names
+tests/test_domain_py.py::test_python_python_use_unqualified_type_names_disabled
+  <template>:401: DeprecationWarning: 'soft_unicode' has been renamed to 'soft_str'. The old name will be removed in MarkupSafe 2.1.
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+1 failed, 44 passed, 191 warnings in 1.40s
